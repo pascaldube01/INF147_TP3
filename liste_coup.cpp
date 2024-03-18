@@ -191,14 +191,12 @@ t_lien nouvelle_liste(void)
 
 /*****************************************************************************/
 
-Bool liste_est_vide(t_lien liste)
+Bool liste_est_vide(t_liste_coups* liste_coups)
 {
-	if (liste == NULL)
+	/*Si le nombre de noeud est à zéro la liste est vide*/
+	if (!get_nb_coups(liste_coups))
 	{
 		return vrai;
 	}
-	else
-	{
-		return faux;
-	}
+	return faux;
 }
