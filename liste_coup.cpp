@@ -122,6 +122,7 @@ int ajouter_coup(t_liste_coups* liste_coups, const t_coup* coup)
 			coup->col_case2, coup->lig_case2);
 		liste_coups->tete = element;
 		liste_coups->fin = element;
+		liste_coups->p_courant = element;
 	}
 	else
 	{
@@ -150,7 +151,41 @@ int ajouter_coup(t_liste_coups* liste_coups, const t_coup* coup)
 
 int ajouter_coup_debut(t_liste_coups* liste_coups, const t_coup* coup) 
 {
-	return 1; 
+	t_lien element;
+
+	//On alloue de l'espace mémoire pour une nouvel élément
+	element = (t_lien)malloc(sizeof(t_lien));
+
+	//On vérifie que l'allocation dynamique s'est bien effectuée
+	if (element == NULL) {
+		return 0;
+	}
+	replacer_pc_debut(liste_coups);
+	set_coup(&element->coup, coup->col, coup->lig, coup->col_dest, coup->lig_dest,
+		coup->col_case2, coup->lig_case2);
+	/*Si la liste est vide*/
+	if (liste_est_vide(liste_coups))
+	{
+		element->suivant = NULL;
+		
+		liste_coups->tete = element;
+		liste_coups->fin = element;
+		liste_coups->p_courant = element;
+	}
+	else
+	{
+		/*On fait le lien entre la fin de l'élément et le début de la file*/
+		element->suivant = liste_coups->p_courant;
+
+		/*On pointe le p_courant sur l'élément*/
+		liste_coups->p_courant = element;
+
+		/*On mets le début sur le p_courant*/
+		liste_coups->tete = liste_coups->p_courant;
+
+	}
+	return 1;
+
 }
 
 /*****************************************************************************/
