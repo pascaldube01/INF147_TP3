@@ -103,15 +103,16 @@ int valider_case_dest(t_liste_coups* liste_coups, int col, int lig)
 int ajouter_coup(t_liste_coups* liste_coups, const t_coup* coup)
 {
 	//On crée un nouvel élément à ajouter
-	t_lien element;
+	t_lien element = NULL;
 	//On créé un nouveau pointeur
 	t_lien ptr = liste_coups->fin;
-	t_coup coup;
+
 	//On alloue de l'espace mémoire pour une nouvel élément
 	element = (t_lien)malloc(sizeof(t_lien));
 
 	//On vérifie que l'allocation dynamique s'est bien effectuée
-	assert(element);
+	if (element == NULL)
+		return 0;
 
 	//Si la liste est vide, on débute la liste 
 	if (liste_est_vide(liste_coups))
@@ -140,6 +141,8 @@ int ajouter_coup(t_liste_coups* liste_coups, const t_coup* coup)
 
 	//On incrémente le nombre de noeud, car on a joute un nouvel élément
 	liste_coups->nb_noeuds++;
+
+	return 1;
 
 }
 

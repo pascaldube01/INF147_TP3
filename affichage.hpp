@@ -39,6 +39,8 @@
 
 #define DECALAGE_X 10 //Decalage en x
 #define DECALAGE_Y 5  //Decalage en y 
+#define TAILLE_COLONNE_AFFICHAGE 15  //Taille de colonne 
+#define DISTANCE_ENTRE_COLONNES 13   //Distance entre les colonnes
 
 /*=========================================================*/
 /*                  LES PROTOTYPES                         */
