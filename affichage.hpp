@@ -25,8 +25,8 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include "mtwister.h"
-#include "grille_echecs.h"
+#include "mtwister.hpp"
+#include "grille_echecs.hpp"
 
 #ifndef WINCONSOLE
 #define WINCONSOLE 0

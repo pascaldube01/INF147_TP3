@@ -62,7 +62,7 @@
 /*=========================================================*/
 
 #include "test_generer_liste.h"
-#include"grille_echecs.h"
+#include"grille_echecs.hpp"
 
 /*=========================================================*/
 /*                  LES FONCTIONS                          */
