@@ -33,11 +33,13 @@
 liste_coup.c*/
 #define TEST_MODULE_LISTE_COUP 1
 
+#define TAILLE_MAX_TEST 80
+
 /*test pour la fonction jouer_coup et l'affichage*/
 #define TEST_JOUER_COUP 0
 
 /*activation du main pour faire rouler le programme principale */
-#define JOUER_UNE_PARTIE 1
+#define JOUER_UNE_PARTIE 0
 
 /*=========================================================*/
 /*                  PROGRAMME DE TESTS                     */
@@ -50,7 +52,7 @@ int main()
 	t_liste_coups liste_coups;
 
 	/*on cree une variable test_coup pour pouvoir tester les fonctions set_coup et ajouter_coup*/
-	t_coup* test_coup = malloc(sizeof(t_coup));
+	t_coup* test_coup = (t_coup*) malloc(sizeof(t_coup));
 	if (test_coup == NULL)
 	{
 		printf("impossible d'allouer test_coup");
@@ -93,7 +95,7 @@ int main()
 	while (ajouter_coup(&liste_coups, test_coup)) {}
 
 	printf("\n\napres avoir rempli la liste de coup, on a %d coups, il en faut %d"
-			, get_nb_coups(&liste_coups), TAILLE_MAX);
+			, get_nb_coups(&liste_coups), TAILLE_MAX_TEST);
 
 
 	/*le premier test pour valider_coup cherche une valeur qui n'existe pas*/

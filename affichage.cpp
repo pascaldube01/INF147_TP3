@@ -158,7 +158,7 @@ void afficher_piece(int piece_a_afficher)
 }
 
 /*****************************************************************************/
-t_coup lire_coup_joueur(const t_liste_coups* liste_coups)
+t_coup lire_coup_joueur(t_liste_coups* liste_coups)
 {
 	char coup_depart[6] = { 0 };  //Le coup de depart saisit par le joueur
 	char coup_arrivee[3] = { 0 }; //Le coup d'arrivee saisit par le joueur

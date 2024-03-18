@@ -118,8 +118,10 @@ void afficher_joueur(int joueur);
 	SORTIE :	Le coup de l'utilisateur
 
 	ecrit par Pascal Dube, Victor Poulin et Simon Des-Alliers
+
+TODO : j'ai enleve le const temporaire pour pouvoir compiler	
 ***********************************************************************************************/
-t_coup lire_coup_joueur(const t_liste_coups* liste_coups);
+t_coup lire_coup_joueur(t_liste_coups* liste_coups);
 
 /**********************************************************************************************
     OBJECTIF : Affiche le coup choisi par l’un ou l’autre joueur à l’écran avec une couleur de fond
