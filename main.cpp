@@ -55,6 +55,8 @@ int main()
 	char string_test_faux[6] = "faux" ;
 	char string_test_case[6] = "b7-c6";
 
+	init_liste_coups(&liste_coups);
+
 	/*on cree une variable test_coup pour pouvoir tester les fonctions set_coup et ajouter_coup*/
 	t_coup* test_coup = (t_coup*) malloc(sizeof(t_coup));
 	if (test_coup == NULL)

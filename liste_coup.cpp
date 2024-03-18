@@ -37,6 +37,15 @@ void init_liste_coups(t_liste_coups* liste_coups)
 
 void set_coup(t_coup* coup, int col, int lig, int col_dest, int lig_dest, int col2, int lig2)
 {
+	/*on cree la sring du coup a partir des valeurs entrees et des macros qui change les position
+	sur le plateau en valeur ascii affichables dans un terminal*/
+	coup->texte_coup[0] = COL_A_CH(col);
+	coup->texte_coup[1] = RAN_A_NO(lig);
+	coup->texte_coup[2] = '-';
+	coup->texte_coup[3] = COL_A_CH(col_dest);
+	coup->texte_coup[4] = RAN_A_NO(lig_dest);
+	coup->texte_coup[5] = '\0';
+
 	/*On assigne les valeurs mis ne paramètre dans les paramètres du coup envoyé en paramètre*/
 	coup->col = col;
 	coup->lig = lig;
@@ -104,8 +113,6 @@ int ajouter_coup(t_liste_coups* liste_coups, const t_coup* coup)
 {
 	//On crée un nouvel élément à ajouter
 	t_lien element = NULL;
-	//On créé un nouveau pointeur
-	t_lien ptr = liste_coups->fin;
 
 	//On alloue de l'espace mémoire pour une nouvel élément
 	element = (t_lien)malloc(sizeof(t_lien));
