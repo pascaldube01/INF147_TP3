@@ -65,7 +65,7 @@ int get_nb_coups(const t_liste_coups* liste_coups)
 int valider_coup(t_liste_coups* liste_coups, char* texte_coup, t_coup* coup)
 {
 	//On initialise le pointeur courant au début de la liste
-	liste_coups->p_courant = liste_coups->tete;
+	replacer_pc_debut(liste_coups);
 
 	//Tant qu'on est pas à la fin de la liste
 	while (liste_coups->p_courant != NULL)
@@ -87,7 +87,7 @@ int valider_coup(t_liste_coups* liste_coups, char* texte_coup, t_coup* coup)
 int valider_case_dest(t_liste_coups* liste_coups, int col, int lig)
 {
 	//On initialise le pointeur courant au début de la liste
-	liste_coups->p_courant = liste_coups->tete;
+	replacer_pc_debut(liste_coups);
 
 	//Tant qu'on est pas à la fin de la liste
 	while (liste_coups->p_courant != NULL)
@@ -139,7 +139,7 @@ int ajouter_coup(t_liste_coups* liste_coups, const t_coup* coup)
 		liste_coups->fin = element;
 	}
 
-	//On incrémente le nombre de noeud, car on a joute un nouvel élément
+	//On incrémente le nombre de noeud, car on ajoute un nouvel élément
 	liste_coups->nb_noeuds++;
 
 	return 1;
@@ -163,7 +163,7 @@ void vider_liste_coups(t_liste_coups* liste_coups)
 	replacer_pc_debut(liste_coups);
 
 	//Tant qu'on est pas arrivé à la fin de la liste
-	while (compteur != liste_coups->nb_noeuds)
+	while (compteur != get_nb_coups(liste_coups))
 	{
 		//On avance le pointeur_courant
 		avancer_pc(liste_coups);
@@ -220,7 +220,7 @@ t_coup choix_coup_ordi(t_liste_coups* liste_coups)
 	if (!liste_est_vide(liste_coups))
 	{
 		/*On génère le nombre aléatoire*/
-		coup_choisi = mt_randU(liste_coups->nb_noeuds);
+		coup_choisi = mt_randU(get_nb_coups(liste_coups));
 		/*On retourne le coup qui est à la liste aléatoire*/
 		for (int i = 0; i <= coup_choisi; i++)
 		{
