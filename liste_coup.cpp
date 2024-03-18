@@ -120,14 +120,14 @@ int ajouter_coup(t_liste_coups* liste_coups, const t_coup* coup)
 
 /*****************************************************************************/
 
-t_lien new_list(void)
+t_lien nouvelle_liste(void)
 {
 	return NULL;
 }
 
 /*****************************************************************************/
 
-Bool is_empty_list(t_lien liste)
+Bool liste_est_vide(t_lien liste)
 {
 	if (liste == NULL)
 	{
