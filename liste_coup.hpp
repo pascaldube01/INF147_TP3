@@ -129,7 +129,7 @@ void detruire_liste_coups(t_liste_coups* liste_coups);
 t_lien nouvelle_liste(void);
 
 //Renvoie 1 si la liste est vide, 0 sinon
-Bool liste_est_vide(t_lien liste);
+Bool liste_est_vide(t_liste_coups* liste);
 
 
 #endif
