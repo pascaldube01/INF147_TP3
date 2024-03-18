@@ -117,7 +117,8 @@ int ajouter_coup(t_liste_coups* liste_coups, const t_coup* coup)
 	if (liste_est_vide(liste_coups))
 	{
 		element->suivant = NULL;
-		set_coup(&element->coup, coup->col, coup->lig, coup->col_dest, coup->lig_dest, coup->col_case2, coup->lig_case2);
+		set_coup(&element->coup, coup->col, coup->lig, coup->col_dest, coup->lig_dest, 
+			coup->col_case2, coup->lig_case2);
 		liste_coups->tete = element;
 		liste_coups->fin = element;
 	}
@@ -127,7 +128,8 @@ int ajouter_coup(t_liste_coups* liste_coups, const t_coup* coup)
 		while (liste_coups->p_courant->suivant != NULL)
 			avancer_pc(liste_coups);
 		/*On set le coup dans element*/
-		set_coup(&element->coup, coup->col, coup->lig, coup->col_dest, coup->lig_dest, coup->col_case2, coup->lig_case2);
+		set_coup(&element->coup, coup->col, coup->lig, coup->col_dest, coup->lig_dest, 
+			coup->col_case2, coup->lig_case2);
 		/*On fait le lien entre la liste et l'élément */
 		liste_coups->p_courant->suivant = element;
 		/*on met le suivant de l'élément à NULL car c'est le dernier de la liste*/
