@@ -185,13 +185,6 @@ t_coup choix_coup_ordi(t_liste_coups* liste_coups)
 
 /*****************************************************************************/
 
-t_lien nouvelle_liste(void)
-{
-	return NULL;
-}
-
-/*****************************************************************************/
-
 Bool liste_est_vide(t_liste_coups* liste_coups)
 {
 	/*Si le nombre de noeud est à zéro la liste est vide*/
