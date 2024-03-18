@@ -135,13 +135,15 @@ int ajouter_coup(t_liste_coups* liste_coups, const t_coup* coup)
 
 /*****************************************************************************/
 
-int ajouter_coup_debut(t_liste_coups* liste_coups, const t_coup* coup) {
+int ajouter_coup_debut(t_liste_coups* liste_coups, const t_coup* coup) 
+{
 	return 1; 
 }
 
 /*****************************************************************************/
 
-void vider_liste_coups(t_liste_coups* liste_coups) {
+void vider_liste_coups(t_liste_coups* liste_coups)
+{
 
 }
 
