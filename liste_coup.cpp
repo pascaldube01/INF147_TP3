@@ -16,7 +16,9 @@
 
 #include "liste_coup.hpp"
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
+#include <assert.h>
 
 /*=========================================================*/
 /*                  LES FONCTIONS                          */
@@ -82,3 +84,57 @@ int valider_case_dest(t_liste_coups* liste_coups, int col, int lig)
 	return 0;
 }
 
+/*****************************************************************************/
+
+int ajouter_coup(t_liste_coups* liste_coups, const t_coup* coup)
+{
+	t_lien element; //On crée un nouvel élément à ajouter
+
+	element = (t_lien)malloc(sizeof(t_lien));
+
+	assert(element);
+
+	element->coup = coup;
+	element->suivant = NULL; //Dernier élement
+
+	if (liste_est_vide(liste_coups))
+	{
+		//On retourne l'élément, car dans tous les cas il y a juste lui
+		return element;
+	}
+
+	t_lien tmp; //C'est pas une copie, c'est vraiment la même chose
+	tmp = li;         //tmp est un pointeur qui pointe à la même place que li
+
+	while (tmp->suivant != NULL)
+	{
+		tmp = tmp->suivant;
+	}
+
+	//On ajoute le nouvel élément à li
+	tmp->suivant = element;
+
+	//tmp est une référence à li donc en modifiant tmp, on modifie li
+	return li;
+}
+
+/*****************************************************************************/
+
+t_lien new_list(void)
+{
+	return NULL;
+}
+
+/*****************************************************************************/
+
+Bool is_empty_list(t_lien liste)
+{
+	if (liste == NULL)
+	{
+		return vrai;
+	}
+	else
+	{
+		return faux;
+	}
+}

@@ -18,6 +18,9 @@
 /*                    TYPES POINTEURS ET STRUCT                      */
 /*-------------------------------------------------------------------*/
 
+/*Définition d'un type Booléen*/
+typedef enum {faux, vrai} Bool;
+
 //NOTE: Ce type-struct n'est PAS encapsulé. Vous avez le droit d'accéder à
 //      n'importe quel de ses 7 champs directement n'importe-où dans le projet.
 typedef struct
@@ -121,5 +124,12 @@ void afficher_liste_coups(t_liste_coups* liste_coups);
 
 /* Détruire la liste de coups. Faites simplement un appel à "vider_liste_coups()" ici. */
 void detruire_liste_coups(t_liste_coups* liste_coups);
+
+/*On retourne une nouvelle liste (NULL)*/
+t_lien nouvelle_liste(void);
+
+//Renvoie 1 si la liste est vide, 0 sinon
+Bool liste_est_vide(t_lien liste);
+
 
 #endif
