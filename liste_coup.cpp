@@ -45,9 +45,9 @@ int valider_coup(t_liste_coups* liste_coups, char* texte_coup, t_coup* coup)
 	while (liste_coups->p_courant != NULL)
 	{
 		//On compare le pointeur_courant avec le texte_coup
-		if (strcmp(liste_coups->p_courant, texte_coup) == 0)
+		if (strcmp(liste_coups->p_courant->coup.texte_coup, texte_coup) == 0)
 		{
-			strcpy(coup->texte_coup, liste_coups->p_courant);
+			strcpy(coup->texte_coup, liste_coups->p_courant->coup.texte_coup);
 
 			return 1;
 		}

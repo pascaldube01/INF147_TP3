@@ -31,7 +31,7 @@
 
 /*activation du main de test pour verifier le bon fonctionnement de toutes les fonctions du module
 liste_coup.c*/
-#define TEST_MODULE_LISTE_COUP 0
+#define TEST_MODULE_LISTE_COUP 1
 
 /*test pour la fonction jouer_coup et l'affichage*/
 #define TEST_JOUER_COUP 0
