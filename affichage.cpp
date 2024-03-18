@@ -384,3 +384,61 @@ void gagnant_jeu(const t_etat_jeu* jeu)
 	}
 }
 
+void afficher_liste_coups(t_liste_coups* liste_coups)
+{
+	/*comme on affiche la liste de coups par colonne, il faut garder le nombre total de coups
+	affichees (qui persiste entre les changements de colonne) ainsi que le numero de la colonne
+	courante)*/
+	int total_coups_affiche = 0;
+	/*Numéro de colonne*/
+	int no_de_colonne = 0;
+
+	/*il faut commencer par placer le curseur de winconsole au bon endroit*/
+	gotoxy(DECALAGE_AFFICHAGE_Y, DECALAGE_AFFICHAGE_X);
+
+	/*on affiche ensuite le nombre de coup total contenu dans la liste*/
+	//printf("%d coups possibles", liste_coups->nb_coups);
+	printf(" %d coups possibles", get_nb_coups(liste_coups));
+	/*on affiche les colones de talle TAILLE_COLONNE_AFFICHAGE une a la fois et on continue
+	tant qu'on a pas affiche tous les coups de la liste*/
+	while (total_coups_affiche < get_nb_coups(liste_coups))
+	{
+		for (int i = 0; i < TAILLE_COLONNE_AFFICHAGE; i++)
+		{
+			/*si on a plus de line a afficher, on sort de la boucle for et aussi de la boucle
+			while, car on est arrive a la fin de la liste et que la condition de fin pour la
+			boucle while est la meme qu'ici*/
+			if (total_coups_affiche >= get_nb_coups(liste_coups))
+				break;
+
+			/*on commence par deplacer le curseur de la console vers le debut de la prochaine
+			ligne a ecrire*/
+			gotoxy(DECALAGE_AFFICHAGE_Y +
+				(DISTANCE_ENTRE_COLONNES * no_de_colonne),
+				DECALAGE_AFFICHAGE_X + i + 1);
+
+			/*on affiche ensuite directement la string contenue dans la liste*/
+			//printf("%s", liste_coups->tab_coups[total_coups_affiche].texte_coup);
+			for (int i = 0; i < get_nb_coups(liste_coups); i++)
+			{
+				printf("%s", liste_coups->)
+			}
+
+			/*si la ligne de la case 2 du coup n'est pas POS_VIDE, on doit egalement l'afficher
+			mais entre parentheses, il n'est necessaire de verifier qu'une seule valeur car si la
+			ligne est a POS_VIDE, la colonne le sera forcement aussi*/
+			if (liste_coups->tab_coups[total_coups_affiche].lig_case2 != POS_VIDE)
+				printf(" (%c%c)",
+					COL_A_CH(liste_coups->tab_coups[total_coups_affiche].col_case2),
+					RAN_A_NO(liste_coups->tab_coups[total_coups_affiche].lig_case2));
+
+			/*on passe ensuite au prochain coup dans la liste (ou on sort des boucles si on est
+			a la fin)*/
+			total_coups_affiche++;
+		}
+		/*une fois la colonne pleine (a une longueur de TAILLE_COLONNE_AFFICHAGE) on passe a la
+		suivante*/
+		no_de_colonne++;
+	}
+}
+
