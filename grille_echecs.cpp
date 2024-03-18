@@ -336,7 +336,7 @@ int generer_liste_coups(t_etat_jeu* jeu, t_liste_coups* liste_coups, int check_r
 		}
 	}
 	/*On retourne le nombre de coup*/
-	return liste_coups->nb_coups;
+	return liste_coups->nb_noeuds;
 }
 
 /***********************************************************************************************/
@@ -683,44 +683,44 @@ void roque_du_roi(t_etat_jeu* jeu, t_liste_coups* liste, int check_roq)
 			/*Verification si les tours ont bougés*/
 			if (get_piece_case(jeu, TAILLE - 1, ROQUE_ROI(joueur)) == TOURI_N + joueur)
 			{
-				//Si l'initialisation de la liste du joueur adverse a fonctionner
-				if (init_liste_coups(&coups_tmp) != NULL)
+				//on doit creer une liste de coups temporaire
+				init_liste_coups(&coups_tmp)
+				
+				//On inverse le joueur
+					
+				set_joueur(jeu, INVERSER_JOUEUR(joueur));
+				/*On doit s'assurer que le roi n'est pas en danger lorsqu'il se déplace
+				on met donc temporairement des rois sur les cases que le roi va se déplacer*/
+				set_piece_case(jeu, (t_piece)(ROI_N + joueur), 5, ROQUE_ROI(joueur));
+				set_piece_case(jeu, (t_piece)(ROI_N + joueur), 6, ROQUE_ROI(joueur));
+					
+				//On génère la liste de coups de l'ennemi
+				generer_liste_coups(jeu, &coups_tmp, 0);
+				/*On doit vider les cases où nous avions
+				temporairement placé des rois sur les cases que le roi va se déplacer*/
+					
+				set_piece_case(jeu, VIDE, 5, ROQUE_ROI(joueur));
+				set_piece_case(jeu, VIDE, 6, ROQUE_ROI(joueur));
+				/*On doit vérifier que les coups possibles de l'ennemi ne mange pas le roi
+					
+				sur ces 3 cases de déplacements*/
+				for (int col_dest = 4; col_dest <= 6; col_dest++)
+					if (!valider_case_dest(&coups_tmp, col_dest, ROQUE_ROI(joueur)))
+						non_validation_case++;
+					
+				//Si le roi ne sera pas en danger avant, pendant et après son déplacement
+				if (non_validation_case == 3)
 				{
-					//On inverse le joueur
-					
-					set_joueur(jeu, INVERSER_JOUEUR(joueur));
-					/*On doit s'assurer que le roi n'est pas en danger lorsqu'il se déplace
-					on met donc temporairement des rois sur les cases que le roi va se déplacer*/
-					set_piece_case(jeu, (t_piece)(ROI_N + joueur), 5, ROQUE_ROI(joueur));
-					set_piece_case(jeu, (t_piece)(ROI_N + joueur), 6, ROQUE_ROI(joueur));
-					
-					//On génère la liste de coups de l'ennemi
-					generer_liste_coups(jeu, &coups_tmp, 0);
-					/*On doit vider les cases où nous avions
-					temporairement placé des rois sur les cases que le roi va se déplacer*/
-					
-					set_piece_case(jeu, VIDE, 5, ROQUE_ROI(joueur));
-					set_piece_case(jeu, VIDE, 6, ROQUE_ROI(joueur));
-					/*On doit vérifier que les coups possibles de l'ennemi ne mange pas le roi
-					
-					sur ces 3 cases de déplacements*/
-					for (int col_dest = 4; col_dest <= 6; col_dest++)
-						if (!valider_case_dest(&coups_tmp, col_dest, ROQUE_ROI(joueur)))
-							non_validation_case++;
-					
-					//Si le roi ne sera pas en danger avant, pendant et après son déplacement
-					if (non_validation_case == 3)
-					{
-						//On veut ajouter le coup à notre vrai liste 
-						set_coup(&coup_roi, 4, ROQUE_ROI(joueur), 6, ROQUE_ROI(joueur),
-						7, ROQUE_ROI(joueur));
-						ajouter_coup(liste, &coup_roi);
-					}
-					
-					//on réinverse le joueur 
-					set_joueur(jeu, joueur);
-					detruire_liste_coups(&coups_tmp);
+					//On veut ajouter le coup à notre vrai liste 
+					set_coup(&coup_roi, 4, ROQUE_ROI(joueur), 6, ROQUE_ROI(joueur),
+					7, ROQUE_ROI(joueur));
+					ajouter_coup(liste, &coup_roi);
 				}
+					
+				//on réinverse le joueur 
+				set_joueur(jeu, joueur);
+				detruire_liste_coups(&coups_tmp);
+				
 			}
 		}
 		non_validation_case = 0;
@@ -730,44 +730,44 @@ void roque_du_roi(t_etat_jeu* jeu, t_liste_coups* liste, int check_roq)
 			/*verification si les tours ont bougés*/
 			if (get_piece_case(jeu, 0, ROQUE_ROI(joueur)) == TOURI_N + joueur)
 			{	
-				//Si l'initialisation de la liste du joueur adverse a fonctionner
-				if (init_liste_coups(&coups_tmp) != NULL)
+				/*on doit creer une liste de coups temporaire*/
+				(init_liste_coups(&coups_tmp)
+				
+				//On inverse le joueur
+				set_joueur(jeu, INVERSER_JOUEUR(joueur));
+					
+				/*On doit s'assurer que le roi n'est pas en danger lorsqu'il se déplace
+				on met donc temporairement des rois sur les cases que le roi va se déplacer*/
+				set_piece_case(jeu, (t_piece)(ROI_N + joueur), 2, ROQUE_ROI(joueur));
+				set_piece_case(jeu, (t_piece)(ROI_N + joueur), 3, ROQUE_ROI(joueur));
+					
+				//On génère la liste de coups de l'ennemi
+				generer_liste_coups(jeu, &coups_tmp, 0);
+					
+				/*On doit vider les cases où nous avions
+				temporairement placer des rois sur les cases que le roi va se déplacer*/
+				set_piece_case(jeu, VIDE, 2, ROQUE_ROI(joueur));
+				set_piece_case(jeu, VIDE, 3, ROQUE_ROI(joueur));
+					
+				//On doit vérifier que les coups possible de l'ennemi ne mange pas le roi
+				//sur ces 3 cases de déplacements
+				for (int col_dest = 4; col_dest >= 2; col_dest--)
+					if (!valider_case_dest(&coups_tmp, col_dest, ROQUE_ROI(joueur)))
+						non_validation_case++;
+					
+				//Si le roi ne sera pas en danger avant, pendant et après son déplacement
+				if (non_validation_case == 3)
 				{
-					//On inverse le joueur
-					set_joueur(jeu, INVERSER_JOUEUR(joueur));
-					
-					/*On doit s'assurer que le roi n'est pas en danger lorsqu'il se déplace
-					on met donc temporairement des rois sur les cases que le roi va se déplacer*/
-					set_piece_case(jeu, (t_piece)(ROI_N + joueur), 2, ROQUE_ROI(joueur));
-					set_piece_case(jeu, (t_piece)(ROI_N + joueur), 3, ROQUE_ROI(joueur));
-					
-					//On génère la liste de coups de l'ennemi
-					generer_liste_coups(jeu, &coups_tmp, 0);
-					
-					/*On doit vider les cases où nous avions
-					temporairement placer des rois sur les cases que le roi va se déplacer*/
-					set_piece_case(jeu, VIDE, 2, ROQUE_ROI(joueur));
-					set_piece_case(jeu, VIDE, 3, ROQUE_ROI(joueur));
-					
-					//On doit vérifier que les coups possible de l'ennemi ne mange pas le roi
-				    //sur ces 3 cases de déplacements
-					for (int col_dest = 4; col_dest >= 2; col_dest--)
-						if (!valider_case_dest(&coups_tmp, col_dest, ROQUE_ROI(joueur)))
-							non_validation_case++;
-					
-					//Si le roi ne sera pas en danger avant, pendant et après son déplacement
-					if (non_validation_case == 3)
-					{
-						//On veut ajouter le coup à notre vrai liste 
-						set_coup(&coup_roi, 4, ROQUE_ROI(joueur), 2, ROQUE_ROI(joueur),
-						0, ROQUE_ROI(joueur));
-						ajouter_coup(liste, &coup_roi);
-					}
-					
-					//on réinverse le joueur 
-					set_joueur(jeu, joueur);
-					detruire_liste_coups(&coups_tmp);
+					//On veut ajouter le coup à notre vrai liste 
+					set_coup(&coup_roi, 4, ROQUE_ROI(joueur), 2, ROQUE_ROI(joueur),
+					0, ROQUE_ROI(joueur));
+					ajouter_coup(liste, &coup_roi);
 				}
+					
+				//on réinverse le joueur 
+				set_joueur(jeu, joueur);
+				detruire_liste_coups(&coups_tmp);
+				
 				
 			}
 		}

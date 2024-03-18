@@ -51,6 +51,10 @@ int main()
 	/*pour le test, on a besoin de creer une liste de coup*/
 	t_liste_coups liste_coups;
 
+	/*on cree des variables pour des strings car certaines fonctions requerent des pointeurs*/
+	char string_test_faux[6] = "faux" ;
+	char string_test_case[6] = "b7-c6";
+
 	/*on cree une variable test_coup pour pouvoir tester les fonctions set_coup et ajouter_coup*/
 	t_coup* test_coup = (t_coup*) malloc(sizeof(t_coup));
 	if (test_coup == NULL)
@@ -81,13 +85,6 @@ int main()
 	1 1 2 2 et 3 3 purement pour le test*/
 	set_coup(test_coup, 1, 1, 2, 2, 3, 3);
 
-	/*initialisation de la liste de coup(mise a 0 et allocation du pointeur)
-	et verification de l'allocation du tableau des coups*/
-	if (init_liste_coups(&liste_coups) == NULL)
-	{
-		printf("impossible d'initialiser le tableau des coups possibles");
-		return EXIT_FAILURE;
-	}
 
 	/*on teste maintenant la fonction ajotuer_coup en entrant test_coup dans liste_coups autant de
 	fois que possible. une fois toutes les cases de coups pleines, la fonction retourne une erreur
@@ -100,13 +97,13 @@ int main()
 
 	/*le premier test pour valider_coup cherche une valeur qui n'existe pas*/
 	printf("\n\n\ntestde valider_coup");
-	if (valider_coup(&liste_coups, "faux ", test_coup) == 0)
+	if (valider_coup(&liste_coups, string_test_faux, test_coup) == 0)
 		printf("\nSUCCES : valeur inexistante introuvable");
 	else
 		printf("\nECHEC :  valeur inexistante trouvee");
 
 	/*le deuxieme test recherche une valeur qui existe*/
-	if (valider_coup(&liste_coups, "b7-c6", test_coup))
+	if (valider_coup(&liste_coups, string_test_case, test_coup))
 		printf("\nSUCCES : valeur existante trouvable");
 	else
 		printf("\nECHEC :  valeur existante introuvable");

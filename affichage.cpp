@@ -372,7 +372,7 @@ t_coup  choix_coup_ordi(const t_liste_coups liste)
 
 	//On veut prendre un coup aléatoire dans la liste, 
 	//Le nombre doit donc être entre 0 et le nombre de coups possible -1.
-	coup_aleatoire = mt_randU(liste.nb_coups);
+	coup_aleatoire = mt_randU(liste.nb_noeuds);
 
 	//On retourne un coup du tableau aléatoire
 	return liste.tab_coups[coup_aleatoire];

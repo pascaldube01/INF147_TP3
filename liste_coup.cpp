@@ -22,6 +22,16 @@
 /*                  LES FONCTIONS                          */
 /*=========================================================*/
 
+void init_liste_coups(t_liste_coups* liste_coups)
+{
+	liste_coups->fin = NULL;
+	liste_coups->p_courant = NULL;
+	liste_coups->tete = NULL;
+	liste_coups->nb_noeuds = 0;
+}
+
+/*****************************************************************************/
+
 t_coup get_coup_pc(const t_liste_coups* liste_coups)
 {
 	return liste_coups->p_courant->coup;
