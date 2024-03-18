@@ -102,28 +102,35 @@ int valider_case_dest(t_liste_coups* liste_coups, int col, int lig)
 
 int ajouter_coup(t_liste_coups* liste_coups, const t_coup* coup)
 {
-	t_lien element; //On crée un nouvel élément à ajouter
-
-	element = (t_lien)malloc(sizeof(t_lien));
-
-	assert(element);
-
-	element->coup = coup;
-	element->suivant = NULL; //Dernier élement
-
-	t_lien tmp; //C'est pas une copie, c'est vraiment la même chose
-	tmp = li;   //tmp est un pointeur qui pointe à la même place que li
-
-	while (tmp->suivant != NULL)
+	//Si la liste est vide, on retourne 0
+	if (liste_est_vide(liste_coups))
 	{
-		tmp = tmp->suivant;
+		return 0;
 	}
 
-	//On ajoute le nouvel élément à li
-	tmp->suivant = element;
+	//On crée un nouvel élément à ajouter
+	t_lien element; 
 
-	//tmp est une référence à li donc en modifiant tmp, on modifie li
-	return li;
+	//On alloue de l'espace mémoire pour une nouvel élément
+	element = (t_lien)malloc(sizeof(t_lien));
+
+	//On vérifie que l'allocation dynamique s'est bien effectuée
+	assert(element);
+
+	//On avance le pointeur courant jusqu'à la fin de la liste
+	while (avancer_pc(liste_coups) != 0){}
+
+	//On copie chaque éléments du nouveau coup dans la liste
+	liste_coups->p_courant->coup.col = coup->col;
+	liste_coups->p_courant->coup.lig = coup->lig;
+	liste_coups->p_courant->coup.col_dest = coup->col_dest;
+	liste_coups->p_courant->coup.lig_dest = coup->lig_dest;
+	liste_coups->p_courant->coup.col_case2 = coup->col_case2;
+	liste_coups->p_courant->coup.lig_case2 = coup->lig_case2;
+
+	//On incrémente le nombre de noeud, car on a joute un nouvel élément
+	liste_coups->nb_noeuds++;
+
 }
 
 /*****************************************************************************/
