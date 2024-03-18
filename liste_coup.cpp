@@ -121,13 +121,14 @@ int ajouter_coup(t_liste_coups* liste_coups, const t_coup* coup)
 	//On vérifie que l'allocation dynamique s'est bien effectuée
 	if (element == NULL)
 		return 0;
-
+	/*On set le coup dans element*/
+	set_coup(&element->coup, coup->col, coup->lig, coup->col_dest, coup->lig_dest,
+		coup->col_case2, coup->lig_case2);
 	//Si la liste est vide, on débute la liste 
 	if (!get_nb_coups(liste_coups))
 	{
 		element->suivant = NULL;
-		set_coup(&element->coup, coup->col, coup->lig, coup->col_dest, coup->lig_dest, 
-			coup->col_case2, coup->lig_case2);
+		
 		liste_coups->tete = element;
 		liste_coups->fin = element;
 		liste_coups->p_courant = element;
@@ -140,15 +141,14 @@ int ajouter_coup(t_liste_coups* liste_coups, const t_coup* coup)
 		//On avance le pointeur courant jusqu'à la fin de la liste
 		while (liste_coups->p_courant->suivant != NULL)
 			avancer_pc(liste_coups);
-		/*On set le coup dans element*/
-		set_coup(&element->coup, coup->col, coup->lig, coup->col_dest, coup->lig_dest, 
-			coup->col_case2, coup->lig_case2);
+		
 		/*On fait le lien entre la liste et l'élément */
 		liste_coups->p_courant->suivant = element;
 		/*on met le suivant de l'élément à NULL car c'est le dernier de la liste*/
 		element->suivant = NULL;
 		/*on met la fin à l'élément*/
 		liste_coups->fin = element;
+		
 	}
 
 	//On incrémente le nombre de noeud, car on ajoute un nouvel élément
@@ -186,13 +186,10 @@ int ajouter_coup_debut(t_liste_coups* liste_coups, const t_coup* coup)
 	else
 	{
 		/*On fait le lien entre la fin de l'élément et le début de la file*/
-		element->suivant = liste_coups->p_courant;
+		element->suivant = liste_coups->tete;
 
-		/*On pointe le p_courant sur l'élément*/
-		liste_coups->p_courant = element;
-
-		/*On mets le début sur le p_courant*/
-		liste_coups->tete = liste_coups->p_courant;
+		/*On pointe la tete sur l'élément*/
+		liste_coups->tete = element;
 
 	}
 
