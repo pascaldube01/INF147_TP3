@@ -65,7 +65,7 @@ int get_nb_coups(const t_liste_coups* liste_coups)
 int valider_coup(t_liste_coups* liste_coups, char* texte_coup, t_coup* coup)
 {
 	//On initialise le pointeur courant au début de la liste
-	liste_coups->p_courant = liste_coups->tete;
+	replacer_pc_debut(liste_coups);
 
 	//Tant qu'on est pas à la fin de la liste
 	while (liste_coups->p_courant != NULL)
@@ -138,7 +138,7 @@ int ajouter_coup(t_liste_coups* liste_coups, const t_coup* coup)
 		liste_coups->fin = element;
 	}
 
-	//On incrémente le nombre de noeud, car on a joute un nouvel élément
+	//On incrémente le nombre de noeud, car on ajoute un nouvel élément
 	liste_coups->nb_noeuds++;
 
 }
