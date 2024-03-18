@@ -272,7 +272,7 @@ int** get_grille_jeu(const t_etat_jeu* jeu)
 /************************************************************************************************/
 t_piece get_piece_case(const t_etat_jeu* jeu, int col, int ran)
 {
-	return jeu->grille_jeu[ran][col];
+	return (t_piece)jeu->grille_jeu[ran][col];
 }
 
 /************************************************************************************************/
