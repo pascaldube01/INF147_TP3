@@ -684,7 +684,7 @@ void roque_du_roi(t_etat_jeu* jeu, t_liste_coups* liste, int check_roq)
 			if (get_piece_case(jeu, TAILLE - 1, ROQUE_ROI(joueur)) == TOURI_N + joueur)
 			{
 				//on doit creer une liste de coups temporaire
-				init_liste_coups(&coups_tmp)
+				init_liste_coups(&coups_tmp);
 				
 				//On inverse le joueur
 					
@@ -731,7 +731,7 @@ void roque_du_roi(t_etat_jeu* jeu, t_liste_coups* liste, int check_roq)
 			if (get_piece_case(jeu, 0, ROQUE_ROI(joueur)) == TOURI_N + joueur)
 			{	
 				/*on doit creer une liste de coups temporaire*/
-				(init_liste_coups(&coups_tmp)
+				init_liste_coups(&coups_tmp);
 				
 				//On inverse le joueur
 				set_joueur(jeu, INVERSER_JOUEUR(joueur));
