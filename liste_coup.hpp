@@ -1,222 +1,125 @@
-/******************************************************************************************/
-/*  LISTE_COUP.H                                                                          */
-/*  Auteurs: Victor Poulin, Pascal Dube et Simon Des-Alliers                              */
-/*  Date: 14 février 2024                                                                 */
-/*                                                                                        */
-/* Ce module gere la liste de coups au niveau de l'affichage, de la validite, etc.        */
-/*                                                                                        */
-/*Liste des fonctions:  t_coup* init_liste_coups(t_liste_coups* liste_coups)              */
-/*                      void set_coup(	t_coup* coup, int col, int lig, int col_dest,     */
-/*                         int lig_dest, int col2, int lig2);                             */
-/*                      int ajouter_coup(t_liste_coups* liste_coups, const t_coup* coup)  */
-/*                      void vider_liste_coups(t_liste_coups* liste_coups)                */
-/*                      int get_nb_coups(const t_liste_coups* liste_coups)                */
-/*                      int valider_coup(const t_liste_coups* liste_coups,                */
-/*                         char* texte_coup, t_coup* coup)                                */
-/*                      int valider_case_dest(const t_liste_coups* liste_coups, int col,  */
-/*                         int lig);                                                      */
-/*                      void afficher_liste_coups(const t_liste_coups* liste_coups);      */
-/*                      void detruire_liste_coups(t_liste_coups* liste_coups)             */
-/******************************************************************************************/
+/*******************************************************************************
+    LISTE_COUPS.HPP  (version pour le TP3)
+    Auteurs : Simon Des-Alliers, PAscal Dubé et Victor Poulin
 
-#ifndef LISTE_COUP
-#define LISTE_COUP 0
+    Module qui contient les fonctions de gestion d'une liste chainée de coups.
+    Ce module est indépendant et n'inclut rien.
+*******************************************************************************/
+#if !defined(POS_VIDE)
 
-#define _CRT_SECURE_NO_WARNINGS
+#define TAILLE_GR    8      //taille carrée de la grille de jeu
+#define POS_VIDE    -1      //indique une position non-valide ou non-utilisée
 
-/*=========================================================*/
-/*                 LES LIBRAIRIES                          */
-/*=========================================================*/
+//les deux macros de conversion de coordonnées (pour remplir un "texte_coup")
+#define COL_A_CH(c)  ((c) + 'a')
+#define RAN_A_NO(r)  (TAILLE_GR - (r) + '0')
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+/*-------------------------------------------------------------------*/
+/*                    TYPES POINTEURS ET STRUCT                      */
+/*-------------------------------------------------------------------*/
 
-#ifndef WINCONSOLE
-#define WINCONSOLE 0
-#include "WinConsole.hpp"
-#endif
-
-/*=========================================================*/
-/*                  LES CONSTANTES                         */
-/*=========================================================*/
-
-#define TAILLE_GR    8                //taille carree de la grille de jeu
-#define TAILLE_MAX  80                //taille maximale de la liste des coups
-#define POS_VIDE    -1                //indique une position non-valide ou non-utilisee
-
-/*constantes concernant l'affichage*/
-#define DECALAGE_AFFICHAGE_X 2       //Valeur de decalage pour l'affichage en x
-#define DECALAGE_AFFICHAGE_Y 40      //Valeur de decalage pour l'affichage en y 
-#define TAILLE_COLONNE_AFFICHAGE 15  //Taille de colonne 
-#define DISTANCE_ENTRE_COLONNES 13   //Distance entre les colonnes
-
-/*=========================================================*/
-/*                  LES MACROFONCTIONS                     */
-/*=========================================================*/
-
-/*convertis une position colonne a sa lettre correspondante.Eg. 0 a 'a'. comme nous utilisons
-des codes ascii, et que les valeurs dans le tableau vont de 0 a TAILLE, il suffit d'ajouter le
-nombre en entree a la valeur ascii de la lettre 'a'*/
-#define COL_A_CH(c) ((c) + 'a')
-
-/*convertis une position rangee en numero de ligne.Eg. 0 a 8  et 7 a 1. comme les numeros de
-rangee sont a l'ordre inverse de ceux des indexes du tableau, il faut soustraire la valeur
-en entree a la taille de celui-ci ajoutee a la valeur de '0' en ascii*/
-#define RAN_A_NO(r) ((TAILLE_GR - r) + '0')
-
-/***************************************************************************************/
-/*                              DECLARATIONS DES TYPES                                 */
-/***************************************************************************************/
+//NOTE: Ce type-struct n'est PAS encapsulé. Vous avez le droit d'accéder à
+//      n'importe quel de ses 7 champs directement n'importe-où dans le projet.
 typedef struct
 {
-	char texte_coup[6];         //le coup en texte. Ex. "a1-b2"
-	int  col, lig;              //position-depart du coup
-	int  col_dest, lig_dest;    //position-arrivee du coup
-	int  col_case2, lig_case2;  //la case secondaire concernee (en-passant, roque)
+    char texte_coup[6];         //le coup en texte. Ex. "a1-b2"
+    int col, lig;               //position-départ du coup (source)
+    int col_dest, lig_dest;     //position-arrivée du coup (destination)
+    int col_case2, lig_case2;   //la case secondaire concernée (en-passant et roque) 
 } t_coup;
 
-/*cette structure a besoinde t_coup, lle doit donc etre apres*/
+/* Les types nécessaires pour la liste chainée de coups */
+typedef struct noeud* t_lien;      //type-pointeur vers un neoud
+
+/* la structure-noeud contenant un coup et le lien vers le coup suivant */
+struct noeud
+{
+    t_coup coup;
+    t_lien suivant;     //pointeur vers le noeud suivant
+};
+
+/* structure principale de gestion de la liste chainée */
 typedef struct
 {
-	t_coup* tab_coups;          //tableau dynamique de la liste de coups
-	int taille_liste;           //la taille totale (maximale) de la liste
-	int nb_coups;               //le nombre de coups valides dans la liste
+    t_lien tete;        //la tête de la liste
+    t_lien fin;         //la fin de la liste
+    t_lien p_courant;   //le pointeur-courant (pour parcourir la liste)
+    int nb_noeuds;      //le nombre d'éléments dans la liste
 } t_liste_coups;
 
-/***************************************************************************************/
-/*                       DECLARATIONS DES FONCTIONS PUBLIQUES                          */
-/***************************************************************************************/
 
-/*************************************************************************************************
-    OBJECTIF :Initialiser la liste de coups. On alloue le tableau dynamique avec TAILLE_MAX cases
-	          et on met le nombre de coups valides a zero. Le champ "taille_liste" doit contenir la
-			  taille totale du tableau
+/*-------------------------------------------------------------------*/
+/*                       FONCTIONS PUBLIQUES                         */
+/*-------------------------------------------------------------------*/
 
-	PARAMETRE : liste_coup : la liste des coups a initialiser
+/*-------------------------------------------------------------------*/
+/*                     FONCTIONS INFORMATRICES                       */
+/*-------------------------------------------------------------------*/
+/* obtenir le coup du neoud pointé par le pointeur-courant */
+t_coup get_coup_pc(const t_liste_coups* liste_coups);
 
-	SORTIE :retourne l'addresse du pointeur liste_coup->tab_coup (sera NULL s'il y a erreur)
-			liste de coup initialis�e (changements directement au pointeur)
+/* Accesseur qui permet de savoir le nombre de coups valides dans la liste. */
+int get_nb_coups(const t_liste_coups* liste_coups);
 
-	ecrit par Pascal Dube, Victor Poulin et Simon Des-Alliers
-******************************************************************************/
-t_coup* init_liste_coups(t_liste_coups* liste_coups);
+/* Valide si le "coup" reçu est dans la liste des coups possibles à jouer.  On reçoit  */
+/* la représentation-texte du coup à retrouver.  On parcourt la liste en comparant le  */
+/* texte reçu avec le champ "texte_coup" de chaque coup.  Si ce texte a été retrouvé,  */
+/* on retourne une copie de ce coup via la référence "*coup" et on retourne 1.  Sinon, */
+/* on retourne 0 (coup non-présent dans la liste). */
+int valider_coup(t_liste_coups* liste_coups, char* texte_coup, t_coup* coup);
 
-/************************************************************************************************
-    OBJECTIF : Fonction qui cree un nouveau coup. Les 6 derniers parametres sont copies dans leurs
-	           champs respectifs de la reference *coup.  On doit aussi former la 
-			   representation-texte du coup a partir des valeurs "col, lig" et "col_dest,
-			   lig_dest". Eg. "a2-a4".
+/* Valide si la position-destination (col, lig) reçue fait partie d'un des coups de la */
+/* liste. On reçoit les coordonnées de la case "col, lig" et on parcourt la liste à la */
+/* recherche d'un coup qui a la même case-destination que (col, lig). Dès qu'on trouve */
+/* un coup qui atteint cette case, la fonction arrête sa recherche et retourne 1.      */
+/* Sinon, elle retourne 0 (aucun coup de la liste se rends à la case [col, lig]). */
+int valider_case_dest(t_liste_coups* liste_coups, int col, int lig);
 
-	PARAMETRES : coup :		pointeur qui renvoie vers le coup a modifier
-				 col :		colonne d'origine de la piece
-				 lig :		ligne d'origine de la piece
-				 col_dest :	colonne de destination de la piece
-				 lig_dest : ligne de destination de la piece
-				 col2 :		position de colonne necesaire pour certains coups
-				 lig2 :		position de ligne necessaire pour certains coups
+/*-------------------------------------------------------------------*/
+/*                         LES MUTATEURS                             */
+/*-------------------------------------------------------------------*/
+/* Initialiser la liste de coups. On mets les trois pointeurs de la liste à NULL et on */
+/* met le nombre d'éléments de la liste à zéro. */
+void init_liste_coups(t_liste_coups* liste_coups);
 
-	SORTIES : Ne retourne rien (void)
+/* Fonction qui crée un nouveau coup. Les 6 derniers paramètres sont copiés dans leurs */
+/* champs respectifs de la référence "coup".  On doit aussi former la représentation-  */
+/* texte du coup à partir des valeurs "col, lig" et "col_dest, lig_dest". Eg. "a2-a4". */
+void set_coup(t_coup* coup, int col, int lig, int col_dest, int lig_dest, int col2, int lig2);
 
-ecrit par Pascal Dube, Victor Poulin et Simon Des-Alliers
-*******************************************************************************/
-void set_coup(	t_coup* coup, int col, int lig, int col_dest, int lig_dest,
-				int col2, int lig2);
-
-/************************************************************************************************
-    OBJECTIF : Ajoute un nouveau coup a la liste de coups reçue en reference. On doit verifier si il reste encore
-               de la place dans le tableau dynamique des coups. 
-
-	PARAMETRES : liste-coup : la liste de coup
-				 coup : le coup a ajouter
-
-	SORTIES : retourne soit 1 (succes) ou 0 (erreur)
-			  ajoute le coup a la liste de coup directement
-
-ecrit par Pascal Dube, Victor Poulin et Simon Des-Alliers
-
-*************************************************************************************************/
+/* Ajoute un nouveau coup à la fin de la liste de coups reçue en référence. On crée un */
+/* nouveau noeud. On y copie le coup reçu et on l'ajoute à la FIN de la liste chainée. */
+/* Si l'allocation du nouveau noeud a échoué, la fonction retourne 0. Sinon, on ajoute */
+/* le coup, on place le pointeur de fin de liste sur le nouveau coup et on retourne 1. */
 int ajouter_coup(t_liste_coups* liste_coups, const t_coup* coup);
 
-/************************************************************************************************
-    OBJECTIF : Vide la liste des coups en remettant le "nb_coups" a zero.
+/* Ajoute un coup au début de la liste de coups. On crée un nouveau noeud. On y copie  */
+/* le coup reçu et on l'ajoute au DÉBUT de la liste. Si l'allocation du nouveau noeud  */
+/* a échoué, la fonction retourne 0. Sinon, on ajoute le coup et on retourne 1. */
+int ajouter_coup_debut(t_liste_coups* liste_coups, const t_coup* coup);
 
-	PARAMETRE : liste_coup : la liste des coups a vider
-
-	SORTIE :	liste de coup videe (changements directement au pointeur)
-
-	ecrit par Pascal Dube, Victor Poulin et Simon Des-Alliers
-*************************************************************************************************/
+/* Vider la liste des coups en détruisant tous les noeuds de la liste et en remettant  */
+/* son "nb_noeuds" à zéro. Les trois pointeurs seront mis à NULL. */
 void vider_liste_coups(t_liste_coups* liste_coups);
 
-/************************************************************************************************
-    OBJECTIF : Accesseur qui permet de savoir le nombre de coups valides dans la liste.
+/* Replacer le pointeur-courant sur le noeud de tête. */
+void replacer_pc_debut(t_liste_coups* liste_coups);
 
-	PARAMETRE : liste_coup : la liste des coups a compter
+/* Si le pointeur-courant est non-NULL et qu'il ne pointe pas sur le dernier noeud, on */
+/* l'avance au noeud suivant et on retourne 1. Sinon on le bouge pas et on retourne 0. */
+int  avancer_pc(t_liste_coups* liste_coups);
 
-	SORTIE :	retourne le nombre d'entree de la liste de coup
+/* Effectue un choix de coup aléatoire dans la liste de coups. On génére une position  */
+/* aléatoirement entre [0..nb_noeuds-1] et on parcours la liste à partir du début en   */
+/* faisant "pos_alea" déplacements (avec le "p_courant").  On retourne le coup qui se  */
+/* trouve dans le noeud suite aux "pos_alea" déplacements (utilisée pour le MANDAT 1). */
+t_coup choix_coup_ordi(t_liste_coups* liste_coups);
 
-	ecrit par Pascal Dube, Victor Poulin et Simon Des-Alliers
-*************************************************************************************************/
- int get_nb_coups(const t_liste_coups* liste_coups);
+/* Affiche le contenu de la liste dans la console-texte (SANS le "Winconsole" pour la  */
+/* version finale du projet).  Sera utile pour les débuggages seulement. */
+void afficher_liste_coups(t_liste_coups* liste_coups);
 
-/*************************************************************************************************
-    OBJECTIF : Valide si le coup reçu est dans la liste des coups possibles a jouer. On re�oit la
-	           representation texte du coup a retrouver. On parcourt la liste en comparant le texte
-			   recu avec le champ texte_coup de chaque coup. Si ce texte a ete retrouve, on
-			   retourne une copie de ce coup via la reference "*coup" et on retourne 1. Sinon, on
-			   retourne 0 (coup non-present dans la liste).
-
-	PARAMETRE : liste_coup : la liste des coups a compter
-			  :	texte_coup : le texte recu a comparer avec les strings des differentes coups
-			  : coup :		 le pointeur de retour pour le coup
-
-	SORTIE : retourne 1 si le coup est dans la liste de coups valide sinon on retourne 0
-			 le coup extrait de la liste retournee via le pointeur coup
-
-	ecrit par Pascal Dube, Victor Poulin et Simon Des-Alliers
-*************************************************************************************************/
-int valider_coup(const t_liste_coups* liste_coups, char* texte_coup, t_coup* coup);
-
-/*************************************************************************************************
-    OBJECTIF : Valide si la position-destination (col, lig) recue fait partie d'un des coups de
-	           la liste. On recoit les coordonnees de la case "col, lig" et on parcourt la liste a
-			   la recherche d'un coup qui a la meme case-destination que (col, lig). Des qu'on
-			   trouve un coup qui atteint cette case, la fonction arrete sa recherche et retourne
-			   1. Sinon, elle retourne 0 (aucun coup de la liste n'atterri sur la case [col, lig]).
-
-	PARAMETRE : liste_coup : la liste des coups possibles a jouer
-				col : colonne de destination du coup a verifier
-				lig : ligne de destination du coup a verifier
-
-	SORTIE :	retourne 1 si le coup est possible et 0 sinon
-
-	ecrit par Pascal Dube, Victor Poulin et Simon Des-Alliers
-*************************************************************************************************/
-int valider_case_dest(const t_liste_coups* liste_coups, int col, int lig);
-
-/**********************************************************************************************
-    OBJECTIF : Affiche le contenu de la liste dans la moitie-droite de la console-texte.
-
-	PARAMETRE : liste_coup : la liste des coups a afficher
-
-	SORTIE :	affichage a l'ecran seulement
-
-	ecrit par Pascal Dube, Victor Poulin et Simon Des-Alliers
-
-************************************************************************************************/
-void afficher_liste_coups(const t_liste_coups* liste_coups);
-
-/**********************************************************************************************
-    OBJECTIF : Detruit la liste de coups (libere le tableau dynamique des coups et remet les
-	           compteurs a zero)
-
-	PARAMETRE : liste_coup : la liste des coups a detruire
-
-	SORTIE :	liste de coup vide (incluant les 'free' pour les coups eux meme)
-
-	ecrit par Pascal Dube, Victor Poulin et Simon Des-Alliers
-******************************************************************************/
+/* Détruire la liste de coups. Faites simplement un appel à "vider_liste_coups()" ici. */
 void detruire_liste_coups(t_liste_coups* liste_coups);
 
 #endif
