@@ -36,7 +36,7 @@ t_coup* init_liste_coups(t_liste_coups* liste_coups)
 {
 	/*On alloue un espace de 80 t_coup pour le tableau dynamique qui contiendra les coups
 	possibles*/
-	liste_coups->tab_coups = calloc(TAILLE_MAX, sizeof(t_coup));
+	liste_coups->tab_coups = (t_coup*)calloc(TAILLE_MAX, sizeof(t_coup));
 	/*Si l'allocation dynamique c'est bien déroulé*/
 	if (liste_coups->tab_coups != NULL)
 	{
