@@ -34,6 +34,19 @@ void init_liste_coups(t_liste_coups* liste_coups)
 
 /*****************************************************************************/
 
+void set_coup(t_coup* coup, int col, int lig, int col_dest, int lig_dest, int col2, int lig2)
+{
+	/*On assigne les valeurs mis ne paramètre dans les paramètres du coup envoyé en paramètre*/
+	coup->col = col;
+	coup->lig = lig;
+	coup->col_dest = col_dest;
+	coup->lig_dest = lig_dest;
+	coup->col_case2 = col2;
+	coup->lig_case2 = lig2;
+}
+
+/*****************************************************************************/
+
 t_coup get_coup_pc(const t_liste_coups* liste_coups)
 {
 	return liste_coups->p_courant->coup;
@@ -116,6 +129,63 @@ int ajouter_coup(t_liste_coups* liste_coups, const t_coup* coup)
 
 	//tmp est une référence à li donc en modifiant tmp, on modifie li
 	return li;
+}
+
+/*****************************************************************************/
+
+int ajouter_coup_debut(t_liste_coups* liste_coups, const t_coup* coup) {
+	return 1; 
+}
+
+/*****************************************************************************/
+
+void vider_liste_coups(t_liste_coups* liste_coups) {
+
+}
+
+/*****************************************************************************/
+
+void replacer_pc_debut(t_liste_coups* liste_coups) 
+{
+	/*On fait pointer p_courant sur le même noeud que le noeud
+	que pointe la tête pour le replacer au début de la liste*/
+	liste_coups->p_courant = liste_coups->tete;
+}
+
+/*****************************************************************************/
+
+int  avancer_pc(t_liste_coups* liste_coups) 
+{
+	/*Si on n'est pas à la fin de la liste*/
+	if (liste_coups->p_courant->suivant) {
+		liste_coups->p_courant = liste_coups->p_courant->suivant;
+		return 1;
+	}
+	return 0;
+}
+
+/*****************************************************************************/
+
+t_coup choix_coup_ordi(t_liste_coups* liste_coups) 
+{
+	int coup_choisi; //Variable pour prendre le nombre aléatoire est généré
+	/*On doit replacer le pc au début de la liste car on a changer de joueur*/
+	/*Cette ligne va être enlever pour la mettre dans le main */
+	replacer_pc_debut(liste_coups);
+	/*On s'assure que la liste n'est pas vide */
+	if (!liste_est_vide(liste_coups))
+	{
+		/*On génère le nombre aléatoire*/
+		coup_choisi = mt_randU(liste_coups->nb_noeuds);
+		/*On retourne le coup qui est à la liste aléatoire*/
+		for (int i = 0; i <= coup_choisi; i++)
+		{
+			avancer_pc(liste_coups);
+		}
+		return get_coup_pc(liste_coups);
+	}
+	/*Sinon on renvoie un coup vide*/
+	return t_coup({ 0 });
 }
 
 /*****************************************************************************/
