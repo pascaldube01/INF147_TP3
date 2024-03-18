@@ -86,6 +86,7 @@ int valider_coup(t_liste_coups* liste_coups, char* texte_coup, t_coup* coup)
 
 			return 1;
 		}
+		avancer_pc(liste_coups);
 	}
 
 	return 0;
@@ -122,7 +123,7 @@ int ajouter_coup(t_liste_coups* liste_coups, const t_coup* coup)
 		return 0;
 
 	//Si la liste est vide, on débute la liste 
-	if (liste_est_vide(liste_coups))
+	if (!get_nb_coups(liste_coups))
 	{
 		element->suivant = NULL;
 		set_coup(&element->coup, coup->col, coup->lig, coup->col_dest, coup->lig_dest, 
@@ -134,6 +135,8 @@ int ajouter_coup(t_liste_coups* liste_coups, const t_coup* coup)
 	}
 	else
 	{
+		/*On remet le pc au debut*/
+		replacer_pc_debut(liste_coups);
 		//On avance le pointeur courant jusqu'à la fin de la liste
 		while (liste_coups->p_courant->suivant != NULL)
 			avancer_pc(liste_coups);

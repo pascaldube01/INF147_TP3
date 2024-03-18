@@ -50,7 +50,7 @@ int main()
 {
 	/*pour le test, on a besoin de creer une liste de coup*/
 	t_liste_coups liste_coups;
-
+	int compteur = TAILLE_MAX_TEST;
 	/*on cree des variables pour des strings car certaines fonctions requerent des pointeurs*/
 	char string_test_faux[6] = "faux" ;
 	char string_test_case[6] = "b7-c6";
@@ -91,10 +91,12 @@ int main()
 	/*on teste maintenant la fonction ajotuer_coup en entrant test_coup dans liste_coups autant de
 	fois que possible. une fois toutes les cases de coups pleines, la fonction retourne une erreur
 	ce qui arrete la boucle, on teste par le fait meme get_nb_coups*/
-	while (ajouter_coup(&liste_coups, test_coup)) {}
+	while (compteur) {
+		ajouter_coup(&liste_coups, test_coup);
+		compteur--;
+	}
 
-	printf("\n\napres avoir rempli la liste de coup, on a %d coups, il en faut %d"
-			, get_nb_coups(&liste_coups), TAILLE_MAX_TEST);
+	printf("\n\napres avoir rempli la liste de coup, on a %d coups", get_nb_coups(&liste_coups));
 
 
 	/*le premier test pour valider_coup cherche une valeur qui n'existe pas*/
