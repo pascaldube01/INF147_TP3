@@ -691,8 +691,8 @@ void roque_du_roi(t_etat_jeu* jeu, t_liste_coups* liste, int check_roq)
 					set_joueur(jeu, INVERSER_JOUEUR(joueur));
 					/*On doit s'assurer que le roi n'est pas en danger lorsqu'il se déplace
 					on met donc temporairement des rois sur les cases que le roi va se déplacer*/
-					set_piece_case(jeu, ROI_N + joueur, 5, ROQUE_ROI(joueur));
-					set_piece_case(jeu, ROI_N + joueur, 6, ROQUE_ROI(joueur));
+					set_piece_case(jeu, (t_piece)(ROI_N + joueur), 5, ROQUE_ROI(joueur));
+					set_piece_case(jeu, (t_piece)(ROI_N + joueur), 6, ROQUE_ROI(joueur));
 					
 					//On génère la liste de coups de l'ennemi
 					generer_liste_coups(jeu, &coups_tmp, 0);
@@ -738,8 +738,8 @@ void roque_du_roi(t_etat_jeu* jeu, t_liste_coups* liste, int check_roq)
 					
 					/*On doit s'assurer que le roi n'est pas en danger lorsqu'il se déplace
 					on met donc temporairement des rois sur les cases que le roi va se déplacer*/
-					set_piece_case(jeu, ROI_N + joueur, 2, ROQUE_ROI(joueur));
-					set_piece_case(jeu, ROI_N + joueur, 3, ROQUE_ROI(joueur));
+					set_piece_case(jeu, (t_piece)(ROI_N + joueur), 2, ROQUE_ROI(joueur));
+					set_piece_case(jeu, (t_piece)(ROI_N + joueur), 3, ROQUE_ROI(joueur));
 					
 					//On génère la liste de coups de l'ennemi
 					generer_liste_coups(jeu, &coups_tmp, 0);
@@ -815,7 +815,7 @@ t_piece jouer_coup(t_etat_jeu* jeu, const t_coup* coup)
 		{
 			//Calcul de la colonne qu'on met la tour 
 			//Si on est les blancs (ou les noirs) on va à la ligne 7 (ou 0), colonne 3 (ou 5)
-			set_piece_case(jeu, TOUR_N + joueur, POS_TOUR(coup), ROQUE_ROI(joueur));
+			set_piece_case(jeu, (t_piece)(TOUR_N + joueur), POS_TOUR(coup), ROQUE_ROI(joueur));
 			//On vide la case où il y avait la tour avant le roque 
 			set_piece_case(jeu, VIDE, coup->col_case2, coup->lig_case2);
 			//On désactive la permission de faire le roque pour le joueur
@@ -825,14 +825,14 @@ t_piece jouer_coup(t_etat_jeu* jeu, const t_coup* coup)
 
 	//Si on veut déplacer une tour qui n'a pas encore été déplacée on doit modifier la valeur
 	if (piece_a_deplacer == TOURI_N + joueur)
-		set_piece_case(jeu, TOUR_N + joueur, coup->col_dest, coup->lig_dest);
+		set_piece_case(jeu, (t_piece)(TOUR_N + joueur), coup->col_dest, coup->lig_dest);
 	//Sinon, si on veut déplacer un pion qui est à l'extrémité de la grille 
 	else if (piece_a_deplacer == PION_N + joueur)
 	{
 		//Si le joueur désire mettre le pion sur la ligne 0 ou 7, 
 		//on effectue une promotion et le pion devient une dame 
 		if (coup->lig_dest == PROMOTION(joueur))
-			set_piece_case(jeu, DAME_N + joueur, coup->col_dest, coup->lig_dest);
+			set_piece_case(jeu, (t_piece)(DAME_N + joueur), coup->col_dest, coup->lig_dest);
 		//Sinon, on peut placer la pièce à déplacer dans la case destination
 		else
 			set_piece_case(jeu, piece_a_deplacer, coup->col_dest, coup->lig_dest);
