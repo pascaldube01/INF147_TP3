@@ -123,6 +123,7 @@ int ajouter_coup(t_liste_coups* liste_coups, const t_coup* coup)
 		liste_coups->tete = element;
 		liste_coups->fin = element;
 		liste_coups->p_courant = element;
+
 	}
 	else
 	{
@@ -184,6 +185,9 @@ int ajouter_coup_debut(t_liste_coups* liste_coups, const t_coup* coup)
 		liste_coups->tete = liste_coups->p_courant;
 
 	}
+
+	//On incrémente le nombre de noeud, car on ajoute un nouvel élément
+	liste_coups->nb_noeuds++;
 	return 1;
 
 }
