@@ -61,7 +61,7 @@
 /*                 LES LIBRAIRIES                          */
 /*=========================================================*/
 
-#include "test_generer_liste.h"
+#include "test_generer_liste.hpp"
 #include"grille_echecs.hpp"
 
 /*=========================================================*/

@@ -34,7 +34,7 @@
 
 #ifndef WINCONSOLE
 #define WINCONSOLE 0
-#include "WinConsole.h"
+#include "WinConsole.hpp"
 #endif
 
 /*=========================================================*/
