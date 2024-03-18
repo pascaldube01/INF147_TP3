@@ -110,14 +110,8 @@ int ajouter_coup(t_liste_coups* liste_coups, const t_coup* coup)
 	element->coup = coup;
 	element->suivant = NULL; //Dernier élement
 
-	if (liste_est_vide(liste_coups))
-	{
-		//On retourne l'élément, car dans tous les cas il y a juste lui
-		return element;
-	}
-
 	t_lien tmp; //C'est pas une copie, c'est vraiment la même chose
-	tmp = li;         //tmp est un pointeur qui pointe à la même place que li
+	tmp = li;   //tmp est un pointeur qui pointe à la même place que li
 
 	while (tmp->suivant != NULL)
 	{
