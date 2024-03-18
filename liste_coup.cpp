@@ -102,31 +102,39 @@ int valider_case_dest(t_liste_coups* liste_coups, int col, int lig)
 
 int ajouter_coup(t_liste_coups* liste_coups, const t_coup* coup)
 {
-	//Si la liste est vide, on retourne 0
-	if (liste_est_vide(liste_coups))
-	{
-		return 0;
-	}
-
 	//On crée un nouvel élément à ajouter
-	t_lien element; 
-
+	t_lien element;
+	//On créé un nouveau pointeur
+	t_lien ptr = liste_coups->fin;
+	t_coup coup;
 	//On alloue de l'espace mémoire pour une nouvel élément
 	element = (t_lien)malloc(sizeof(t_lien));
 
 	//On vérifie que l'allocation dynamique s'est bien effectuée
 	assert(element);
 
-	//On avance le pointeur courant jusqu'à la fin de la liste
-	while (avancer_pc(liste_coups) != 0){}
-
-	//On copie chaque éléments du nouveau coup dans la liste
-	liste_coups->p_courant->coup.col = coup->col;
-	liste_coups->p_courant->coup.lig = coup->lig;
-	liste_coups->p_courant->coup.col_dest = coup->col_dest;
-	liste_coups->p_courant->coup.lig_dest = coup->lig_dest;
-	liste_coups->p_courant->coup.col_case2 = coup->col_case2;
-	liste_coups->p_courant->coup.lig_case2 = coup->lig_case2;
+	//Si la liste est vide, on débute la liste 
+	if (liste_est_vide(liste_coups))
+	{
+		element->suivant = NULL;
+		set_coup(&element->coup, coup->col, coup->lig, coup->col_dest, coup->lig_dest, coup->col_case2, coup->lig_case2);
+		liste_coups->tete = element;
+		liste_coups->fin = element;
+	}
+	else
+	{
+		//On avance le pointeur courant jusqu'à la fin de la liste
+		while (liste_coups->p_courant->suivant != NULL)
+			avancer_pc(liste_coups);
+		/*On set le coup dans element*/
+		set_coup(&element->coup, coup->col, coup->lig, coup->col_dest, coup->lig_dest, coup->col_case2, coup->lig_case2);
+		/*On fait le lien entre la liste et l'élément */
+		liste_coups->p_courant->suivant = element;
+		/*on met le suivant de l'élément à NULL car c'est le dernier de la liste*/
+		element->suivant = NULL;
+		/*on met la fin à l'élément*/
+		liste_coups->fin = element;
+	}
 
 	//On incrémente le nombre de noeud, car on a joute un nouvel élément
 	liste_coups->nb_noeuds++;
