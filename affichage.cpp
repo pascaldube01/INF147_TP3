@@ -362,21 +362,6 @@ void afficher_coup(const t_etat_jeu* jeu, const t_coup* coup)
 	}
 }
 
-/*****************************************************************************/
-t_coup  choix_coup_ordi(const t_liste_coups liste)
-{
-	int coup_aleatoire; //Représente la coup choisit aléatoirement par le générateur mtwister
-
-	//On initialise le générateur pseudo-aléatoire
-	mt_srand(VALEUR_DEPART);
-
-	//On veut prendre un coup aléatoire dans la liste, 
-	//Le nombre doit donc être entre 0 et le nombre de coups possible -1.
-	coup_aleatoire = mt_randU(liste.nb_noeuds);
-
-	//On retourne un coup du tableau aléatoire
-	return liste.tab_coups[coup_aleatoire];
-}
 
 /*****************************************************************************/
 void gagnant_jeu(const t_etat_jeu* jeu) 

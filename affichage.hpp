@@ -136,18 +136,6 @@ t_coup lire_coup_joueur(t_liste_coups* liste_coups);
 *************************************************************************************************/
 void afficher_coup(const t_etat_jeu* jeu, const t_coup* coup);
 
-/*************************************************************************************************
-    OBJECTIF : Va choisir et retourner le coup de l’ordinateur aléatoirement parmi tous les coups 
-	          valides dans la « liste » reçue en paramètre.
-
-	PARAMETRE : liste   : la liste des coups possible
-
-	SORTIE :	Le coup de l'ordinateur aléatoire
-
-	ecrit par Pascal Dube, Victor Poulin et Simon Des-Alliers
-*************************************************************************************************/
-t_coup  choix_coup_ordi(const t_liste_coups liste);
-
 /***********************************************************************************************
     OBJECTIF : Va afficher à l'écran le gagnant du jeu
 
