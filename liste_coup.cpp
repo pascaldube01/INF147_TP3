@@ -154,6 +154,33 @@ int ajouter_coup_debut(t_liste_coups* liste_coups, const t_coup* coup)
 
 void vider_liste_coups(t_liste_coups* liste_coups)
 {
+	int compteur = 0; //Compteur permettant de sortir de la boucle
+
+	//On met le pointeur courant au debut de la liste
+	replacer_pc_debut(liste_coups);
+
+	//Tant qu'on est pas arrivé à la fin de la liste
+	while (compteur != liste_coups->nb_noeuds)
+	{
+		//On avance le pointeur_courant
+		avancer_pc(liste_coups);
+
+		//On libère la tête
+		free(liste_coups->tete);
+
+		//On met la tête sur le pointeur courant
+		liste_coups->tete = liste_coups->p_courant;
+
+		//On incrémente le compteur
+		compteur++;
+	}
+
+	//On libère les pointeurs
+	liste_coups->tete = NULL;
+	liste_coups->p_courant = NULL;
+
+	//On met le nombre de noeuds à zéro, car on a vidé la liste
+	liste_coups->nb_noeuds = 0;
 
 }
 
@@ -212,4 +239,11 @@ Bool liste_est_vide(t_liste_coups* liste_coups)
 		return vrai;
 	}
 	return faux;
+}
+
+/*****************************************************************************/
+
+void detruire_liste_coups(t_liste_coups* liste_coups)
+{
+	vider_liste_coups(liste_coups);
 }
