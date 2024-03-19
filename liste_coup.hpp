@@ -6,7 +6,26 @@
 /*  Module qui contient les fonctions de gestion d'une liste chainée de coups.            */
 /*  Ce module est indépendant et n'inclut rien.                                           */
 /*                                                                                        */
-/*Liste des fonctions:                                                                    */
+/*Liste des fonctions:   t_coup get_coup_pc(const t_liste_coups* liste_coups)             */
+/*                       int get_nb_coups(const t_liste_coups* liste_coups)               */
+/*                       int valider_coup(t_liste_coups* liste_coups, char* texte_coup,   */
+/*                             t_coup* coup)                                              */
+/*                       int valider_case_dest(t_liste_coups* liste_coups, int col,       */
+/*                           int lig)                                                     */
+/*                       void init_liste_coups(t_liste_coups* liste_coups)                */
+/*                       void set_coup(t_coup* coup, int col, int lig, int col_dest,      */ 
+/*                           int lig_dest, int col2, int lig2)                            */
+/*                       int ajouter_coup(t_liste_coups* liste_coups, const t_coup* coup) */
+/*                       int ajouter_coup_debut(t_liste_coups* liste_coups,               */
+/*                           const t_coup* coup)                                          */
+/*                       void vider_liste_coups(t_liste_coups* liste_coups)               */
+/*                       void replacer_pc_debut(t_liste_coups* liste_coups)               */
+/*                       int  avancer_pc(t_liste_coups* liste_coups)                      */
+/*                       t_coup choix_coup_ordi(t_liste_coups* liste_coups)               */
+/*                       void afficher_liste_coups(t_liste_coups* liste_coups)            */
+/*                       void detruire_liste_coups(t_liste_coups* liste_coups)            */
+/*                       int liste_est_vide(t_liste_coups* liste)                         */
+/*                                                                                        */
 /******************************************************************************************/
 
 #if !defined(POS_VIDE)
