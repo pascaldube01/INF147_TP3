@@ -121,9 +121,11 @@ int ajouter_coup(t_liste_coups* liste_coups, const t_coup* coup)
 	//On vérifie que l'allocation dynamique s'est bien effectuée
 	if (element == NULL)
 		return 0;
+
 	/*On set le coup dans element*/
 	set_coup(&element->coup, coup->col, coup->lig, coup->col_dest, coup->lig_dest,
 		coup->col_case2, coup->lig_case2);
+
 	//Si la liste est vide, on débute la liste 
 	if (!get_nb_coups(liste_coups))
 	{
@@ -138,14 +140,17 @@ int ajouter_coup(t_liste_coups* liste_coups, const t_coup* coup)
 	{
 		/*On remet le pc au debut*/
 		replacer_pc_debut(liste_coups);
+
 		//On avance le pointeur courant jusqu'à la fin de la liste
 		while (liste_coups->p_courant->suivant != NULL)
 			avancer_pc(liste_coups);
 		
 		/*On fait le lien entre la liste et l'élément */
 		liste_coups->p_courant->suivant = element;
+
 		/*on met le suivant de l'élément à NULL car c'est le dernier de la liste*/
 		element->suivant = NULL;
+
 		/*on met la fin à l'élément*/
 		liste_coups->fin = element;
 		
@@ -155,14 +160,13 @@ int ajouter_coup(t_liste_coups* liste_coups, const t_coup* coup)
 	liste_coups->nb_noeuds++;
 
 	return 1;
-
 }
 
 /*****************************************************************************/
 
 int ajouter_coup_debut(t_liste_coups* liste_coups, const t_coup* coup) 
 {
-	t_lien element;
+	t_lien element; //Variable représentant un nouvel élément dans la liste
 
 	//On alloue de l'espace mémoire pour une nouvel élément
 	element = (t_lien)malloc(sizeof(t_lien));
@@ -171,9 +175,13 @@ int ajouter_coup_debut(t_liste_coups* liste_coups, const t_coup* coup)
 	if (element == NULL) {
 		return 0;
 	}
+
+	//On replace le pointeur courant au début de la liste
 	replacer_pc_debut(liste_coups);
+
 	set_coup(&element->coup, coup->col, coup->lig, coup->col_dest, coup->lig_dest,
 		coup->col_case2, coup->lig_case2);
+
 	/*Si la liste est vide*/
 	if (liste_est_vide(liste_coups))
 	{
@@ -247,10 +255,13 @@ void replacer_pc_debut(t_liste_coups* liste_coups)
 int  avancer_pc(t_liste_coups* liste_coups) 
 {
 	/*Si on n'est pas à la fin de la liste*/
-	if (liste_coups->p_courant->suivant) {
+	if (liste_coups->p_courant->suivant) 
+	{
 		liste_coups->p_courant = liste_coups->p_courant->suivant;
+
 		return 1;
 	}
+
 	return 0;
 }
 
@@ -259,14 +270,17 @@ int  avancer_pc(t_liste_coups* liste_coups)
 t_coup choix_coup_ordi(t_liste_coups* liste_coups) 
 {
 	int coup_choisi; //Variable pour prendre le nombre aléatoire est généré
+
 	/*On doit replacer le pc au début de la liste car on a changer de joueur*/
 	/*Cette ligne va être enlever pour la mettre dans le main */
 	replacer_pc_debut(liste_coups);
+
 	/*On s'assure que la liste n'est pas vide */
 	if (!liste_est_vide(liste_coups))
 	{
 		/*On génère le nombre aléatoire*/
 		coup_choisi = mt_randU(get_nb_coups(liste_coups));
+
 		/*On retourne le coup qui est à la liste aléatoire*/
 		for (int i = 0; i <= coup_choisi; i++)
 		{
@@ -274,25 +288,27 @@ t_coup choix_coup_ordi(t_liste_coups* liste_coups)
 		}
 		return get_coup_pc(liste_coups);
 	}
+
 	/*Sinon on renvoie un coup vide*/
 	return t_coup({ 0 });
 }
 
 /*****************************************************************************/
 
-Bool liste_est_vide(t_liste_coups* liste_coups)
+int liste_est_vide(t_liste_coups* liste_coups)
 {
-	/*Si le nombre de noeud est à zéro la liste est vide*/
+	//Si le nombre de noeud est à zéro la liste est vide
 	if (!get_nb_coups(liste_coups))
 	{
-		return vrai;
+		return 1;
 	}
-	return faux;
+	return 0;
 }
 
 /*****************************************************************************/
 
 void detruire_liste_coups(t_liste_coups* liste_coups)
 {
+	//Pour détruire la liste on doit simplement la vider (free) et mettre les pointeurs à NULL
 	vider_liste_coups(liste_coups);
 }

@@ -1,10 +1,14 @@
-/*******************************************************************************
-    LISTE_COUPS.HPP  (version pour le TP3)
-    Auteurs : Simon Des-Alliers, PAscal Dubé et Victor Poulin
+/******************************************************************************************/
+/*  LISTE_COUP.HPP                                                                        */
+/*  Auteurs: Victor Poulin, Pascal Dube et Simon Des-Alliers                              */
+/*  Date: 18 mars 2024                                                                    */
+/*                                                                                        */
+/*  Module qui contient les fonctions de gestion d'une liste chainée de coups.            */
+/*  Ce module est indépendant et n'inclut rien.                                           */
+/*                                                                                        */
+/*Liste des fonctions:                                                                    */
+/******************************************************************************************/
 
-    Module qui contient les fonctions de gestion d'une liste chainée de coups.
-    Ce module est indépendant et n'inclut rien.
-*******************************************************************************/
 #if !defined(POS_VIDE)
 
 #define TAILLE_GR    8      //taille carrée de la grille de jeu
@@ -17,9 +21,6 @@
 /*-------------------------------------------------------------------*/
 /*                    TYPES POINTEURS ET STRUCT                      */
 /*-------------------------------------------------------------------*/
-
-/*Définition d'un type Booléen*/
-typedef enum {faux, vrai} Bool;
 
 //NOTE: Ce type-struct n'est PAS encapsulé. Vous avez le droit d'accéder à
 //      n'importe quel de ses 7 champs directement n'importe-où dans le projet.
@@ -126,7 +127,7 @@ void afficher_liste_coups(t_liste_coups* liste_coups);
 void detruire_liste_coups(t_liste_coups* liste_coups);
 
 //Renvoie 1 si la liste est vide, 0 sinon
-Bool liste_est_vide(t_liste_coups* liste);
+int liste_est_vide(t_liste_coups* liste);
 
 
 #endif
