@@ -47,9 +47,16 @@
 
 void init_liste_coups(t_liste_coups* liste_coups)
 {
+	//On met la fin de la liste à NULL
 	liste_coups->fin = NULL;
+
+	//On met le pointeur courant à NULL
 	liste_coups->p_courant = NULL;
+
+	//On met la tete à NULL
 	liste_coups->tete = NULL;
+
+	//On initialise le nombre de noeud à 0
 	liste_coups->nb_noeuds = 0;
 }
 
@@ -79,6 +86,7 @@ void set_coup(t_coup* coup, int col, int lig, int col_dest, int lig_dest, int co
 
 t_coup get_coup_pc(const t_liste_coups* liste_coups)
 {
+	//On retourne lec coup du pointeur courant
 	return liste_coups->p_courant->coup;
 }
 
@@ -86,6 +94,7 @@ t_coup get_coup_pc(const t_liste_coups* liste_coups)
 
 int get_nb_coups(const t_liste_coups* liste_coups)
 {
+	//On retourne le nombre de coups de la liste chaînée (nombre de noeuds)
 	return liste_coups->nb_noeuds;
 }
 
@@ -102,10 +111,13 @@ int valider_coup(t_liste_coups* liste_coups, char* texte_coup, t_coup* coup)
 		//On compare le pointeur_courant avec le texte_coup
 		if (strcmp(liste_coups->p_courant->coup.texte_coup, texte_coup) == 0)
 		{
+			//On copie le texte_coup de la liste avec le texte_coup reçu
 			strcpy(coup->texte_coup, liste_coups->p_courant->coup.texte_coup);
 
 			return 1;
 		}
+
+		//On avance le poibteur courant
 		avancer_pc(liste_coups);
 	}
 
@@ -135,7 +147,7 @@ int ajouter_coup(t_liste_coups* liste_coups, const t_coup* coup)
 	//On crée un nouvel élément à ajouter
 	t_lien element = NULL;
 
-	//On alloue de l'espace mémoire pour une nouvel élément
+	//On alloue de l'espace mémoire pour un nouvel élément
 	element = (t_lien)malloc(sizeof(t_lien));
 
 	//On vérifie que l'allocation dynamique s'est bien effectuée
@@ -154,7 +166,6 @@ int ajouter_coup(t_liste_coups* liste_coups, const t_coup* coup)
 		liste_coups->tete = element;
 		liste_coups->fin = element;
 		liste_coups->p_courant = element;
-
 	}
 	else
 	{
