@@ -173,8 +173,8 @@ int ajouter_coup(t_liste_coups* liste_coups, const t_coup* coup)
 		replacer_pc_debut(liste_coups);
 
 		//On avance le pointeur courant jusqu'à la fin de la liste
-		while (liste_coups->p_courant->suivant != NULL)
-			avancer_pc(liste_coups);
+		while (avancer_pc(liste_coups)) {}
+			
 		
 		/*On fait le lien entre la liste et l'élément */
 		liste_coups->p_courant->suivant = element;
