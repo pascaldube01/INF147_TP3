@@ -132,9 +132,11 @@ int valider_case_dest(t_liste_coups* liste_coups, int col, int lig)
 	replacer_pc_debut(liste_coups);
 
 	//Tant qu'on est pas à la fin de la liste
-	while (liste_coups->p_courant != NULL)
+	for (int i = liste_coups->nb_noeuds; i != 0; i--)
 	{
-
+		if (liste_coups->p_courant->coup.lig_dest == lig &&
+			liste_coups->p_courant->coup.col_dest == col)
+			return 1;
 	}
 
 	return 0;

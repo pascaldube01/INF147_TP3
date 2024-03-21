@@ -31,7 +31,7 @@
 
 /*activation du main de test pour verifier le bon fonctionnement de toutes les fonctions du module
 liste_coup.c*/
-#define TEST_MODULE_LISTE_COUP 1
+#define TEST_MODULE_LISTE_COUP 0
 
 #define TAILLE_MAX_TEST 80
 
@@ -39,7 +39,7 @@ liste_coup.c*/
 #define TEST_JOUER_COUP 0
 
 /*activation du main pour faire rouler le programme principale */
-#define JOUER_UNE_PARTIE 0
+#define JOUER_UNE_PARTIE 1
 
 /*=========================================================*/
 /*                  PROGRAMME DE TESTS                     */
@@ -227,7 +227,7 @@ int main()
 		}
 		//Si le joueur est noir (ordi), on choisit son coup de manière aléatoire
 		else
-			coup = choix_coup_ordi(liste_coups);
+			coup = choix_coup_ordi(&liste_coups);
 		
 		/*Si l'utilisateur à rentré le message de fin de partie, 
 		on doit sortir de la boucle et ne pas exécuter les actions suivantes*/
@@ -246,7 +246,7 @@ int main()
 			/*On modifie le joueur pour le prochain joueur à jouer*/
 			set_joueur(&etat_jeu, INVERSER_JOUEUR(etat_jeu.joueur));
 			/*On remet la liste de coups à 0 */
-			liste_coups.nb_coups = 0;
+			liste_coups.nb_noeuds = 0;
 			/*On répète la boucle jusqu'à temps que le joueur humain arrête la partie, ou qu'un
 			roi est capturé*/
 		}
