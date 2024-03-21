@@ -106,7 +106,7 @@ int valider_coup(t_liste_coups* liste_coups, char* texte_coup, t_coup* coup)
 	replacer_pc_debut(liste_coups);
 
 	//Tant qu'on est pas à la fin de la liste
-	while (liste_coups->p_courant != NULL)
+	while (liste_coups->p_courant->suivant != NULL)
 	{
 		//On compare le pointeur_courant avec le texte_coup
 		if (strcmp(liste_coups->p_courant->coup.texte_coup, texte_coup) == 0)
@@ -148,14 +148,14 @@ int ajouter_coup(t_liste_coups* liste_coups, const t_coup* coup)
 	t_lien element = NULL;
 
 	//On alloue de l'espace mémoire pour un nouvel élément
-	element = (t_lien)malloc(sizeof(t_lien));
+	element = (t_lien) malloc(sizeof(t_noeud));
 
 	//On vérifie que l'allocation dynamique s'est bien effectuée
 	if (element == NULL)
 		return 0;
 
 	/*On set le coup dans element*/
-	set_coup(&element->coup, coup->col, coup->lig, coup->col_dest, coup->lig_dest,
+	set_coup(&(element->coup), coup->col, coup->lig, coup->col_dest, coup->lig_dest,
 		coup->col_case2, coup->lig_case2);
 
 	/*on met le suivant de l'élément à NULL car c'est le dernier de la liste*/
@@ -163,28 +163,17 @@ int ajouter_coup(t_liste_coups* liste_coups, const t_coup* coup)
 
 	//Si la liste est vide, on débute la liste 
 	if (!get_nb_coups(liste_coups))
-	{
-		element->suivant = NULL;
-		
+	{	
 		liste_coups->tete = element;
 		liste_coups->fin = element;
 		liste_coups->p_courant = element;
 	}
 	else
 	{
-		/*On remet le pc au debut*/
-		replacer_pc_debut(liste_coups);
-
-		//On avance le pointeur courant jusqu'à la fin de la liste
-		while (avancer_pc(liste_coups)) {}
-			
-		
-		/*On fait le lien entre la liste et l'élément */
-		liste_coups->p_courant->suivant = element;
+		liste_coups->fin->suivant = element;
 
 		/*on met la fin à l'élément*/
 		liste_coups->fin = element;
-		
 	}
 
 	//On incrémente le nombre de noeud, car on ajoute un nouvel élément
@@ -286,10 +275,9 @@ void replacer_pc_debut(t_liste_coups* liste_coups)
 int  avancer_pc(t_liste_coups* liste_coups) 
 {
 	/*Si on n'est pas à la fin de la liste*/
-	if (liste_coups->p_courant->suivant) 
+	if (liste_coups->p_courant->suivant != NULL) 
 	{
 		liste_coups->p_courant = liste_coups->p_courant->suivant;
-
 		return 1;
 	}
 

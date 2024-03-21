@@ -55,11 +55,11 @@ typedef struct
 typedef struct noeud* t_lien;      //type-pointeur vers un neoud
 
 /* la structure-noeud contenant un coup et le lien vers le coup suivant */
-struct noeud
+typedef struct noeud
 {
     t_coup coup;
     t_lien suivant;     //pointeur vers le noeud suivant
-};
+} t_noeud;
 
 /* structure principale de gestion de la liste chainée */
 typedef struct
