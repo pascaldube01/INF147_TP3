@@ -394,9 +394,11 @@ void afficher_liste_coups(t_liste_coups* liste_coups)
 	int total_coups_affiche = 0;
 	/*Numéro de colonne*/
 	int no_de_colonne = 0;
+	/*creation d'un coup temporaire pour l'affichage*/
+	t_coup coup_a_afficher = { 0 };
 
 	/*il faut commencer par placer le curseur de winconsole au bon endroit*/
-	gotoxy(DECALAGE_Y + 50, DECALAGE_X);
+	gotoxy(DECALAGE_X + 40, DECALAGE_Y);
 
 	/*on remet le pointeur */
 	replacer_pc_debut(liste_coups);
@@ -417,25 +419,24 @@ void afficher_liste_coups(t_liste_coups* liste_coups)
 				break;
 
 			/*on va chercher une copie du prochain coup*/
-			get_coup_pc(liste_coups);
-			avancer_pc(liste_coups);
+			coup_a_afficher = get_coup_pc(liste_coups);
 
 			/*on commence par deplacer le curseur de la console vers le debut de la prochaine
 			ligne a ecrire*/
-			gotoxy(DECALAGE_Y + 50 +
+			gotoxy(DECALAGE_X + 40 +
 				(DISTANCE_ENTRE_COLONNES * no_de_colonne),
-				DECALAGE_X + (i % TAILLE_COLONNE_AFFICHAGE));
+				DECALAGE_Y + (i % TAILLE_COLONNE_AFFICHAGE) + 1);
 
 			/*on affiche ensuite directement la string contenue dans la liste*/
-			printf("%s", liste_coups->p_courant->coup.texte_coup);
+			printf("%s", coup_a_afficher.texte_coup);
 
 			/*si la ligne de la case 2 du coup n'est pas POS_VIDE, on doit egalement l'afficher
 			mais entre parentheses, il n'est necessaire de verifier qu'une seule valeur car si la
 			ligne est a POS_VIDE, la colonne le sera forcement aussi*/
-			if (liste_coups->p_courant->coup.lig_case2 != POS_VIDE)
+			if (coup_a_afficher.lig_case2 != POS_VIDE)
 				printf(" (%c%c)",
-					COL_A_CH(liste_coups->p_courant->coup.col_case2),
-					RAN_A_NO(liste_coups->p_courant->coup.lig_case2));
+					COL_A_CH(coup_a_afficher.col_case2),
+					RAN_A_NO(coup_a_afficher.lig_case2));
 
 			/*on passe ensuite au prochain coup dans la liste (ou on sort des boucles si on est
 			a la fin)*/

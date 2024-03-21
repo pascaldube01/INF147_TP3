@@ -29,7 +29,7 @@
 #include "grille_echecs.hpp"
 
 #ifndef WINCONSOLE
-#define WINCONSOLE 0
+#define WINCONSOLE 0define DECALAGE_Y
 #include "WinConsole.hpp"
 #endif
 
