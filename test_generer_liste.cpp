@@ -130,9 +130,18 @@ void initialiser_grille_test_roi(t_grille grille_jeu)
 
 	/*mise des pieces sur le jeu pour le test */
 	grille_jeu[4][4] = ROI_B;
-	grille_jeu[4][3] = PION_N;
-	grille_jeu[6][1] = PION_N;
-	grille_jeu[5][4] = PION_B; 
+	grille_jeu[4][5] = ROI_B;
+	grille_jeu[4][6] = ROI_B;
+	grille_jeu[5][4] = ROI_B;
+	grille_jeu[5][6] = ROI_B;
+	grille_jeu[6][4] = ROI_B;
+	grille_jeu[6][5] = ROI_B;
+	grille_jeu[6][6] = ROI_B;
+	grille_jeu[5][5] = ROI_N;
+	
+	//grille_jeu[4][3] = PION_N;
+	//grille_jeu[6][1] = PION_N;
+	//grille_jeu[3][4] = PION_B; 
 	//grille_jeu[3][4] = VIDE_EP;
 }
 
