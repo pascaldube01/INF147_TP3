@@ -272,5 +272,15 @@ void detruire_liste_coups(t_liste_coups* liste_coups);
 ***********************************************************************************************/
 int liste_est_vide(t_liste_coups* liste_coups);
 
+/**********************************************************************************************
+    OBJECTIF : Permet de détruire un coup de la liste à partir du début
+
+    PARAMETRES : La liste chaînée de coups
+
+    SORTIES :	Retourne rien
+
+    écrit par Pascal Dubé, Victor Poulin et Simon Des-Alliers
+***********************************************************************************************/
+void detruire_un_coup(t_liste_coups* liste_coups);
 
 #endif
