@@ -384,8 +384,7 @@ void gagnant_jeu(const t_etat_jeu* jeu)
 	}
 }
 
-
-
+/*****************************************************************************/
 void afficher_liste_coups(t_liste_coups* liste_coups)
 {
 	/*comme on affiche la liste de coups par colonne, il faut garder le nombre total de coups
