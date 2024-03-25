@@ -111,6 +111,11 @@ t_saisie choix_case(int* col_case, int* lig_case)
 
 }
 
+static int pale_foncer(int i, int j)
+{
+	return (i + j) % 2 ? 0 : 1;
+}
+
 void afficher_grille(const t_etat_jeu* jeu)
 {
 	int piece;
@@ -127,11 +132,6 @@ void afficher_grille(const t_etat_jeu* jeu)
 		}
 	}
 	dessiner_grille_vide();
-}
-
-static int pale_foncer(int i, int j)
-{
-	return (i + j) % 2 ? 0 : 1;
 }
 
 
