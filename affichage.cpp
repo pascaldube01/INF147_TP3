@@ -49,3 +49,37 @@ typedef struct _image_BMP
 // Rangée [1]: les 16 pièces de jeu sur fond vert-foncé (positions-impaires)
 static t_image_BMP images[2][16];
 
+t_saisie choix_case(int* col_case, int* lig_case)
+{
+	int colonne;
+	int ligne;
+	int validation = 0;
+
+	//Tant qu'on a pas obtenue un choix de case valide
+	while(!validation)
+	{
+		//On désactive les boutons de la souris 
+		eteindre_bouton_souris();
+
+		//Contient une boucle vide qui roule jusqu’à ce qu’on clique le bouton-gauche de la souris
+		attend_bouton_pese();
+
+		//On récupère les coordonnées du clic-souris
+		obtient_souris(col_case, lig_case);
+
+		//pour obtenir la position-case équivalente (entre 0 - 7)
+		colonne = ((*col_case - MARGEX) / TAILLE_BMP);
+		ligne = ((*lig_case - MARGEY) / TAILLE_BMP);
+
+		//Si le clic de la souris se situe sur le grille, on valide le clic
+		if(colonne >= 0 && colonne <= 7 && ligne >= 0 && ligne <= 7)
+		{
+			//Permet de sortir de la boucle de validation
+			validation = 1;
+
+			//On retourne 1
+			return POS_VALIDE;
+		}
+	}
+
+}
