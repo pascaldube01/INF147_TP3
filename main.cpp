@@ -59,6 +59,11 @@ int main()
 {
 	int succes_lire_images = 0;
 
+	t_etat_jeu etat_jeu;
+
+	/*initialisation de l'etat du jeu (aux echecs le joueur blanc est toujours le premier a
+	jouer)*/
+	init_jeu(&etat_jeu, BLANCS);
 		
 	succes_lire_images = lire_images(FICHIER_IMAGES);
 	if (succes_lire_images == 0)
@@ -69,7 +74,9 @@ int main()
 	printf("fichier images ouvert avec succes");
 
 
+
 	detruire_images();
+	detruire_grille(etat_jeu.grille_jeu);
 
 	printf("\n\nle programme de test s'est execute correctement");
 	return EXIT_SUCCESS;
