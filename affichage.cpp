@@ -97,6 +97,9 @@ t_saisie choix_case(int* col_case, int* lig_case)
 		colonne = ((*col_case - MARGEX) / TAILLE_BMP);
 		ligne = ((*lig_case - MARGEY) / TAILLE_BMP);
 
+		*col_case = colonne;
+		*lig_case = ligne;
+
 		//Si le clic de la souris se situe sur le grille, on valide le clic
 		if(colonne >= 0 && colonne <= 7 && ligne >= 0 && ligne <= 7)
 		{
