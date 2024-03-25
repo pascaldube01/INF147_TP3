@@ -1,450 +1,51 @@
-/***************************************************************************************/
-/*  AFFICHAGE.C                                                                        */
-/*  Auteurs: Victor Poulin, Pascal Dube et Simon Des-Alliers                           */
-/*  Date: 14 février 2024                                                              */
-/*                                                                                     */
-/* Ce module gère l'affichage de la grille d'échec (pièces, couleurs, etc.)            */
-/*                                                                                     */
-/*Liste des fonctions:  void afficher_jeu(const t_grille grille_jeu, int joueur)       */
-/*                      void afficher_piece(int piece_a_afficher)                      */
-/*                      void changer_couleur_arriere_plan(int pair_impair)             */
-/*                      void afficher_joueur(int joueur)                               */
-/*                      t_coup lire_coup_joueur(const t_liste_coups* liste_coups)      */
-/*                      void afficher_coup(const t_etat_jeu* jeu, const t_coup* coup)  */
-/*                      t_coup  choix_coup_ordi(const t_liste_coups liste)             */
-/*                      void gagnant_jeu(const t_etat_jeu* jeu)                        */
-/***************************************************************************************/
+/*******************************************************************************
+	AFFICHAGE.CPP  (version pour le TP3)
+	Auteurs :
 
+	Module qui contient les fonctions de gestion de l'affichage de la grille et
+	des coups jouées avec des images Bitmap en mode graphique.
+*******************************************************************************/
 #define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+#include <stdlib.h>
+#include "affichage.h"
 
-/*=========================================================*/
-/*                 LES LIBRAIRIES                          */
-/*=========================================================*/
+/* Type definitions */
+typedef unsigned int  UINT;
+typedef unsigned short int USHORT;
+typedef unsigned char  UCHAR;
 
-#include "affichage.hpp"
+/* Bitmap header */
+typedef struct _BMP_Header
+{   //Windows header values
+	USHORT magicID;				/* Magic identifier: "BM" */
+	UINT   file_size;			/* Size of the BMP file in bytes */
+	USHORT reserved1;			/* Reserved */
+	USHORT reserved2;			/* Reserved */
+	UINT   data_offset;			/* Offset of image data relative to the file's start */
 
-/*=========================================================*/
-/*                  LES CONSTANTES                         */
-/*=========================================================*/
+	//Bitmap header values
+	UINT   headersize;			/* Size of the header in bytes */
+	UINT   width;				/* Bitmap's width */
+	UINT   height;				/* Bitmap's height */
+	USHORT planes;				/* Number of color planes in the BMP */
+	USHORT bits_per_pixel;		/* Number of bits per pixel */
+	UINT   compression_type;	/* Compression type */
+	UINT   image_data_size;		/* Size of uncompressed image's data */
+	UINT   Hpixels_per_meter;	/* Horizontal resolution (pixels per meter) */
+	UINT   Vpixels_per_meter;	/* Vertical resolution (pixels per meter) */
+	UINT   colors_used;			/* Number of color indexes in the color table used by the BMP */
+	UINT   colors_required;		/* Number of color indexes required for displaying the BMP */
+} t_BMP_Header;
 
-#define VALEUR_DEPART 0  //Valeur permettant d'initialiser le générateur
-#define FIN_PARTIE  "xx" //String qui signifie que le joueur souhaite abandonner
-
-//constantes ascii pour passer des pièces de la grille à des codes ascii
-/*les valeurs à afficher pour les pièces données dans l'énoncé présume que le terminal utilisé
-supporte les codes ANSI par défaut, ce qui semble faux dans notre cas (peu importe la raison).
-pour assurer une compatibilité maximale, nous avons décidé d'utiliser des symboles alphabétiques.
-P = pion, R = tour, C = cavalier, B = fou, Q = dame et K = roi */
-const unsigned char CH_PIECES[9] = { ' ', 'P', '.', 'R', 'C', 'B', 'Q', 'K', '_'};
-
-/*=========================================================*/
-/*                  LES FONCTIONS                          */
-/*=========================================================*/
-
-void afficher_jeu(const t_grille grille_jeu, int joueur)
+typedef struct _image_BMP
 {
-	/*pour s'assurer que le jeu s'affiche correctement, on efface toute la console*/
-	clrscr();
+	t_BMP_Header  header;   //en-tête du fichier bitmap
+	UCHAR* image_data;		//liste des pixels (3 octets par pixel)
+} t_image_BMP;
 
-	gotoxy(DECALAGE_X, DECALAGE_Y + 17);
-	printf("(tapez 'xx' pour quitter le jeu)");
-
-	/*on commence par afficher le texte "grille de jeu" au bon endroit par rapport au décalage de
-	la grille de jeu*/
-	gotoxy(DECALAGE_X + 1, DECALAGE_Y - 3);
-	printf("grille de jeu");
-
-	/*on affiche ensuite le nom des colonnes juste en dessous*/
-	gotoxy(DECALAGE_X + 1, DECALAGE_Y - 1);
-	printf("A B C D E F G H");
-
-	/*on affiche ensuite toutes les cases et leurs pieces respectives. La premiere boucle for
-	compte les rangees et la deuxième compte les colonnes*/
-	for (int rangee = 0; rangee < TAILLE; rangee++)
-	{
-		/*pour chaque rangee, on affiche d'abord son numero de rangee juste avant celle-ci*/
-		gotoxy(DECALAGE_X - 2, DECALAGE_Y + rangee);
-		printf("%d", TAILLE - rangee);
-
-		/*on affiche ensuite chaque colonne de la rangee*/
-		for (int colonne = 0; colonne < TAILLE; colonne++)
-		{
-			/*la couleur de la case plan dépend uniquement de la paritee du numero de celle ci. On
-			peut trouver cette information en effectuant un modulo 2 sur la somme du numero de
-			colonne et de rangee*/
-			changer_couleur_arriere_plan((colonne + rangee) % 2);
-
-			/*on va ensuite à la position de la piece (le no de colonne est multiplie par deux, car
-			on ecrit deux caracteres lors du printf pour que la grille de jeu ait un aspect carre)
-			et on affiche le caractere ASCII de la piece*/
-			gotoxy((colonne * 2) + DECALAGE_X, rangee + DECALAGE_Y);
-			afficher_piece(grille_jeu[rangee][colonne]);
-			
-		}
-		/*on remet ensuite la couleur d'arriere plan à BLACK et la couleur du texte à WHITE pour
-		ecrire le numéro de rangee (si on refait un tour de boucle) et pour que le reste du
-		texte ailleurs dans l'écran de jeu s'affiche normalement (si la boucle est finie)*/
-		textcolor(WHITE);
-		textbackground(BLACK);
-	}
-
-	/*une fois l'affichage de la grille de jeu termine, on affiche quel joueur doit jouer le
-	prochain tour*/
-	afficher_joueur(joueur);
-}
-
-/*****************************************************************************/
-void afficher_joueur (int joueur)
-{
-	/*il faut se mettre en position en dessous du plateau de jeu pour faire le printf*/
-	gotoxy(DECALAGE_X, DECALAGE_Y + 10);
-
-	/*on ecrit ensuite de quel joueur il s'agit*/
-	if (joueur)
-		printf("joueur blanc c'est a vous");
-	else
-		printf("joueur noir c'est a vous");
-}
-
-/*****************************************************************************/
-void changer_couleur_arriere_plan(int pair_impair)
-{
-	/*si le numero de la case est pair, la couleur sera GREEN au moment du
-	printf (qui se trouve dans la fonction afficher_piece()), sinon, la couleur
-	sera LIGHTGREEN*/
-	switch (pair_impair) {
-	case 0:
-		textbackground(GREEN);
-		break;
-	case 1:
-		textbackground(LIGHTGREEN);
-		break;
-	}
-}
-
-/*****************************************************************************/
-void afficher_piece(int piece_a_afficher)
-{
-	/*il faut s'assurer d'afficher la bonne couleur pour la bonne piece et
-	comme la seule difference entre les blancs et les noirs est que les blancs
-	ont le bit 8 allume, on peut simplement verifier ce bit en verifiant si
-	la piece à afficher est plus grande que 8. il faut egalement considerer que
-	l'underscore de VIDE_EP est jaune. comme VIDE_EP est plus grand que 8 on
-	teste cette condition avant tout le reste*/
-	if (piece_a_afficher == VIDE_EP)
-		textcolor(YELLOW);
-	else if (piece_a_afficher >= BLANCS)
-		textcolor(WHITE);
-	else
-		textcolor(BLACK);
-
-	/*une fois la couleur choisie, on peut se servir de printf pour afficher
-	le caractere CH_PIECE qui correspond à notre piece. Comme la couleur est
-	deja selectionnee, il faut eviter de la compter sinon on risque d'avoir
-	une valeur en dehors de CH_PIECE, on fait donc modulo BLANCS (modulo 8)
-	pour regler ce problème (et comme c'est la seule difference entre les
-	pièces BLANCS et NOIR on a pas besoin d'avoir deux fois le code ASCII dans
-	CH_PIECES). il faut aussi ajouter un point si la tour n'a pas bougee
-	(indication pour le roque) et comme TOURI_N est deja le caractere ascii
-	d'un point (et qu'aucune autre piece n'utilise le point), on peut juste
-	ajouter le R (pour rook en notation algebrique) avant le point (car
-	VIDE_EP est '.' pas 'R')*/
-	if (piece_a_afficher == VIDE_EP)
-		printf("%c ", CH_PIECES[piece_a_afficher]);
-	else if(piece_a_afficher % BLANCS != TOURI_N)
-		printf("%c ", CH_PIECES[piece_a_afficher % BLANCS]);
-	else
-		printf("R%c", CH_PIECES[piece_a_afficher % BLANCS]);
-}
-
-/*****************************************************************************/
-t_coup lire_coup_joueur(t_liste_coups* liste_coups)
-{
-	char coup_depart[6] = { 0 };  //Le coup de depart saisit par le joueur
-	char coup_arrivee[3] = { 0 }; //Le coup d'arrivee saisit par le joueur
-	t_coup coup = {0};            //On crée un nouveau coup
-	int flag_coup_valide = 0;     //Flag permettant de savoir si le coup est valide
-	int init = 0;                 //Compteur qui permet d'afficher un message d'erreur
-
-	//on demande le coup au joueur et on s'assure qu'il écrit juste 5 caractères
-	do {
-		//On met le coup de depart a 0
-		for (int i = 0; i < 6; i++)
-			coup_depart[i] = 0;
-		//On affiche un message d'erreur si ça fait plus d'un coup qu'on demande
-		if (init)
-		{
-			gotoxy(DECALAGE_X, DECALAGE_Y + 16);
-			clreol();
-			printf("ERREUR! Coup non-permis, recommencez..");
-
-			//On attend 2 secondes avant de re-demander un coup
-			delay(2000);
-		}
-
-		//On demande la case de depart
-		gotoxy(DECALAGE_X, DECALAGE_Y + 16);
-		clreol();
-		printf("Case de depart ? ");
-		scanf("%2s", coup_depart);
-
-		/*avant de rechercher un coup dans la liste, on verifie si le joueur veut quitter*/
-		if (!strcmp(coup_depart, FIN_PARTIE))
-		{
-			/*On cree un coup vide pour signaler au main que le joueur veut quitter la partie*/
-			set_coup(&coup, POS_VIDE, POS_VIDE, POS_VIDE, POS_VIDE, POS_VIDE, POS_VIDE);
-			return coup;
-		}
-
-		//On demande la case d'arrivee
-		gotoxy(DECALAGE_X, DECALAGE_Y + 16);
-		clreol();
-		printf("Case d'arrivee ? ");
-		scanf("%2s", coup_arrivee);
-	
-		/*avant de rechercher un coup dans la liste, on verifie si le joueur veut quitter*/
-		if (!strcmp(coup_arrivee, FIN_PARTIE))
-		{
-			/*On cree un coup vide pour signaler au main que le joueur veut quitter la partie*/
-			set_coup(&coup, POS_VIDE, POS_VIDE, POS_VIDE, POS_VIDE, POS_VIDE, POS_VIDE);
-			return coup;
-		}
-
-		//On incremente le compteur
-		init++;
-
-		//On ajoute le tiret
-		coup_depart[2] = '-';
-
-		//On concatène les deux cases
-		strcat(coup_depart, coup_arrivee);
-
-		/*si le joueur ne desire pas quitter, on verifie si son coup est possible*/
-		flag_coup_valide = valider_coup(liste_coups, coup_depart, &coup);
-
-		//On vide la mémoire tampon de scanf
-		FFLUSH()
-	} while (!flag_coup_valide);
-	
-	return coup;
-}
-
-/*****************************************************************************/
-void afficher_coup(const t_etat_jeu* jeu, const t_coup* coup) 
-{
-	t_piece piece_case_source;     //Pièce de la case source
-	t_piece piece_case_secondaire; //Pièce à la case secondaire
-	int joueur = get_joueur(jeu);  //Joueur actuel
-	
-	/*On initialise la valeur de la piece secondaire à PION_B pour s'assurer de ne pas rentrer
-	dans les conditions de l'affichage de tous cas sauf pour le roque*/
-	piece_case_secondaire = PION_B;
-
-	/*On initialise la valeur de la piece case_source*/
-	piece_case_source = get_piece_case(jeu, coup->col, coup->lig);
-
-	/*Si le coup possède une case secondaire, alors on met piece_case_secondaire 
-	à la valeur de la case secondaire de la grille du jeu*/
-	if (coup->col_case2 != POS_VIDE && coup->lig_case2 != POS_VIDE)
-		piece_case_secondaire = get_piece_case(jeu, coup->col_case2, coup->lig_case2);
-
-	/*On commence par allez en bas de la grille pour afficher le coup*/
-	gotoxy(DECALAGE_X, DECALAGE_Y + 16);
-	clreol();
-	printf("coup choisi : %s", coup->texte_coup);
-
-	/*On va à la case source sur l'écran*/
-	gotoxy((coup->col * 2) + DECALAGE_X, coup->lig + DECALAGE_Y);
-	/*Ensuite on affiche la case en bleu cyan*/
-	textbackground(CYAN);
-	printf("  ");
-
-	/*Si on fait le roque du roi */
-	if (piece_case_secondaire == TOURI_N + joueur)
-	{
-		gotoxy((coup->col_case2 * 2) + DECALAGE_X, coup->lig_case2 + DECALAGE_Y);
-		printf("  ");
-	}
-
-	/*On prend un délai de 500ms*/
-	delay(500);
-
-	/*On remet la case source dans sa couleur d'origine*/
-	changer_couleur_arriere_plan((coup->col + coup->lig) % 2);
-	gotoxy((coup->col * 2) + DECALAGE_X, coup->lig + DECALAGE_Y);
-	printf("  ");
-
-	/*Si on fait le roque du roi, on remet l'arrière-plan de la case initiale de la TOUR
-	dans sa couleur d'origine */
-	if (piece_case_secondaire == TOURI_N + joueur)
-	{
-		changer_couleur_arriere_plan((coup->col_case2 + coup->lig_case2) % 2);
-		gotoxy((coup->col_case2 * 2) + DECALAGE_X, coup->lig_case2 + DECALAGE_Y);
-		printf("  ");
-	}
-
-	/*On va à la case destination sur l'écran*/
-	gotoxy((coup->col_dest * 2) + DECALAGE_X, coup->lig_dest + DECALAGE_Y);
-
-	/*On affiche la pièce avec un fond d'écran bleu cyan pendant 500 ms*/
-	textbackground(CYAN);
-	afficher_piece(piece_case_source);
-
-	/*Si c'est un pion et qu'on avance de deux cases, on doit montrer la case secondaire en cyan*/
-	if (piece_case_secondaire == VIDE)
-	{
-		gotoxy((coup->col_case2 * 2) + DECALAGE_X, coup->lig_case2 + DECALAGE_Y);
-		afficher_piece(VIDE_EP);
-	}
-
-	/*Si on fait le roque du roi */
-	if (piece_case_secondaire == TOURI_N + joueur)
-	{
-		/*Si on fait le petit roque*/
-		if (coup->col_case2 > coup->col_dest)
-		{
-			/*TOUR est à gauche du roi*/
-			gotoxy(((coup->col_dest - 1) * 2) + DECALAGE_X, coup->lig_dest + DECALAGE_Y);
-			afficher_piece(TOUR_N + joueur);
-		}
-
-		/*Si on fait le grand roque*/
-		if (coup->col_case2 < coup->col_dest)
-		{
-			/*TOUR est à droite du roi*/
-			gotoxy(((coup->col_dest + 1) * 2) + DECALAGE_X, coup->lig_dest + DECALAGE_Y);
-			afficher_piece(TOUR_N + joueur);
-		}
-	}
-
-	/*On prend un délai de 500ms*/
-	delay(500);
-
-	/*Si le joueur est les noirs, on conserve le fond d'écran bleu pendant 3 secondes de plus*/
-	if (jeu->joueur == NOIRS)
-		delay(3000);
-
-	/*Ensuite, on remet la couleur du fond d'écran de la case pièce destination dans sa couleur
-	d'origine et on remet la pièce dans cette case*/
-	changer_couleur_arriere_plan((coup->col_dest + coup->lig_dest) % 2);
-	gotoxy((coup->col_dest * 2) + DECALAGE_X, coup->lig_dest + DECALAGE_Y);
-	afficher_piece(piece_case_source);
-
-	/*Si c'est un pion et qu'on avance de deux cases, on doit remettre la couleur du fond d'écran
-	de la case intermédiaire dans sa couleur d'origine et on remet VIDE_EP dans cette case*/
-	if (piece_case_secondaire == VIDE)
-	{
-		changer_couleur_arriere_plan((coup->col_case2 + coup->lig_case2) % 2);
-		gotoxy((coup->col_case2 * 2) + DECALAGE_X, coup->lig_case2 + DECALAGE_Y);
-		afficher_piece(VIDE_EP);
-	}
-
-	/*Si c'est le roque du roi, on doit remettre la couleur du fond d'écran 
-	de la case destination de la tour dans sa couleur d'origine */
-	if (piece_case_secondaire == TOURI_N + joueur)
-	{
-		/*Si on fait le petit roque*/
-		if (coup->col_case2 > coup->col_dest)
-		{
-			/********************************TOUR est a gauche du roi***************************/
-			changer_couleur_arriere_plan(((coup->col_dest - 1) + coup->lig_dest) % 2);
-			gotoxy(((coup->col_dest - 1) * 2) + DECALAGE_X, coup->lig_dest + DECALAGE_Y);
-			afficher_piece(TOUR_N + joueur);
-		}
-		/*Si on fait le grand roque*/
-		if (coup->col_case2 < coup->col_dest)
-		{
-			/********************************TOUR est a droite du roi***************************/
-			changer_couleur_arriere_plan(((coup->col_dest + 1) + (coup->lig_dest)) % 2);
-			gotoxy(((coup->col_dest + 1) * 2) + DECALAGE_X, coup->lig_dest + DECALAGE_Y);
-			afficher_piece(TOUR_N + joueur);
-		}
-	}
-}
-
-
-/*****************************************************************************/
-void gagnant_jeu(const t_etat_jeu* jeu) 
-{
-	//On clear les deux lignes a la fin de la console
-	gotoxy(DECALAGE_X, DECALAGE_Y + 16);
-	clreol();
-	gotoxy(DECALAGE_X, DECALAGE_Y + 17);
-	clreol();
-
-	//On affiche le gagnant (soit le blanc ou le noir)
-	switch (jeu->joueur)
-	{
-	case NOIRS:
-		printf("La partie est terminee, le gagnant est le joueur noir.");
-		break;
-	case BLANCS:
-		printf("La partie est terminee, le gagnant est le joueur blanc.");
-		break;
-	}
-}
-
-/*****************************************************************************/
-void afficher_liste_coups(t_liste_coups* liste_coups)
-{
-	/*comme on affiche la liste de coups par colonne, il faut garder le nombre total de coups
-	affichees (qui persiste entre les changements de colonne) ainsi que le numero de la colonne
-	courante)*/
-	int total_coups_affiche = 0;
-	/*Numéro de colonne*/
-	int no_de_colonne = 0;
-	/*creation d'un coup temporaire pour l'affichage*/
-	t_coup coup_a_afficher = { 0 };
-
-	/*il faut commencer par placer le curseur de winconsole au bon endroit*/
-	gotoxy(DECALAGE_X + 40, DECALAGE_Y);
-
-	/*on remet le pointeur */
-	replacer_pc_debut(liste_coups);
-
-	/*on affiche ensuite le nombre de coup total contenu dans la liste*/
-	//printf("%d coups possibles", liste_coups->nb_coups);
-	printf(" %d coups possibles", get_nb_coups(liste_coups));
-	/*on affiche les colones de talle TAILLE_COLONNE_AFFICHAGE une a la fois et on continue
-	tant qu'on a pas affiche tous les coups de la liste*/
-	while (total_coups_affiche < get_nb_coups(liste_coups))
-	{
-		for (int i = 0; i < TAILLE_COLONNE_AFFICHAGE; i++)
-		{
-			/*si on a plus de line a afficher, on sort de la boucle for et aussi de la boucle
-			while, car on est arrive a la fin de la liste et que la condition de fin pour la
-			boucle while est la meme qu'ici*/
-			if (total_coups_affiche >= get_nb_coups(liste_coups))
-				break;
-
-			/*on va chercher une copie du prochain coup*/
-			coup_a_afficher = get_coup_pc(liste_coups);
-
-			/*on commence par deplacer le curseur de la console vers le debut de la prochaine
-			ligne a ecrire*/
-			gotoxy(DECALAGE_X + 40 +
-				(DISTANCE_ENTRE_COLONNES * no_de_colonne),
-				DECALAGE_Y + (i % TAILLE_COLONNE_AFFICHAGE) + 1);
-
-			/*on affiche ensuite directement la string contenue dans la liste*/
-			printf("%s", coup_a_afficher.texte_coup);
-
-			/*si la ligne de la case 2 du coup n'est pas POS_VIDE, on doit egalement l'afficher
-			mais entre parentheses, il n'est necessaire de verifier qu'une seule valeur car si la
-			ligne est a POS_VIDE, la colonne le sera forcement aussi*/
-			if (coup_a_afficher.lig_case2 != POS_VIDE)
-				printf(" (%c%c)",
-					COL_A_CH(coup_a_afficher.col_case2),
-					RAN_A_NO(coup_a_afficher.lig_case2));
-
-			/*on passe ensuite au prochain coup dans la liste (ou on sort des boucles si on est
-			a la fin)*/
-			total_coups_affiche++;
-			avancer_pc(liste_coups);
-		}
-		/*une fois la colonne pleine (a une longueur de TAILLE_COLONNE_AFFICHAGE) on passe a la
-		suivante*/
-		no_de_colonne++;
-	}
-}
+//Variable-privée qui contient les 32 bitmaps de toutes les pièces de jeu possibles :
+// Rangée [0]: les 16 pièces de jeu sur fond vert-pale (aux positions-paires)
+// Rangée [1]: les 16 pièces de jeu sur fond vert-foncé (positions-impaires)
+static t_image_BMP images[2][16];
 

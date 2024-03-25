@@ -1,151 +1,66 @@
-/***************************************************************************************/
-/*  AFFICHAGE.H                                                                        */
-/*  Auteurs: Victor Poulin, Pascal Dube et Simon Des-Alliers                           */
-/*  Date: 14 fÃ©vrier 2024                                                              */
-/*                                                                                     */
-/* Ce module gÃ¨re l'affichage de la grille d'Ã©chec (piÃ¨ces, couleurs, etc.)            */
-/*                                                                                     */
-/*Liste des fonctions:  void afficher_jeu(const t_grille grille_jeu, int joueur)       */
-/*                      void afficher_piece(int piece_a_afficher)                      */
-/*                      void changer_couleur_arriere_plan(int pair_impair)             */
-/*                      void afficher_joueur(int joueur)                               */
-/*                      t_coup lire_coup_joueur(const t_liste_coups* liste_coups)      */
-/*                      void afficher_coup(const t_etat_jeu* jeu, const t_coup* coup)  */
-/*                      t_coup  choix_coup_ordi(const t_liste_coups liste)             */
-/*                      void gagnant_jeu(const t_etat_jeu* jeu)                        */
-/***************************************************************************************/
+/*******************************************************************************
+    AFFICHAGE.H  (version pour le TP3)
+    Auteurs :
 
-#ifndef AFFICHAGE
-#define AFFICHAGE
+    Module qui contient les fonctions de gestion de l'affichage de la grille et
+    des coups jouées avec des images Bitmap en mode graphique.
+    Les outils et fonctions d'affichages utilisée proviennent du module 
+    "utilitaire_affichage.h" et les fonctions de gestion de la souris sont
+    importées du module "SOURISLIB.h". Ce module inclut aussi "grille_echecs.h".
+*******************************************************************************/
+#ifndef _AFF_LIB_H
+#define _AFF_LIB_H 1
 
-/*=========================================================*/
-/*                 LES LIBRAIRIES                          */
-/*=========================================================*/
+//Librairies et modules externes nécessaires
+#include"utilitaire_affichage.h"
+#include"grille_echecs.h"
+#include"SOURISLIB.h"
 
-#include <string.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include "mtwister.hpp"
-#include "grille_echecs.hpp"
+//position du bouton-Abandon
+#define POSY_BOUT_QUIT   20
+#define POSX_BOUT_QUIT   (20 + TAILLE_BMP)
 
-#ifndef WINCONSOLE
-#define WINCONSOLE 0define DECALAGE_Y
-#include "WinConsole.hpp"
-#endif
+//position du bouton-Recommencer
+#define POSY_BOUT_RESET  100
+#define POSX_BOUT_RESET  (20 + TAILLE_BMP)
 
-/*=========================================================*/
-/*                  LES CONSTANTES                         */
-/*=========================================================*/
+//chaine par défaut pour un coup VIDE
+#define COUP_VIDE  "xx-xx"
+ 
+//les trois valeurs de retour d'un clic-souris. 
+//QUITTER = bouton "ABANDONNER", RESET = bouton "RECOMMENCER", POS_VALIDE = une case valide
+typedef enum { QUITTER = -1, RESET, POS_VALIDE } t_saisie;
 
-#define DECALAGE_X 10 //Decalage en x
-#define DECALAGE_Y 5  //Decalage en y 
-#define TAILLE_COLONNE_AFFICHAGE 15  //Taille de colonne 
-#define DISTANCE_ENTRE_COLONNES 13   //Distance entre les colonnes
 
-/*=========================================================*/
-/*                  LES PROTOTYPES                         */
-/*=========================================================*/
+/*-------------------------------------------------------------------*/
+/*                       FONCTIONS PUBLIQUES                         */
+/*-------------------------------------------------------------------*/
 
-/*************************************************************************************************
-    OBJECTIF : cette macrofonction nettoie le buffer d'entree de scanf
+/* Permet de lire toutes les images Bitmap à partit du fichier binaire reçu en paramètre.    */
+/* La fonction tente d'ouvrir le fichier avec le nom reçu en paramètre en mode binaire.      */
+/* Si l’ouverture de fichier a échouée, la fonction retourne 0.  Sinon, elle lit les 32      */
+/* images Bitmap se trouvant dans le fichier dans la variable privée "images" et retourne 1. */
+int lire_images(const char* nom_fich_bin);
 
-	PARAMETRES : aucun
-	SORTIES :	aucune
+/* Permet de détruire les allocations des tableaux d'octets de chacune des 32 images Bitmap. */
+void detruire_images();
 
-	SPEC :
+/* Permet d'afficher la grille du "jeu" reçu en paramètre à l'aide des 32 images Bitmap qui  */
+/* se trouvent dans le tableau privé "images". Cette fonction fera appel aux procédures      */
+/* d'affichage "init_zone_grille()", "afficher_piece()" et "dessiner_grille_vide()".   */
+void afficher_grille(const t_etat_jeu* jeu);
 
-	Ecrit par Pascal Dube, Victor Poulin et Simon Des-Alliers
-**************************************************************************************************/
-#define FFLUSH() while(getchar() != '\n') {}
+/* Permet de choisir une case de la grille (ou un bouton-commande) avec la souris. Utilise   */
+/* les outils de gestion de souris offerts dans le module "SOURISLIB.h".                     */
+/* Cette fonction va retourner trois informations :                                          */
+/*  - le type de saisie "QUITTER", "RESET" ou "POS_VALIDE" (type t_saisie).                  */
+/*  - la position-grille (*col_case, *lig_case) de la saisie si on retourne "POS_VALIDE".    */
+t_saisie choix_case(int* col_case, int* lig_case);
 
-/************************************************************************************************
-    OBJECTIF : Cette fonction affiche le plateau de jeu ainsi que les pieces a leur position
+/* Cette procédure va illustrer un coup choisi par soit l’utilisateur ou l’ordinateur.       */
+/* On reçoit la pièce "piece_src" qui se trouve sur la case-source (col_src, ran_src) et la  */
+/* pièce (ou case vide) "piece_dest" qui se trouve à la case-destination(col_dest, ran_dest) */
+void afficher_coup(t_piece piece_src, int col_src, int ran_src,
+                   t_piece piece_dest, int col_dest, int ran_dest);
 
-	PARAMETRES : grille_jeu :  la position des pieces qui doit etre affichee
-				joueur : le joueur courant (soit NOIRS ou BLANCS qui sont definis dans
-						 grille_echecs.h)
-	
-	SORTIES :	aucune (affichage seulement)
-
-	SPEC :
-
-	ecrit par Pascal Dube, Victor Poulin et Simon Des-Alliers
-***********************************************************************************************/
-void afficher_jeu(const t_grille grille_jeu, int joueur);
-
-/***********************************************************************************************
-    OBJECTIF : Cette fonction affiche une piece de type t_piece, il est necessaire d'utiliser
-              cette fonction, car l'affichage doit etre ascii et t_piece n'est pas ascii
-
-	PARAMETRES : piece_a_afficher : la piece a afficher
-	SORTIES : affichage seulement
-
-	SPEC : 
-
-	ecrit par Pascal Dube, Victor Poulin et Simon Des-Alliers
-*************************************************************************************************/
-void afficher_piece(int piece_a_afficher);
-
-/************************************************************************************************
-    OBJECTIF : Cette fonction sert a changer la couleur de l'arriere plan de la grille de jeu elle
-	          existe principalement pour alleger la lecture de la fonction afficher_jeu()
-
-	PARAMETRES : pair_impair :  la couleur (GEEN ou LIGHTGREEN) depend seulement de la parite
-								du nombre total de cases vues jusqu'a date
-
-	SORTIES : change la couleur de l'arriere plan avec le module WinConsole
-
-	SPEC : 
-
-	ecrit par Pascal Dube, Victor Poulin et Simon Des-Alliers
-*************************************************************************************************/
-void changer_couleur_arriere_plan(int pair_impair);
-
-/***********************************************************************************************
-    OBJECTIF : Permet d'afficher le joueur
-
-	PARAMETRE : joueur     : le joueur actuel
-
-	SORTIE :	void (Ne retourne rien)
-
-	ecrit par Pascal Dube, Victor Poulin et Simon Des-Alliers
-***********************************************************************************************/
-void afficher_joueur(int joueur);
-
-/*********************************************************************************************
-    OBJECTIF : Permet de saisir un coup de lâ€™utilisateur
-
-	PARAMETRE : liste     : la liste des coups possible
-
-	SORTIE :	Le coup de l'utilisateur
-
-	ecrit par Pascal Dube, Victor Poulin et Simon Des-Alliers
-
-TODO : j'ai enleve le const temporaire pour pouvoir compiler	
-***********************************************************************************************/
-t_coup lire_coup_joueur(t_liste_coups* liste_coups);
-
-/**********************************************************************************************
-    OBJECTIF : Affiche le coup choisi par lâ€™un ou lâ€™autre joueur Ã  lâ€™Ã©cran avec une couleur de fond
-	          diffÃ©rente
-
-	PARAMETRE : jeu    : Ã‰tat du jeu actuel
-	            coup   : Le coup choisi
-
-	SORTIE :	void (Ne retourne rien)
-
-	ecrit par Pascal Dube, Victor Poulin et Simon Des-Alliers
-*************************************************************************************************/
-void afficher_coup(const t_etat_jeu* jeu, const t_coup* coup);
-
-/***********************************************************************************************
-    OBJECTIF : Va afficher Ã  l'Ã©cran le gagnant du jeu
-
-	PARAMETRE : jeu et Ã©tat du jeu actuel
-
-	SORTIE :	On retourne 1
-
-	ecrit par Pascal Dube, Victor Poulin et Simon Des-Alliers
-************************************************************************************************/
-void gagnant_jeu(const t_etat_jeu* jeu);
 #endif
