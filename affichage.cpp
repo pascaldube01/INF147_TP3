@@ -113,27 +113,36 @@ t_saisie choix_case(int* col_case, int* lig_case)
 
 static int pale_foncer(int i, int j)
 {
+	//Permet de retourner 1 ou 0 dépendamment de la parité de la case
 	return (i + j) % 2 ? 1 : 0;
 }
 
 void afficher_grille(const t_etat_jeu* jeu)
 {
-	int piece;
+	int piece; //Contient la pièce à la colonne et la rangée choisit
+
+	//On dessinne le cadre de la grille de jeu
 	init_zone_grille(TAILLE, TAILLE);
+
+	//On parcourt toute la grille
 	for (int i = 0; i < TAILLE; i++)
 	{
 		for (int j = 0; j < TAILLE; j++)
 		{
+			//On va chercher la pièce à la case voulue
 			piece = (int)get_piece_case(jeu, j, i);
+
+			//On affiche la pièce sur la grille
 			afficher_piece(i * TAILLE_BMP, j * TAILLE_BMP, 
 			images[pale_foncer(i, j)][piece].header.height, 
 			images[pale_foncer(i, j)][piece].header.width, 
 			images[pale_foncer(i, j)][piece].image_data);
 		}
 	}
+
+	//On crée un gabarit de la grille initialisée
 	dessiner_grille_vide();
 }
-
 
 int lire_images(const char* nom_fich_bin)
 {
@@ -161,7 +170,10 @@ int lire_images(const char* nom_fich_bin)
 				  fichier_images);
 		}
 
+	//On ferme le fichier
 	fclose(fichier_images);
+
+	//On retourne 1 pour confirmer qu'on a ouvert le fichier correctement
 	return 1;
 }
 
