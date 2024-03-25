@@ -94,14 +94,11 @@ t_saisie choix_case(int* col_case, int* lig_case)
 		//À partir d'ici, on n'a pas souhaité quitter ou recommencer, donc on vérifie la validité du clic
 
 		//pour obtenir la position-case équivalente (entre 0 - 7)
-		colonne = ((*col_case - MARGEX) / TAILLE_BMP);
-		ligne = ((*lig_case - MARGEY) / TAILLE_BMP);
-
-		*col_case = colonne;
-		*lig_case = ligne;
+		*col_case = ((*col_case - MARGEX) / TAILLE_BMP);
+		*lig_case = ((*lig_case - MARGEY) / TAILLE_BMP);
 
 		//Si le clic de la souris se situe sur le grille, on valide le clic
-		if(colonne >= 0 && colonne <= 7 && ligne >= 0 && ligne <= 7)
+		if(*col_case >= 0 && *col_case <= 7 && *lig_case >= 0 && *lig_case <= 7)
 		{
 			//Permet de sortir de la boucle de validation
 			validation = 1;
