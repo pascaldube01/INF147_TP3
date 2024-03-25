@@ -32,6 +32,9 @@
 /*                  LES CONSTANTES                         */
 /*=========================================================*/
 
+#define FICHIER_IMAGES "imagesBMP.bin"
+
+
 /*activation du main de test pour verifier le bon fonctionnement de toutes les fonctions du module
 liste_coup.c*/
 #define TEST_MODULE_LISTE_COUP 0
@@ -54,6 +57,21 @@ liste_coup.c*/
 #if TEST_AFFICHAGE_GRAPH == 1
 int main()
 {
+	int succes_lire_images = 0;
+
+		
+	succes_lire_images = lire_images(FICHIER_IMAGES);
+	if (succes_lire_images == 0)
+	{
+		printf("erreur lors de l'ouverture du fichier images");
+		return EXIT_FAILURE;
+	}
+	printf("fichier images ouvert avec succes");
+
+
+	detruire_images();
+
+	printf("\n\nle programme de test s'est execute correctement");
 	return EXIT_SUCCESS;
 }
 #endif

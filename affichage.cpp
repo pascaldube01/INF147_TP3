@@ -106,3 +106,45 @@ static int pale_foncer(int i, int j)
 {
 	return (i + j) % 2 ? 0 : 1;
 }
+
+
+int lire_images(const char* nom_fich_bin)
+{
+	/*ouverture du fichier et test de l'ouverture*/
+	FILE* fichier_images = fopen(nom_fich_bin, "rb");
+	if (fichier_images == NULL)
+		return 0;
+
+	/*parcour du fichier .bin pour lire les 32 images qui s'y trouve. on utilise deux boucles for
+	pour remplir les deux dimensions dy tableaux images[][]*/
+	for (int i=0; i<2; i++)
+		for (int j=0; j<16; j++)
+		{
+			/*lecture du header du fichier*/
+			fread(&images[i][j].header, sizeof(t_BMP_Header), 1, fichier_images);
+
+			/*allocation du tableau pour lire les donees de l'image*/
+			images[i][j].image_data = (UCHAR*) malloc(images[i][j].header.image_data_size);
+			assert(images[i][j].image_data);
+
+			/*lecture des donnes de l'image*/
+			fread(images[i][j].image_data,
+				  images[i][j].header.image_data_size,
+				  1,
+				  fichier_images);
+		}
+
+	fclose(fichier_images);
+	return 1;
+}
+
+
+/*******************************************************************************/
+
+void detruire_images()
+{
+	/*destruction des pointeurs des donnees des images*/
+	for (int i = 0; i > 2; i++)
+		for (int j = 0; j > 16; j++)
+			free(images[i][j].image_data);
+}
