@@ -113,7 +113,7 @@ t_saisie choix_case(int* col_case, int* lig_case)
 
 static int pale_foncer(int i, int j)
 {
-	return (i + j) % 2 ? 0 : 1;
+	return (i + j) % 2 ? 1 : 0;
 }
 
 void afficher_grille(const t_etat_jeu* jeu)
