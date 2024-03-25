@@ -142,15 +142,15 @@ int lire_images(const char* nom_fich_bin)
 	if (fichier_images == NULL)
 		return 0;
 
-	/*parcour du fichier .bin pour lire les 32 images qui s'y trouve. on utilise deux boucles for
-	pour remplir les deux dimensions dy tableaux images[][]*/
+	/*parcourt du fichier .bin pour lire les 32 images qui s'y trouve. on utilise deux boucles for
+	pour remplir les deux dimensions du tableaux images[][]*/
 	for (int i=0; i<2; i++)
 		for (int j=0; j<16; j++)
 		{
 			/*lecture du header du fichier*/
 			fread(&images[i][j].header, sizeof(t_BMP_Header), 1, fichier_images);
 
-			/*allocation du tableau pour lire les donees de l'image*/
+			/*allocation du tableau pour lire les données de l'image*/
 			images[i][j].image_data = (UCHAR*) malloc(images[i][j].header.image_data_size);
 			assert(images[i][j].image_data);
 
@@ -170,8 +170,8 @@ int lire_images(const char* nom_fich_bin)
 
 void detruire_images()
 {
-	/*destruction des pointeurs des donnees des images*/
-	for (int i = 0; i > 2; i++)
-		for (int j = 0; j > 16; j++)
+	/*Destruction des pointeurs des donnees des images*/
+	for (int i = 0; i < 2; i++)
+		for (int j = 0; j < 16; j++)
 			free(images[i][j].image_data);
 }
