@@ -83,3 +83,23 @@ t_saisie choix_case(int* col_case, int* lig_case)
 	}
 
 }
+
+void afficher_grille(const t_etat_jeu* jeu)
+{
+	int piece;
+	init_zone_grille(TAILLE, TAILLE);
+	for (int i = 0; i < TAILLE; i++)
+	{
+		for (int j = 0; j < TAILLE; j++)
+		{
+			piece = (int)get_piece_case(jeu, i, j);
+			afficher_piece(i * TAILLE_BMP, j * TAILLE_BMP, images[pale_foncer(i, j)][piece].header.height, images[pale_foncer(i, j)][piece].header.width, images[pale_foncer(i, j)][piece].image_data);
+		}
+	}
+	dessiner_grille_vide();
+}
+
+static int pale_foncer(int i, int j)
+{
+	return (i + j) % 2 ? 0 : 1;
+}
