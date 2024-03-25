@@ -93,7 +93,9 @@ void afficher_grille(const t_etat_jeu* jeu)
 		for (int j = 0; j < TAILLE; j++)
 		{
 			piece = (int)get_piece_case(jeu, i, j);
-			afficher_piece(i * TAILLE_BMP, j * TAILLE_BMP, images[pale_foncer(i, j)][piece].header.height, images[pale_foncer(i, j)][piece].header.width, images[pale_foncer(i, j)][piece].image_data);
+			afficher_piece(i * TAILLE_BMP, j * TAILLE_BMP, 
+				images[pale_foncer(i, j)][piece].header.height, images[pale_foncer(i, j)][piece].header.width, 
+				images[pale_foncer(i, j)][piece].image_data);
 		}
 	}
 	dessiner_grille_vide();
