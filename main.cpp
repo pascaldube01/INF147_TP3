@@ -71,8 +71,10 @@ int main()
 		printf("erreur lors de l'ouverture du fichier images");
 		return EXIT_FAILURE;
 	}
-	printf("fichier images ouvert avec succes");
+	printf("fichier images ouvert avec succes\n\n");
 
+
+	afficher_grille(&etat_jeu);
 
 
 	detruire_images();
