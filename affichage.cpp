@@ -79,7 +79,7 @@ t_saisie choix_case(int* col_case, int* lig_case)
 			return QUITTER;
 		}
 
-		//Si on a cliqué sur QUITTER
+		//Si on a cliqué sur RESET
 		if ((*col_case >= POSX_BOUT_RESET) && (*col_case <= POSX_BOUT_RESET + TAILLEX_BOUTON) &&
 			(*lig_case >= POSY_BOUT_RESET) && (*lig_case <= POSY_BOUT_RESET + TAILLEY_BOUTON))
 		{
