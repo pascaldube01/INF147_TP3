@@ -68,7 +68,8 @@ t_saisie choix_case(int* col_case, int* lig_case)
 		obtient_souris(col_case, lig_case);
 
 		//Si on a cliqué sur QUITTER
-		if (*col_case == POSX_BOUT_QUIT && *lig_case == POSY_BOUT_QUIT)
+		if ((*col_case >= POSX_BOUT_QUIT) && (*col_case <= POSX_BOUT_QUIT + TAILLEX_BOUTON) &&
+			(*lig_case >= POSY_BOUT_QUIT) && (*lig_case <= POSY_BOUT_QUIT + TAILLEY_BOUTON))
 		{
 			//On met -1 dans la colonne et la ligne
 			*col_case = POS_VIDE;
@@ -79,7 +80,8 @@ t_saisie choix_case(int* col_case, int* lig_case)
 		}
 
 		//Si on a cliqué sur QUITTER
-		if (*col_case == POSX_BOUT_RESET && *lig_case == POSY_BOUT_RESET)
+		if ((*col_case >= POSX_BOUT_RESET) && (*col_case <= POSX_BOUT_RESET + TAILLEX_BOUTON) &&
+			(*lig_case >= POSY_BOUT_RESET) && (*lig_case <= POSY_BOUT_RESET + TAILLEY_BOUTON))
 		{
 			//On met -1 dans la colonne et la ligne
 			*col_case = POS_VIDE;
