@@ -13,7 +13,7 @@
 
 //Librairies et modules externes nécessaires
 #include"utilitaire_affichage.h"
-#include"grille_echecs.h"
+#include"grille_echecs.hpp"
 #include"SOURISLIB.h"
 
 //position du bouton-Abandon

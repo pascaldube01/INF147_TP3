@@ -24,6 +24,9 @@
 #include "grille_echecs.hpp"
 #include "affichage.hpp"
 #include <assert.h>
+#include "SOURISLIB.h"
+#include "utilitaire_affichage.h"
+#include "winBGIm.h"
 
 /*=========================================================*/
 /*                  LES CONSTANTES                         */
