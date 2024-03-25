@@ -57,9 +57,14 @@ liste_coup.c*/
 #if TEST_AFFICHAGE_GRAPH == 1
 int main()
 {
+	t_saisie succes_choix_case = RESET;
 	int succes_lire_images = 0;
+	int lig_recu = 0;
+	int col_recu = 0;
 
 	t_etat_jeu etat_jeu;
+
+	init_graphe();
 
 	/*initialisation de l'etat du jeu (aux echecs le joueur blanc est toujours le premier a
 	jouer)*/
@@ -73,14 +78,22 @@ int main()
 	}
 	printf("fichier images ouvert avec succes\n\n");
 
-
 	afficher_grille(&etat_jeu);
+
+	/*test de choix_case*/
+	printf("choisisez une case sur le plateau de jeu avec la souris");
+	
+	succes_choix_case =  choix_case(&col_recu, &lig_recu);
+	printf("\ncase choisie : %d, %d, ", lig_recu, col_recu);
+
+
 
 
 	detruire_images();
 	detruire_grille(etat_jeu.grille_jeu);
 
 	printf("\n\nle programme de test s'est execute correctement");
+	system("pause");
 	return EXIT_SUCCESS;
 }
 #endif
