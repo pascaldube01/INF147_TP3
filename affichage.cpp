@@ -56,7 +56,7 @@ t_saisie choix_case(int* col_case, int* lig_case)
 	int validation = 0;
 
 	//Tant qu'on a pas obtenue un choix de case valide
-	while(!validation)
+	do
 	{
 		//On désactive les boutons de la souris 
 		eteindre_bouton_souris();
@@ -66,6 +66,30 @@ t_saisie choix_case(int* col_case, int* lig_case)
 
 		//On récupère les coordonnées du clic-souris
 		obtient_souris(col_case, lig_case);
+
+		//Si on a cliqué sur QUITTER
+		if (*col_case == POSX_BOUT_QUIT && *lig_case == POSY_BOUT_QUIT)
+		{
+			//On met -1 dans la colonne et la ligne
+			*col_case = POS_VIDE;
+			*lig_case = POS_VIDE;
+
+			//On retourne -1
+			return QUITTER;
+		}
+
+		//Si on a cliqué sur QUITTER
+		if (*col_case == POSX_BOUT_RESET && *lig_case == POSY_BOUT_RESET)
+		{
+			//On met -1 dans la colonne et la ligne
+			*col_case = POS_VIDE;
+			*lig_case = POS_VIDE;
+
+			//On retourne 0
+			return RESET;
+		}
+
+		//À partir d'ici, on n'a pas souhaité quitter ou recommencer, donc on vérifie la validité du clic
 
 		//pour obtenir la position-case équivalente (entre 0 - 7)
 		colonne = ((*col_case - MARGEX) / TAILLE_BMP);
@@ -80,7 +104,8 @@ t_saisie choix_case(int* col_case, int* lig_case)
 			//On retourne 1
 			return POS_VALIDE;
 		}
-	}
+
+	} while (!validation);
 
 }
 

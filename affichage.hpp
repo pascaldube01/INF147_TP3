@@ -26,10 +26,6 @@
 
 //chaine par défaut pour un coup VIDE
 #define COUP_VIDE  "xx-xx"
-
-//Les marges en X et en Y pour la grille
-#define MARGEX 400
-#define MARGEY 50
  
 //les trois valeurs de retour d'un clic-souris. 
 //QUITTER = bouton "ABANDONNER", RESET = bouton "RECOMMENCER", POS_VALIDE = une case valide
