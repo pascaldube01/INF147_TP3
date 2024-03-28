@@ -83,6 +83,8 @@ int main()
 
 	//Sinon, on affiche un message de succès pour l'ouverture de l'image
 	printf("fichier images ouvert avec succes\n\n");
+
+	/*affichage des boutons*/
 	afficher_bouton(POSY_BOUT_QUIT, POSX_BOUT_QUIT, "quitter");
 	afficher_bouton(POSY_BOUT_RESET, POSX_BOUT_RESET, "reset");
 
@@ -94,8 +96,9 @@ int main()
 	
 	//On récupère le succès ou bien l'échec de la fonction choix_case
 	succes_choix_case =  choix_case(&col_recu, &lig_recu);
-	;
+	
 
+	/*verification de ce que retourne choix_case*/
 	switch (succes_choix_case)
 	{
 	case POS_VALIDE:
