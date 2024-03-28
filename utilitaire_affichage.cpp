@@ -10,7 +10,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "utilitaire_affichage.h"
-#include "winbgim.h"
+#include "winBGIm.h"
 
 //Nombre de pixels pour un caractere
 #define TAILLE_CAR 24
