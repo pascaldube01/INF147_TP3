@@ -32,8 +32,8 @@
 /*                  LES CONSTANTES                         */
 /*=========================================================*/
 
+//Le fichier contenant les images
 #define FICHIER_IMAGES "imagesBMP.bin"
-
 
 /*activation du main de test pour verifier le bon fonctionnement de toutes les fonctions du module
 liste_coup.c*/
@@ -57,10 +57,10 @@ liste_coup.c*/
 #if TEST_AFFICHAGE_GRAPH == 1
 int main()
 {
-	t_saisie succes_choix_case = RESET;
-	int succes_lire_images = 0;
-	int lig_recu = 0;
-	int col_recu = 0;
+	t_saisie succes_choix_case = RESET; //Variable montrant que la fonction choix_case fonctionne
+	int succes_lire_images = 0;         //Variable montrant que la fonxtion lire_image fonctionne
+	int lig_recu = 0;                   //Ligne envoyée en paramètre de choix_case
+	int col_recu = 0;                   //Colonnne envoyée en paramètre de choix_case
 
 	t_etat_jeu etat_jeu;
 
@@ -71,20 +71,28 @@ int main()
 	init_jeu(&etat_jeu, BLANCS);
 		
 	succes_lire_images = lire_images(FICHIER_IMAGES);
+
+	//S'il y a une erreur dans la lecture de l'image, on affiche un message d'erreur
 	if (succes_lire_images == 0)
 	{
 		printf("erreur lors de l'ouverture du fichier images");
+
+		//On quitte
 		return EXIT_FAILURE;
 	}
+
+	//Sinon, on affiche un message de succès pour l'ouverture de l'image
 	printf("fichier images ouvert avec succes\n\n");
 	afficher_bouton(POSY_BOUT_QUIT, POSX_BOUT_QUIT, "quitter");
 	afficher_bouton(POSY_BOUT_RESET, POSX_BOUT_RESET, "reset");
 
+	//On affiche la grille
 	afficher_grille(&etat_jeu);
 	
 	/*test de choix_case*/
 	printf("choisisez une case sur le plateau de jeu avec la souris");
 	
+	//On récupère le succès ou bien l'échec de la fonction choix_case
 	succes_choix_case =  choix_case(&col_recu, &lig_recu);
 	;
 
@@ -102,10 +110,10 @@ int main()
 	}
 
 
-
-
-
+	//On détruit les images
 	detruire_images();
+
+	//On détruit la grille de jeu
 	detruire_grille(etat_jeu.grille_jeu);
 
 	printf("\n\nle programme de test s'est execute correctement");
