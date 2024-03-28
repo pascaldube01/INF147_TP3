@@ -85,8 +85,8 @@ int main()
 	printf("fichier images ouvert avec succes\n\n");
 
 	/*affichage des boutons*/
-	afficher_bouton(POSY_BOUT_QUIT, POSX_BOUT_QUIT, "quitter");
-	afficher_bouton(POSY_BOUT_RESET, POSX_BOUT_RESET, "reset");
+	afficher_bouton(POSY_BOUT_QUIT, POSX_BOUT_QUIT, "ABANDONNER");
+	afficher_bouton(POSY_BOUT_RESET, POSX_BOUT_RESET, "RECOMMENCER");
 
 	//On affiche la grille
 	afficher_grille(&etat_jeu);
