@@ -47,8 +47,8 @@ liste_coup.c*/
 /*test pour les fonctions de l'affichage graphique*/
 #define TEST_AFFICHAGE_GRAPH 1
 
-/*activation du main pour faire rouler le programme principal en mode console */
-#define JOUER_UNE_PARTIE_TERMINAL 0
+/*activation du main pour faire rouler le programme principal */
+#define JOUER_UNE_PARTIE 0
 
 /*=========================================================*/
 /*                  PROGRAMME DE TESTS                     */
@@ -245,7 +245,7 @@ int main()
 /*                  PROGRAMME PRINCIPAL                    */
 /*=========================================================*/
 
-#if JOUER_UNE_PARTIE_TERMINAL == 1
+#if JOUER_UNE_PARTIE == 1
 int main()
 {
 	t_piece capture = VIDE;  //Représente la variable pour sortir de la boucle
