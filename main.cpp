@@ -45,10 +45,13 @@ liste_coup.c*/
 #define TEST_JOUER_COUP 0
 
 /*test pour les fonctions de l'affichage graphique*/
-#define TEST_AFFICHAGE_GRAPH 1
+#define TEST_AFFICHAGE_GRAPH 0
 
-/*activation du main pour faire rouler le programme principal */
-#define JOUER_UNE_PARTIE 0
+/*activation du main pour faire rouler le programme principal en mode console */
+#define JOUER_UNE_PARTIE_TERMINAL 0
+
+/*activation du main pour faire rouler le programme principal en mode graphique */
+#define JOUER_UNE_PARTIE_BGI 1
 
 /*=========================================================*/
 /*                  PROGRAMME DE TESTS                     */
@@ -98,7 +101,7 @@ int main()
 	succes_choix_case =  choix_case(&col_recu, &lig_recu);
 	
 
-	/*verification de ce que retourne choix_case*/
+
 	switch (succes_choix_case)
 	{
 	case POS_VALIDE:
@@ -245,7 +248,107 @@ int main()
 /*                  PROGRAMME PRINCIPAL                    */
 /*=========================================================*/
 
-#if JOUER_UNE_PARTIE == 1
+#if JOUER_UNE_PARTIE_BGI == 1
+int main()
+{
+	
+	t_piece capture = VIDE;  //Représente la variable pour sortir de la boucle
+	t_coup coup;			 //Représente le coup du joueur actuel 
+	/*la variable etat_jeu sert a contenir l'etat du jeu courant (permission pour le roque,
+	grille de jeu et joueur courant)*/
+	t_etat_jeu etat_jeu;
+	/*variables qui contiendront la selection de cases de jeu faites par l'utilisateur*/
+	int lig_choisi = 0, col_choisi = 0;
+	int lig_dest_choisi = 0, col_dest_choisi = 0;
+	/*contiens la selection du joueur (boutons ou plateau de jeu)*/
+	t_saisie bouton_clique = POS_VALIDE;
+	/*indique le succes de la lecture du fichier contenant les bitmaps des pieces*/
+	int succes_lire_images = 1;
+
+	/*ouverture de la fenetre graphique*/
+	init_graphe();
+
+	succes_lire_images = lire_images(FICHIER_IMAGES);
+
+	//S'il y a une erreur dans la lecture de l'image, on affiche un message d'erreur
+	if (succes_lire_images == 0)
+	{
+		printf("erreur lors de l'ouverture du fichier images");
+
+		//On quitte
+		return EXIT_FAILURE;
+	}
+
+
+
+	/*initialisation de l'etat du jeu (aux echecs le joueur blanc est toujours le premier a
+	jouer)*/
+	init_jeu(&etat_jeu, BLANCS);
+
+	/*la liste de coup, etant une structure, elle doit etre initialisee dans la fonction
+	init_liste_coup (c'est fait juste apres)*/
+	t_liste_coups liste_coups;
+
+	//initialisation de la liste de coup (mise a 0 et allocation du pointeur)
+	init_liste_coups(&liste_coups);
+
+	/*affichage des boutons pour reset et quitter*/
+	afficher_bouton(POSY_BOUT_QUIT, POSX_BOUT_QUIT, "quitter");
+	afficher_bouton(POSY_BOUT_RESET, POSX_BOUT_RESET, "reset");
+
+
+
+
+	do{
+
+		/*generation de la liste de coups en partant de la grille actuelle*/
+		generer_liste_coups(&etat_jeu, &liste_coups, verif_roque(&etat_jeu));
+
+		/*affichage de la grille actuelle*/
+		afficher_grille(&etat_jeu);
+
+
+		/*affichage du joueur courrant*/
+		if (get_joueur(&etat_jeu) == BLANCS)
+			afficher_message("tour du joueur BLANC");
+		else
+			afficher_message("tour du joueur NOIR");
+
+		/*affichage du nombre de coups possible*/
+		afficher_info("%d coups possible", get_nb_coups(&liste_coups));
+
+
+		/*demande d'un choix a l'utilisateur*/
+		bouton_clique = choix_case(&col_choisi, &lig_choisi);
+
+		switch (bouton_clique)
+		{
+		case POS_VALIDE:
+			/*si la case choisie est sur le plateau, on en demande une autre comme
+			case de destination*/
+			choix_case(&col_dest_choisi, &lig_dest_choisi);
+			break;
+		case RESET: /*remise du jeu a son etat initial*/
+			init_jeu(&etat_jeu, BLANCS);
+			break;
+		case QUITTER: //fin du jeu
+			detruire_liste_coups(&liste_coups);
+			detruire_grille(etat_jeu.grille_jeu);
+			detruire_images();
+			return EXIT_SUCCESS;
+		}
+
+		vider_liste_coups(&liste_coups);
+
+	} while (capture != ROI_B && capture != ROI_N);
+
+
+	return EXIT_SUCCESS;
+}
+
+#endif
+
+#if JOUER_UNE_PARTIE_TERMINAL == 1
 int main()
 {
 	t_piece capture = VIDE;  //Représente la variable pour sortir de la boucle
