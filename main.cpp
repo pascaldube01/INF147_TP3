@@ -257,9 +257,9 @@ int main()
 	/*la variable etat_jeu sert a contenir l'etat du jeu courant (permission pour le roque,
 	grille de jeu et joueur courant)*/
 	t_etat_jeu etat_jeu;
-	/*variables qui contiendront la selection de cases de jeu faites par l'utilisateur*/
-	int lig_choisi = 0, col_choisi = 0;
-	int lig_dest_choisi = 0, col_dest_choisi = 0;
+	/*variables qui contiendront la selection de cases de jeu faites par l'utilisateur on a besoin
+	d'un tableau car la deuxieme case est la case de destination*/
+	int lig_choisi[2] = { 0 }, col_choisi[2] = {0};
 	/*contiens la selection du joueur (boutons ou plateau de jeu)*/
 	t_saisie bouton_clique = POS_VALIDE;
 	/*indique le succes de la lecture du fichier contenant les bitmaps des pieces*/
@@ -318,25 +318,37 @@ int main()
 		afficher_info("%d coups possible", get_nb_coups(&liste_coups));
 
 
-		/*demande d'un choix a l'utilisateur*/
-		bouton_clique = choix_case(&col_choisi, &lig_choisi);
-
-		switch (bouton_clique)
+		/*demande de la case a selectionner par le joueur*/
+		for (int i = 0; i < 2; i++)
 		{
-		case POS_VALIDE:
-			/*si la case choisie est sur le plateau, on en demande une autre comme
-			case de destination*/
-			choix_case(&col_dest_choisi, &lig_dest_choisi);
-			break;
-		case RESET: /*remise du jeu a son etat initial*/
-			init_jeu(&etat_jeu, BLANCS);
-			break;
-		case QUITTER: //fin du jeu
-			detruire_liste_coups(&liste_coups);
-			detruire_grille(etat_jeu.grille_jeu);
-			detruire_images();
-			return EXIT_SUCCESS;
+			bouton_clique = choix_case(&col_choisi[i], &lig_choisi[i]);
+
+			switch (bouton_clique)
+			{
+			case POS_VALIDE:
+				/*si la case choisie est sur le plateau, on en demande une autre comme
+				case de destination*/
+				printf("coup normal");
+				break;
+			case RESET: /*remise du jeu a son etat initial*/
+				init_jeu(&etat_jeu, BLANCS);
+				break;
+			case QUITTER: //fin du jeu
+				detruire_liste_coups(&liste_coups);
+				detruire_grille(etat_jeu.grille_jeu);
+				detruire_images();
+				return EXIT_SUCCESS;
+			}
+			printf("\nchoisi : %d, %d", lig_choisi[i], col_choisi[i]);
 		}
+
+
+		/******a faire*****/
+		/*creer coup a partir de l'entree*/
+		/*chercher coup dans liste
+			afficher message coup invalide et faire continue pour retourner en haut*/
+					/*OU*/
+			/*jouer le coup*/
 
 		vider_liste_coups(&liste_coups);
 
