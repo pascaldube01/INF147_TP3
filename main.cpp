@@ -77,14 +77,30 @@ int main()
 		return EXIT_FAILURE;
 	}
 	printf("fichier images ouvert avec succes\n\n");
+	afficher_bouton(POSY_BOUT_QUIT, POSX_BOUT_QUIT, "quitter");
+	afficher_bouton(POSY_BOUT_RESET, POSX_BOUT_RESET, "reset");
 
 	afficher_grille(&etat_jeu);
-
+	
 	/*test de choix_case*/
 	printf("choisisez une case sur le plateau de jeu avec la souris");
 	
 	succes_choix_case =  choix_case(&col_recu, &lig_recu);
-	printf("\ncase choisie : %d, %d, ", lig_recu, col_recu);
+	;
+
+	switch (succes_choix_case)
+	{
+	case POS_VALIDE:
+		printf("\ncase choisie : %d, %d, ", lig_recu, col_recu);
+		break;
+	case RESET:
+		printf("\n le joueur a clique sur RESET");
+		break;
+	case QUITTER:
+		printf("\n le joueur a clique sur QUITTER");
+		break;
+	}
+
 
 
 
