@@ -260,6 +260,9 @@ int main()
 	/*variables qui contiendront la selection de cases de jeu faites par l'utilisateur on a besoin
 	d'un tableau car la deuxieme case est la case de destination*/
 	int lig_choisi[2] = { 0 }, col_choisi[2] = {0};
+	/*contiens la string qui sera genere a partir des selections du joueur afin de pouvoir la
+	chercher avec valider_coup()*/
+	char coup_input_string[6] = { 0 };
 	/*contiens la selection du joueur (boutons ou plateau de jeu)*/
 	t_saisie bouton_clique = POS_VALIDE;
 	/*indique le succes de la lecture du fichier contenant les bitmaps des pieces*/
@@ -319,18 +322,20 @@ int main()
 
 
 		/*demande de la case a selectionner par le joueur*/
+		/*comme on a besoin de demander la case de depart et de destination ainsi que de verifier
+		si on ne clique pas sur quitter ou reset entre temps, on fait une boucle et on ecrit le
+		choix du joueur dans deux tableaux a 2 case (depart et arrivee)*/
 		for (int i = 0; i < 2; i++)
 		{
+			/*demande d'une action du joueur*/
 			bouton_clique = choix_case(&col_choisi[i], &lig_choisi[i]);
 
+			/*verificationd de si on a clique ur quitter ou reset*/
 			switch (bouton_clique)
 			{
-			case POS_VALIDE:
-				/*si la case choisie est sur le plateau, on en demande une autre comme
-				case de destination*/
-				printf("coup normal");
 				break;
 			case RESET: /*remise du jeu a son etat initial*/
+				/*va etre a changer une fois que on peut sortir du do while*/
 				init_jeu(&etat_jeu, BLANCS);
 				break;
 			case QUITTER: //fin du jeu
@@ -344,9 +349,21 @@ int main()
 
 
 		/******a faire*****/
-		/*creer coup a partir de l'entree*/
-		/*chercher coup dans liste
-			afficher message coup invalide et faire continue pour retourner en haut*/
+
+		/*pour pouvoir chercher (et valider) le coup entree par l'utilisateur, on doit creer sa string*/
+		coup_input_string[0] = COL_A_CH(col);
+		coup_input_string[1] = RAN_A_NO(lig);
+		coup_input_string[2] = '-';
+		coup_input_string[3] = COL_A_CH(col_dest);
+		coup_input_string[4] = RAN_A_NO(lig_dest);
+		coup_input_string[5] = '\0';
+
+		printf("string de coup %s", coup_input_string);
+
+
+		//valider_coup()
+
+		/* afficher message coup invalide et faire continue pour retourner en haut*/
 					/*OU*/
 			/*jouer le coup*/
 
