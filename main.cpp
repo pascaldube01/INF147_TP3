@@ -368,7 +368,7 @@ int main()
 			/*si le bouton clique est RESET, on sort de la boucle et on refait l'init du jeu*/
 			if (bouton_clique == RESET)
 				break;
-
+		
 			/*pour pouvoir chercher (et valider) le coup entree par l'utilisateur, on doit creer sa string*/
 			coup_input_string[0] = COL_A_CH(col_choisi[0]);
 			coup_input_string[1] = RAN_A_NO(lig_choisi[0]);
@@ -384,6 +384,7 @@ int main()
 			joue, sinon, on en demande un autre en retournant en haut de la boucle*/
 			if (valider_coup(&liste_coups, coup_input_string, &coup))
 			{
+				printf("\ncoup valide");
 				/*si le coup est valide, on affiche et joue le coup*/
 				afficher_coup(get_piece_case(&etat_jeu, col_choisi[0], lig_choisi[0]), col_choisi[0], lig_choisi[0],
 					get_piece_case(&etat_jeu, col_choisi[1], lig_choisi[1]), col_choisi[1], lig_choisi[1]);
