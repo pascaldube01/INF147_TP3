@@ -287,8 +287,8 @@ int main()
 	}
 
 	/*affichage des boutons pour reset et quitter*/
-	afficher_bouton(POSY_BOUT_QUIT, POSX_BOUT_QUIT, "quitter");
-	afficher_bouton(POSY_BOUT_RESET, POSX_BOUT_RESET, "reset");
+	afficher_bouton(POSY_BOUT_QUIT, POSX_BOUT_QUIT, "ABANDONNER");
+	afficher_bouton(POSY_BOUT_RESET, POSX_BOUT_RESET, "RECOMMENCER");
 
 	/*boucle de jeu incluant initialisation (si on clique reset, on recomemnce ici)*/
 	do
@@ -305,11 +305,6 @@ int main()
 		//initialisation de la liste de coup (mise a 0 et allocation du pointeur)
 		init_liste_coups(&liste_coups);
 
-
-
-
-
-
 		do {
 			/*pour debug*/
 			printf("init du jeu");
@@ -320,14 +315,14 @@ int main()
 			afficher_grille(&etat_jeu);
 
 
-			/*affichage du joueur courrant*/
+			/*affichage du joueur courant*/
 			if (get_joueur(&etat_jeu) == BLANCS)
 				afficher_message("tour du joueur BLANC");
 			else
 				afficher_message("tour du joueur NOIR");
 
 			/*affichage du nombre de coups possible*/
-			afficher_info("%d coups possible", get_nb_coups(&liste_coups));
+			afficher_info("%d coups generes", get_nb_coups(&liste_coups));
 
 			if (get_joueur(&etat_jeu))
 			{
@@ -340,7 +335,7 @@ int main()
 					/*demande d'une action du joueur*/
 					bouton_clique = choix_case(&col_choisi[i], &lig_choisi[i]);
 
-					/*verificationd de si on a clique ur quitter ou reset*/
+					/*verification de si on a clique sur quitter ou reset*/
 					switch (bouton_clique)
 					{
 						break;
