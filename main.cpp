@@ -290,7 +290,7 @@ int main()
 	afficher_bouton(POSY_BOUT_QUIT, POSX_BOUT_QUIT, "ABANDONNER");
 	afficher_bouton(POSY_BOUT_RESET, POSX_BOUT_RESET, "RECOMMENCER");
 
-	/*boucle de jeu incluant initialisation (si on clique reset, on recomemnce ici)*/
+	/*boucle de jeu incluant initialisation (si on clique reset, on recommence ici)*/
 	do
 	{
 
@@ -317,7 +317,7 @@ int main()
 
 			/*affichage du joueur courant*/
 			if (get_joueur(&etat_jeu) == BLANCS)
-				afficher_message("tour du joueur BLANC");
+				afficher_message("BLANCS: Veuillez cliquer sur la case-source");
 			else
 				afficher_message("tour du joueur NOIR");
 
@@ -386,7 +386,13 @@ int main()
 				capture = jouer_coup(&etat_jeu, &coup);
 			}
 			else
+			{
+				afficher_message("ERREUR! Coup non-permis, recommencez..");
+				//On attend 2 secondes avant de re-demander un coup
+				delai_ecran(2000);
 				continue;
+			}
+				
 
 			/* afficher message coup invalide et faire continue pour retourner en haut*/
 						/*OU*/
