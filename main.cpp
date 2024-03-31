@@ -317,11 +317,14 @@ int main()
 
 			/*affichage du joueur courant*/
 			if (get_joueur(&etat_jeu) == BLANCS)
-
+			{
 				//On demande la case-source au joueur
 				afficher_message("BLANCS: Veuillez cliquer sur la case-source");
+			}
 			else
-				afficher_message("tour du joueur NOIR");
+			{
+				afficher_message("Attendez SVP, je réfléchis...");
+			}
 
 			/*affichage du nombre de coups possible*/
 			afficher_info("%d coups generes", get_nb_coups(&liste_coups));

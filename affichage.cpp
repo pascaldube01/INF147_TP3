@@ -195,7 +195,8 @@ void afficher_coup(t_piece piece_src, int col_src, int ran_src,
 {
 	/*affichage de la piece a la destination*/
 	afficher_piece(ran_dest, col_dest,
-	images[pale_foncer(ran_dest, col_dest)][piece_src].header.height,
-	images[pale_foncer(ran_dest, col_dest)][piece_src].header.width,
-	images[pale_foncer(ran_dest, col_dest)][piece_src].image_data);
+		images[pale_foncer(ran_dest, col_dest)][piece_src].header.height,
+		images[pale_foncer(ran_dest, col_dest)][piece_src].header.width,
+		images[pale_foncer(ran_dest, col_dest)][piece_src].image_data);
+
 }
