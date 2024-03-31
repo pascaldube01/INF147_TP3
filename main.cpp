@@ -317,6 +317,8 @@ int main()
 
 			/*affichage du joueur courant*/
 			if (get_joueur(&etat_jeu) == BLANCS)
+
+				//On demande la case-source au joueur
 				afficher_message("BLANCS: Veuillez cliquer sur la case-source");
 			else
 				afficher_message("tour du joueur NOIR");
@@ -334,6 +336,9 @@ int main()
 				{
 					/*demande d'une action du joueur*/
 					bouton_clique = choix_case(&col_choisi[i], &lig_choisi[i]);
+
+					//On demande la case-destination au joueur
+					afficher_message("BLANCS: Veuillez cliquer sur la case-destination");
 
 					/*verification de si on a clique sur quitter ou reset*/
 					switch (bouton_clique)
@@ -387,9 +392,13 @@ int main()
 			}
 			else
 			{
+				//Si le coup n'est opas valide, on affiche un message d'erreur
 				afficher_message("ERREUR! Coup non-permis, recommencez..");
+
 				//On attend 2 secondes avant de re-demander un coup
 				delai_ecran(2000);
+
+				//On revient au début de la boucle
 				continue;
 			}
 				
