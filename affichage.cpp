@@ -187,3 +187,11 @@ void detruire_images()
 		for (int j = 0; j < 16; j++)
 			free(images[i][j].image_data);
 }
+
+/*******************************************************************************/
+
+void afficher_coup(t_piece piece_src, int col_src, int ran_src,
+	t_piece piece_dest, int col_dest, int ran_dest);
+{
+
+}

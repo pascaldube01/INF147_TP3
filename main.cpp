@@ -251,9 +251,11 @@ int main()
 #if JOUER_UNE_PARTIE_BGI == 1
 int main()
 {
-	
-	t_piece capture = VIDE;  //Représente la variable pour sortir de la boucle
-	t_coup coup;			 //Représente le coup du joueur actuel 
+	/*piece qui a ete capturee (s'il y en a une), utilise pour terminer le jeu si on capture
+	un roi*/
+	t_piece capture = VIDE;
+	/*coup (complet) qui sera retourne par valider_coup()*/
+	t_coup coup;
 	/*la variable etat_jeu sert a contenir l'etat du jeu courant (permission pour le roque,
 	grille de jeu et joueur courant)*/
 	t_etat_jeu etat_jeu;
@@ -267,6 +269,8 @@ int main()
 	t_saisie bouton_clique = POS_VALIDE;
 	/*indique le succes de la lecture du fichier contenant les bitmaps des pieces*/
 	int succes_lire_images = 1;
+	/*flag indiquant qu'il faut remettre le jeu a 0 (joueur a clique sur reset)*/
+	int flag_reset = 0;
 
 	/*ouverture de la fenetre graphique*/
 	init_graphe();
@@ -282,94 +286,121 @@ int main()
 		return EXIT_FAILURE;
 	}
 
-
-
-	/*initialisation de l'etat du jeu (aux echecs le joueur blanc est toujours le premier a
-	jouer)*/
-	init_jeu(&etat_jeu, BLANCS);
-
-	/*la liste de coup, etant une structure, elle doit etre initialisee dans la fonction
-	init_liste_coup (c'est fait juste apres)*/
-	t_liste_coups liste_coups;
-
-	//initialisation de la liste de coup (mise a 0 et allocation du pointeur)
-	init_liste_coups(&liste_coups);
-
 	/*affichage des boutons pour reset et quitter*/
 	afficher_bouton(POSY_BOUT_QUIT, POSX_BOUT_QUIT, "quitter");
 	afficher_bouton(POSY_BOUT_RESET, POSX_BOUT_RESET, "reset");
 
+	/*boucle de jeu incluant initialisation (si on clique reset, on recomemnce ici)*/
+	do
+	{
+
+		/*initialisation de l'etat du jeu (aux echecs le joueur blanc est toujours le premier a
+		jouer)*/
+		init_jeu(&etat_jeu, BLANCS);
+
+		/*la liste de coup, etant une structure, elle doit etre initialisee dans la fonction
+		init_liste_coup (c'est fait juste apres)*/
+		t_liste_coups liste_coups;
+
+		//initialisation de la liste de coup (mise a 0 et allocation du pointeur)
+		init_liste_coups(&liste_coups);
 
 
 
-	do{
-
-		/*generation de la liste de coups en partant de la grille actuelle*/
-		generer_liste_coups(&etat_jeu, &liste_coups, verif_roque(&etat_jeu));
-
-		/*affichage de la grille actuelle*/
-		afficher_grille(&etat_jeu);
 
 
-		/*affichage du joueur courrant*/
-		if (get_joueur(&etat_jeu) == BLANCS)
-			afficher_message("tour du joueur BLANC");
-		else
-			afficher_message("tour du joueur NOIR");
 
-		/*affichage du nombre de coups possible*/
-		afficher_info("%d coups possible", get_nb_coups(&liste_coups));
+		do {
+			/*pour debug*/
+			printf("init du jeu");
+			/*generation de la liste de coups en partant de la grille actuelle*/
+			generer_liste_coups(&etat_jeu, &liste_coups, verif_roque(&etat_jeu));
+
+			/*affichage de la grille actuelle*/
+			afficher_grille(&etat_jeu);
 
 
-		/*demande de la case a selectionner par le joueur*/
-		/*comme on a besoin de demander la case de depart et de destination ainsi que de verifier
-		si on ne clique pas sur quitter ou reset entre temps, on fait une boucle et on ecrit le
-		choix du joueur dans deux tableaux a 2 case (depart et arrivee)*/
-		for (int i = 0; i < 2; i++)
-		{
-			/*demande d'une action du joueur*/
-			bouton_clique = choix_case(&col_choisi[i], &lig_choisi[i]);
+			/*affichage du joueur courrant*/
+			if (get_joueur(&etat_jeu) == BLANCS)
+				afficher_message("tour du joueur BLANC");
+			else
+				afficher_message("tour du joueur NOIR");
 
-			/*verificationd de si on a clique ur quitter ou reset*/
-			switch (bouton_clique)
+			/*affichage du nombre de coups possible*/
+			afficher_info("%d coups possible", get_nb_coups(&liste_coups));
+
+			if (get_joueur(&etat_jeu))
 			{
-				break;
-			case RESET: /*remise du jeu a son etat initial*/
-				/*va etre a changer une fois que on peut sortir du do while*/
-				init_jeu(&etat_jeu, BLANCS);
-				break;
-			case QUITTER: //fin du jeu
-				detruire_liste_coups(&liste_coups);
-				detruire_grille(etat_jeu.grille_jeu);
-				detruire_images();
-				return EXIT_SUCCESS;
+				/*demande de la case a selectionner par le joueur*/
+				/*comme on a besoin de demander la case de depart et de destination ainsi que de verifier
+				si on ne clique pas sur quitter ou reset entre temps, on fait une boucle et on ecrit le
+				choix du joueur dans deux tableaux a 2 case (depart et arrivee)*/
+				for (int i = 0; i < 2; i++)
+				{
+					/*demande d'une action du joueur*/
+					bouton_clique = choix_case(&col_choisi[i], &lig_choisi[i]);
+
+					/*verificationd de si on a clique ur quitter ou reset*/
+					switch (bouton_clique)
+					{
+						break;
+					case RESET: /*remise du jeu a son etat initial*/
+						/*on sort de la boucle, comme on ne peut pas utiliser un break pour sortir
+						d'une boucle dans un switch case, on met i (la variable du for) a 2 pour
+						s'assurer qu'il n'y aura pas unn autre tour*/
+						i = 2; 
+						break;
+					case QUITTER: //fin du jeu
+						detruire_liste_coups(&liste_coups);
+						detruire_grille(etat_jeu.grille_jeu);
+						detruire_images();
+						return EXIT_SUCCESS;
+					}
+					printf("\nchoisi : %d, %d", lig_choisi[i], col_choisi[i]);
+				}
 			}
-			printf("\nchoisi : %d, %d", lig_choisi[i], col_choisi[i]);
-		}
+			else
+			{
+				/*si c'est le tour de l'ordi, il joue un coup au hasard*/
+				coup = choix_coup_ordi(&liste_coups);
+			}
 
+			/*si le bouton clique est RESET, on sort de la boucle et on refait l'init du jeu*/
+			if (bouton_clique == RESET)
+				break;
 
-		/******a faire*****/
+			/*pour pouvoir chercher (et valider) le coup entree par l'utilisateur, on doit creer sa string*/
+			coup_input_string[0] = COL_A_CH(col_choisi[0]);
+			coup_input_string[1] = RAN_A_NO(lig_choisi[0]);
+			coup_input_string[2] = '-';
+			coup_input_string[3] = COL_A_CH(col_choisi[1]);
+			coup_input_string[4] = RAN_A_NO(lig_choisi[1]);
+			coup_input_string[5] = '\0';
 
-		/*pour pouvoir chercher (et valider) le coup entree par l'utilisateur, on doit creer sa string*/
-		coup_input_string[0] = COL_A_CH(col);
-		coup_input_string[1] = RAN_A_NO(lig);
-		coup_input_string[2] = '-';
-		coup_input_string[3] = COL_A_CH(col_dest);
-		coup_input_string[4] = RAN_A_NO(lig_dest);
-		coup_input_string[5] = '\0';
+			/*pour debug*/
+			printf("\nstring de coup %s", coup_input_string);
 
-		printf("string de coup %s", coup_input_string);
+			/*on recherche le coup choisi par le joueur dans la liste, s'il est possible, on le
+			joue, sinon, on en demande un autre en retournant en haut de la boucle*/
+			if (valider_coup(&liste_coups, coup_input_string, &coup))
+			{
+				/*si le coup est valide, on affiche et joue le coup*/
+				afficher_coup(get_piece_case(&etat_jeu, col_choisi[0], lig_choisi[0]), col_choisi[0], lig_choisi[0],
+					get_piece_case(&etat_jeu, col_choisi[1], lig_choisi[1]), col_choisi[1], lig_choisi[1]);
+				capture = jouer_coup(&etat_jeu, &coup);
+			}
+			else
+				continue;
 
+			/* afficher message coup invalide et faire continue pour retourner en haut*/
+						/*OU*/
+				/*jouer le coup*/
 
-		//valider_coup()
+			vider_liste_coups(&liste_coups);
 
-		/* afficher message coup invalide et faire continue pour retourner en haut*/
-					/*OU*/
-			/*jouer le coup*/
-
-		vider_liste_coups(&liste_coups);
-
-	} while (capture != ROI_B && capture != ROI_N);
+		} while (capture != ROI_B && capture != ROI_N);
+	} while (1);
+	/*cette boucle est infinie mais on peut quand meme sortir du main en cliquant sur le bouton reset*/
 
 
 	return EXIT_SUCCESS;
