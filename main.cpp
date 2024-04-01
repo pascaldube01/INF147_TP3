@@ -309,6 +309,7 @@ int main()
 			/*pour debug*/
 			printf("init du jeu");
 			/*generation de la liste de coups en partant de la grille actuelle*/
+			vider_liste_coups(&liste_coups);
 			generer_liste_coups(&etat_jeu, &liste_coups, verif_roque(&etat_jeu));
 
 			/*affichage de la grille actuelle*/
@@ -361,72 +362,64 @@ int main()
 					}
 					printf("\nchoisi : %d, %d", lig_choisi[i], col_choisi[i]);
 				}
+
+
+				/*si le bouton clique est RESET, on sort de la boucle et on refait l'init du jeu*/
+				if (bouton_clique == RESET)
+					break;
+		
+				/*pour pouvoir chercher (et valider) le coup entree par l'utilisateur, on doit creer sa string*/
+				coup_input_string[0] = COL_A_CH(col_choisi[0]);
+				coup_input_string[1] = RAN_A_NO(lig_choisi[0]);
+				coup_input_string[2] = '-';
+				coup_input_string[3] = COL_A_CH(col_choisi[1]);
+				coup_input_string[4] = RAN_A_NO(lig_choisi[1]);
+				coup_input_string[5] = '\0';
+
+				/*pour debug*/
+				printf("\nstring de coup %s", coup_input_string);
+
+				/*on recherche le coup choisi par le joueur dans la liste, s'il est possible, on le
+				joue, sinon, on en demande un autre en retournant en haut de la boucle*/
+				if (valider_coup(&liste_coups, coup_input_string, &coup))
+				{
+					printf("\ncoup valide");
+					/*si le coup est valide, on affiche et joue le coup*/
+					afficher_coup(get_piece_case(&etat_jeu, col_choisi[0], lig_choisi[0]), col_choisi[0], lig_choisi[0],
+						get_piece_case(&etat_jeu, col_choisi[1], lig_choisi[1]), col_choisi[1], lig_choisi[1]);
+					capture = jouer_coup(&etat_jeu, &coup);
+				}
+				else
+				{
+					//Si le coup n'est opas valide, on affiche un message d'erreur
+					afficher_message("ERREUR! Coup non-permis, recommencez..");
+
+					//On attend 2 secondes avant de re-demander un coup
+					delai_ecran(2000);
+
+					//On revient au début de la boucle
+					continue;
+				}
 			}
-			else
+			else //tour de l'ordi
 			{
 				/*si c'est le tour de l'ordi, il joue un coup au hasard*/
 				coup = choix_coup_ordi(&liste_coups);
-			}
-
-			/*si le bouton clique est RESET, on sort de la boucle et on refait l'init du jeu*/
-			if (bouton_clique == RESET)
-				break;
-		
-			/*pour pouvoir chercher (et valider) le coup entree par l'utilisateur, on doit creer sa string*/
-			coup_input_string[0] = COL_A_CH(col_choisi[0]);
-			coup_input_string[1] = RAN_A_NO(lig_choisi[0]);
-			coup_input_string[2] = '-';
-			coup_input_string[3] = COL_A_CH(col_choisi[1]);
-			coup_input_string[4] = RAN_A_NO(lig_choisi[1]);
-			coup_input_string[5] = '\0';
-
-			/*pour debug*/
-			printf("\nstring de coup %s", coup_input_string);
-
-			/*on recherche le coup choisi par le joueur dans la liste, s'il est possible, on le
-			joue, sinon, on en demande un autre en retournant en haut de la boucle*/
-			if (valider_coup(&liste_coups, coup_input_string, &coup))
-			{
-				printf("\ncoup valide");
-				/*si le coup est valide, on affiche et joue le coup*/
 				afficher_coup(get_piece_case(&etat_jeu, col_choisi[0], lig_choisi[0]), col_choisi[0], lig_choisi[0],
 					get_piece_case(&etat_jeu, col_choisi[1], lig_choisi[1]), col_choisi[1], lig_choisi[1]);
 				capture = jouer_coup(&etat_jeu, &coup);
 			}
-			else
-			{
-				//Si le coup n'est opas valide, on affiche un message d'erreur
-				afficher_message("ERREUR! Coup non-permis, recommencez..");
 
-				//On attend 2 secondes avant de re-demander un coup
-				delai_ecran(2000);
-
-				//On revient au début de la boucle
-				continue;
-			}
-				
-
-			/* afficher message coup invalide et faire continue pour retourner en haut*/
-						/*OU*/
-				/*jouer le coup*/
-
-			vider_liste_coups(&liste_coups);
 			set_joueur(&etat_jeu, INVERSER_JOUEUR(etat_jeu.joueur));
 
 		} while (capture != ROI_B && capture != ROI_N);
 
 		if (capture == ROI_B)
-		{
-			afficher_message("le joueur blanc gagne");
-		}
-		else if (capture == ROI_N)
-		{
 			afficher_message("le joueur noir gagne");
-		}
+		else if (capture == ROI_N)
+			afficher_message("le joueur blanc gagne");
 		else
-		{
 			afficher_message("le joueur blanc abandonne");
-		}
 
 		delai_ecran(3000);
 
