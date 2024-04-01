@@ -271,6 +271,9 @@ int main()
 	int succes_lire_images = 1;
 	/*flag indiquant qu'il faut remettre le jeu a 0 (joueur a clique sur reset)*/
 	int flag_reset = 0;
+	/*la liste de coup, etant une structure, elle doit etre initialisee dans la fonction
+	init_liste_coup*/
+	t_liste_coups liste_coups;
 
 	/*ouverture de la fenetre graphique*/
 	init_graphe();
@@ -297,10 +300,6 @@ int main()
 		/*initialisation de l'etat du jeu (aux echecs le joueur blanc est toujours le premier a
 		jouer)*/
 		init_jeu(&etat_jeu, BLANCS);
-
-		/*la liste de coup, etant une structure, elle doit etre initialisee dans la fonction
-		init_liste_coup (c'est fait juste apres)*/
-		t_liste_coups liste_coups;
 
 		//initialisation de la liste de coup (mise a 0 et allocation du pointeur)
 		init_liste_coups(&liste_coups);
@@ -355,10 +354,7 @@ int main()
 						i = 2; 
 						break;
 					case QUITTER: //fin du jeu
-						detruire_liste_coups(&liste_coups);
-						detruire_grille(etat_jeu.grille_jeu);
-						detruire_images();
-						return EXIT_SUCCESS;
+						goto fin_du_jeu;
 					}
 					printf("\nchoisi : %d, %d", lig_choisi[i], col_choisi[i]);
 				}
@@ -385,8 +381,10 @@ int main()
 				{
 					printf("\ncoup valide");
 					/*si le coup est valide, on affiche et joue le coup*/
-					afficher_coup(get_piece_case(&etat_jeu, col_choisi[0], lig_choisi[0]), col_choisi[0], lig_choisi[0],
-						get_piece_case(&etat_jeu, col_choisi[1], lig_choisi[1]), col_choisi[1], lig_choisi[1]);
+					afficher_coup(get_piece_case(&etat_jeu, col_choisi[0], lig_choisi[0]),
+						col_choisi[0], lig_choisi[0],
+						get_piece_case(&etat_jeu, col_choisi[1], lig_choisi[1]),
+						col_choisi[1], lig_choisi[1]);
 					capture = jouer_coup(&etat_jeu, &coup);
 				}
 				else
@@ -397,36 +395,53 @@ int main()
 					//On attend 2 secondes avant de re-demander un coup
 					delai_ecran(2000);
 
-					//On revient au début de la boucle
+					//On revient au début de la boucle (sans changer de joueur)
 					continue;
 				}
 			}
 			else //tour de l'ordi
 			{
-				/*si c'est le tour de l'ordi, il joue un coup au hasard*/
+				/*si c'est le tour de l'ordi, il joue un coup au hasard, on l'affiche et on le joue*/
 				coup = choix_coup_ordi(&liste_coups);
-				afficher_coup(get_piece_case(&etat_jeu, col_choisi[0], lig_choisi[0]), col_choisi[0], lig_choisi[0],
-					get_piece_case(&etat_jeu, col_choisi[1], lig_choisi[1]), col_choisi[1], lig_choisi[1]);
+				afficher_coup(get_piece_case(&etat_jeu, col_choisi[0], lig_choisi[0]),
+					col_choisi[0], lig_choisi[0],
+					get_piece_case(&etat_jeu, col_choisi[1], lig_choisi[1]),
+					col_choisi[1], lig_choisi[1]);
 				capture = jouer_coup(&etat_jeu, &coup);
 			}
 
+			/*si tout s'est bien passe (le coup est joue) on change de joueur*/
 			set_joueur(&etat_jeu, INVERSER_JOUEUR(etat_jeu.joueur));
 
 		} while (capture != ROI_B && capture != ROI_N);
 
 		if (capture == ROI_B)
-			afficher_message("le joueur noir gagne");
+			afficher_message("le joueur noir gagne, quitter ou reset");
 		else if (capture == ROI_N)
-			afficher_message("le joueur blanc gagne");
+			afficher_message("le joueur blanc gagne quitter ou reset");
 		else
-			afficher_message("le joueur blanc abandonne");
+			afficher_message("le joueur blanc abandonne quitter ou reset");
 
-		delai_ecran(3000);
+
+
+		while (bouton_clique != QUITTER && bouton_clique != RESET)
+			bouton_clique = choix_case(&col_choisi[0], &lig_choisi[0]);
+		if (bouton_clique == QUITTER)
+			goto fin_du_jeu;
 
 	} while (1);
 	/*cette boucle est infinie mais on peut quand meme sortir en cliquant sur le bouton reset*/
 
-
+	/*comme il faut sortir de plusieurs boucles en meme temps et qu'on peut pas juste faire un
+	return (il faut liberer la memoire), on envoie toutes les condition causant la fin du jeu
+	a la fin de la fonction main*/
+	fin_du_jeu:
+	
+	detruire_liste_coups(&liste_coups);
+	detruire_grille(etat_jeu.grille_jeu);
+	detruire_images();
+	fermer_mode_graphique();
+	
 	return EXIT_SUCCESS;
 }
 
