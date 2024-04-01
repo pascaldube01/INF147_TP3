@@ -411,10 +411,27 @@ int main()
 				/*jouer le coup*/
 
 			vider_liste_coups(&liste_coups);
+			set_joueur(&etat_jeu, INVERSER_JOUEUR(etat_jeu.joueur));
 
 		} while (capture != ROI_B && capture != ROI_N);
+
+		if (capture == ROI_B)
+		{
+			afficher_message("le joueur blanc gagne");
+		}
+		else if (capture == ROI_N)
+		{
+			afficher_message("le joueur noir gagne");
+		}
+		else
+		{
+			afficher_message("le joueur blanc abandonne");
+		}
+
+		delai_ecran(3000);
+
 	} while (1);
-	/*cette boucle est infinie mais on peut quand meme sortir du main en cliquant sur le bouton reset*/
+	/*cette boucle est infinie mais on peut quand meme sortir en cliquant sur le bouton reset*/
 
 
 	return EXIT_SUCCESS;
