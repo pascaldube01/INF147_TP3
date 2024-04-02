@@ -307,7 +307,7 @@ int main()
 		do
 		{
 			/*pour debug*/
-			printf("init du jeu");
+			printf("\ninit du jeu");
 			/*generation de la liste de coups en partant de la grille actuelle*/
 			vider_liste_coups(&liste_coups);
 			generer_liste_coups(&etat_jeu, &liste_coups, verif_roque(&etat_jeu));
@@ -332,7 +332,7 @@ int main()
 
 			if (get_joueur(&etat_jeu))
 			{
-				/*demande de la case a selectionner par le joueur*/
+				/*demande de la case a selectionnée par le joueur*/
 				/*comme on a besoin de demander la case de depart et de destination ainsi que de verifier
 				si on ne clique pas sur quitter ou reset entre temps, on fait une boucle et on ecrit le
 				choix du joueur dans deux tableaux a 2 case (depart et arrivee)*/
@@ -417,7 +417,7 @@ int main()
 				capture = jouer_coup(&etat_jeu, &coup);
 			}
 
-			/*si tout s'est bien passe (le coup est joue) on change de joueur*/
+			/*si tout s'est bien passe (le coup est joué) on change de joueur*/
 			set_joueur(&etat_jeu, INVERSER_JOUEUR(etat_jeu.joueur));
 
 		} while (capture != ROI_B && capture != ROI_N);
