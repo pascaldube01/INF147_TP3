@@ -261,7 +261,7 @@ int main()
 	t_etat_jeu etat_jeu;
 	/*variables qui contiendront la selection de cases de jeu faites par l'utilisateur on a besoin
 	d'un tableau car la deuxieme case est la case de destination*/
-	int lig_choisi[2] = { 0 }, col_choisi[2] = {0};
+	int lig_choisi[2] = { 0 }, col_choisi[2] = { 0 };
 	/*contiens la string qui sera genere a partir des selections du joueur afin de pouvoir la
 	chercher avec valider_coup()*/
 	char coup_input_string[6] = { 0 };
@@ -346,7 +346,7 @@ int main()
 						//On demande la case-destination au joueur
 						afficher_message("BLANCS: Veuillez cliquer sur la case-destination");
 					}
-				
+
 					/*verification de si on a clique sur quitter ou reset*/
 					switch (bouton_clique)
 					{
@@ -445,13 +445,8 @@ int main()
 	a la fin de la fonction main*/
 	fin_du_jeu:
 
-
-
-	/******DOIT TROUVER UN MOYEN DE PAS QUITTER TANT QU'ON A PAS APPUYER SUR UNE TOUCHE********/
-
-
-	//afficher_message("Au revoir :-( Appuyer sur une touche pour quitter.");
-	//getchar();
+	afficher_message("Au revoir :-( Appuyer sur une touche pour quitter.");
+	while (!touche_pesee()){}
 
 	detruire_liste_coups(&liste_coups);
 	detruire_grille(etat_jeu.grille_jeu);
