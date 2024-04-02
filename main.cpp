@@ -342,7 +342,6 @@ int main()
 					/*demande d'une action du joueur*/
 					bouton_clique = choix_case(&col_choisi[i], &lig_choisi[i]);
 
-					//Si on a pas souhaité quitter ou recommencer, on demande la destination
 					if (bouton_clique != RESET && bouton_clique != QUITTER)
 					{
 						//On demande la case-destination au joueur
@@ -443,6 +442,11 @@ int main()
 	return (il faut liberer la memoire), on envoie toutes les condition causant la fin du jeu
 	a la fin de la fonction main*/
 	fin_du_jeu:
+
+
+
+	/******DOIT TROUVER UN MOYEN DE PAS QUITTER TANT QU'ON A PAS APPUYER SUR UNE TOUCHE********/
+
 
 	//afficher_message("Au revoir :-( Appuyer sur une touche pour quitter.");
 	//getchar();
