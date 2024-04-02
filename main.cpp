@@ -27,7 +27,6 @@
 #include "SOURISLIB.h"
 #include "utilitaire_affichage.h"
 #include "winBGIm.h"
-#include <conio.h>
 
 /*=========================================================*/
 /*                  LES CONSTANTES                         */
