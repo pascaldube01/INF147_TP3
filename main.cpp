@@ -27,6 +27,7 @@
 #include "SOURISLIB.h"
 #include "utilitaire_affichage.h"
 #include "winBGIm.h"
+#include <conio.h>
 
 /*=========================================================*/
 /*                  LES CONSTANTES                         */
@@ -304,7 +305,8 @@ int main()
 		//initialisation de la liste de coup (mise a 0 et allocation du pointeur)
 		init_liste_coups(&liste_coups);
 
-		do {
+		do
+		{
 			/*pour debug*/
 			printf("init du jeu");
 			/*generation de la liste de coups en partant de la grille actuelle*/
@@ -340,9 +342,13 @@ int main()
 					/*demande d'une action du joueur*/
 					bouton_clique = choix_case(&col_choisi[i], &lig_choisi[i]);
 
-					//On demande la case-destination au joueur
-					afficher_message("BLANCS: Veuillez cliquer sur la case-destination");
-
+					//Si on a pas souhaité quitter ou recommencer, on demande la destination
+					if (bouton_clique != RESET && bouton_clique != QUITTER)
+					{
+						//On demande la case-destination au joueur
+						afficher_message("BLANCS: Veuillez cliquer sur la case-destination");
+					}
+				
 					/*verification de si on a clique sur quitter ou reset*/
 					switch (bouton_clique)
 					{
@@ -351,7 +357,9 @@ int main()
 						/*on sort de la boucle, comme on ne peut pas utiliser un break pour sortir
 						d'une boucle dans un switch case, on met i (la variable du for) a 2 pour
 						s'assurer qu'il n'y aura pas unn autre tour*/
-						i = 2; 
+
+						i = 2;
+
 						break;
 					case QUITTER: //fin du jeu
 						goto fin_du_jeu;
@@ -363,7 +371,7 @@ int main()
 				/*si le bouton clique est RESET, on sort de la boucle et on refait l'init du jeu*/
 				if (bouton_clique == RESET)
 					break;
-		
+
 				/*pour pouvoir chercher (et valider) le coup entree par l'utilisateur, on doit creer sa string*/
 				coup_input_string[0] = COL_A_CH(col_choisi[0]);
 				coup_input_string[1] = RAN_A_NO(lig_choisi[0]);
@@ -385,6 +393,7 @@ int main()
 						col_choisi[0], lig_choisi[0],
 						get_piece_case(&etat_jeu, col_choisi[1], lig_choisi[1]),
 						col_choisi[1], lig_choisi[1]);
+
 					capture = jouer_coup(&etat_jeu, &coup);
 				}
 				else
@@ -421,9 +430,7 @@ int main()
 			afficher_message("le joueur blanc gagne quitter ou reset");
 		else
 			afficher_message("le joueur blanc abandonne quitter ou reset");
-
-
-
+	
 		while (bouton_clique != QUITTER && bouton_clique != RESET)
 			bouton_clique = choix_case(&col_choisi[0], &lig_choisi[0]);
 		if (bouton_clique == QUITTER)
@@ -436,7 +443,10 @@ int main()
 	return (il faut liberer la memoire), on envoie toutes les condition causant la fin du jeu
 	a la fin de la fonction main*/
 	fin_du_jeu:
-	
+
+	//afficher_message("Au revoir :-( Appuyer sur une touche pour quitter.");
+	//getchar();
+
 	detruire_liste_coups(&liste_coups);
 	detruire_grille(etat_jeu.grille_jeu);
 	detruire_images();
