@@ -422,13 +422,16 @@ int main()
 
 		} while (capture != ROI_B && capture != ROI_N);
 
+		//Si la pièce capturée est le roi blanc, le joueur noir gagne la partie 
 		if (capture == ROI_B)
 			afficher_message("le joueur noir gagne, quitter ou reset");
+		//Sinon, c'est le joueur blanc qui gagne
 		else if (capture == ROI_N)
 			afficher_message("le joueur blanc gagne quitter ou reset");
+		//Sinon, le joueur blanc abandonne ou bien quitte
 		else
 			afficher_message("le joueur blanc abandonne quitter ou reset");
-	
+
 		while (bouton_clique != QUITTER && bouton_clique != RESET)
 			bouton_clique = choix_case(&col_choisi[0], &lig_choisi[0]);
 		if (bouton_clique == QUITTER)
