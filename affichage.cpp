@@ -193,16 +193,42 @@ void detruire_images()
 void afficher_coup(t_piece piece_src, int col_src, int ran_src,
 	t_piece piece_dest, int col_dest, int ran_dest)
 {
-	/*affichage de la piece a la destination*/
-	afficher_piece(ran_dest * TAILLE_BMP, col_dest * TAILLE_BMP,
-		images[pale_foncer(ran_dest, col_dest)][piece_src].header.height,
-		images[pale_foncer(ran_dest, col_dest)][piece_src].header.width,
-		images[pale_foncer(ran_dest, col_dest)][piece_src].image_data);
 
-	/*mise a vide de la case source*/
-	afficher_piece(ran_src * TAILLE_BMP, col_src * TAILLE_BMP,
-		images[pale_foncer(ran_src, col_src)][VIDE].header.height,
-		images[pale_foncer(ran_src, col_src)][VIDE].header.width,
-		images[pale_foncer(ran_src, col_src)][VIDE].image_data);
+	/*on clignote le coup de son etat present a son etat futur*/
+	for (int i = 0; i <= 3; i++)
+	{
+		/*remise de la piece source a la source*/
+		afficher_piece(ran_src * TAILLE_BMP, col_src * TAILLE_BMP,
+			images[pale_foncer(ran_src, col_src)][piece_src].header.height,
+			images[pale_foncer(ran_src, col_src)][piece_src].header.width,
+			images[pale_foncer(ran_src, col_src)][piece_src].image_data);
+
+		/*remise de la piece destination a la destination*/
+		afficher_piece(ran_dest * TAILLE_BMP, col_dest * TAILLE_BMP,
+			images[pale_foncer(ran_dest, col_dest)][piece_dest].header.height,
+			images[pale_foncer(ran_dest, col_dest)][piece_dest].header.width,
+			images[pale_foncer(ran_dest, col_dest)][piece_dest].image_data);
+
+
+
+		delai_ecran(100);
+
+		/*affichage de la piece a la destination*/
+		afficher_piece(ran_dest * TAILLE_BMP, col_dest * TAILLE_BMP,
+			images[pale_foncer(ran_dest, col_dest)][piece_src].header.height,
+			images[pale_foncer(ran_dest, col_dest)][piece_src].header.width,
+			images[pale_foncer(ran_dest, col_dest)][piece_src].image_data);
+
+		/*mise a vide de la case source*/
+		afficher_piece(ran_src * TAILLE_BMP, col_src * TAILLE_BMP,
+			images[pale_foncer(ran_src, col_src)][VIDE].header.height,
+			images[pale_foncer(ran_src, col_src)][VIDE].header.width,
+			images[pale_foncer(ran_src, col_src)][VIDE].image_data);
+
+
+
+		delai_ecran(100);
+
+	}
 
 }

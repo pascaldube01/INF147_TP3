@@ -429,6 +429,8 @@ int main()
 				capture = jouer_coup(&etat_jeu, &coup);
 			}
 
+			afficher_grille(&etat_jeu);
+
 			/*si tout s'est bien passe (le coup est joué) on change de joueur*/
 			set_joueur(&etat_jeu, INVERSER_JOUEUR(etat_jeu.joueur));
 
