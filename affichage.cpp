@@ -195,7 +195,7 @@ void afficher_coup(t_piece piece_src, int col_src, int ran_src,
 {
 
 	/*on clignote le coup de son etat present a son etat futur*/
-	for (int i = 0; i <= 3; i++)
+	for (int i = 0; i < 3; i++)
 	{
 		/*remise de la piece source a la source*/
 		afficher_piece(ran_src * TAILLE_BMP, col_src * TAILLE_BMP,
@@ -211,7 +211,7 @@ void afficher_coup(t_piece piece_src, int col_src, int ran_src,
 
 
 
-		delai_ecran(100);
+		delai_ecran(200);
 
 		/*affichage de la piece a la destination*/
 		afficher_piece(ran_dest * TAILLE_BMP, col_dest * TAILLE_BMP,
@@ -227,7 +227,7 @@ void afficher_coup(t_piece piece_src, int col_src, int ran_src,
 
 
 
-		delai_ecran(100);
+		delai_ecran(200);
 
 	}
 
