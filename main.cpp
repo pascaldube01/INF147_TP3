@@ -362,7 +362,17 @@ int main()
 					case QUITTER: //fin du jeu
 						goto fin_du_jeu;
 					}
-					printf("\nchoisi : %d, %d", lig_choisi[i], col_choisi[i]);
+
+					//Affiche sur la console les cases choisies
+					if (!i)
+					{
+						printf("\nchoix de la case source : %d, %d", lig_choisi[i], col_choisi[i]);
+					}
+					else
+					{
+						printf("\nchoix de la case destination : %d, %d", lig_choisi[i], col_choisi[i]);
+					}
+					
 				}
 
 
@@ -445,9 +455,12 @@ int main()
 	a la fin de la fonction main*/
 	fin_du_jeu:
 
+	//Si le joueur souhaite quitter, on lui demande d'appuyer sur une touche avant
 	afficher_message("Au revoir :-( Appuyer sur une touche pour quitter.");
+	printf("\nabandon");
 	while (!touche_pesee()){}
 
+	//On détruit les allocations et on ferme le mode graphique
 	detruire_liste_coups(&liste_coups);
 	detruire_grille(etat_jeu.grille_jeu);
 	detruire_images();
