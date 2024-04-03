@@ -428,7 +428,10 @@ int main()
 					coup.col_dest, coup.lig_dest);
 				capture = jouer_coup(&etat_jeu, &coup);
 			}
-
+			+
+			/*apres avoir affiche le mouvement de la piece (avec afficher_coup()), on doit
+			re-afficher la grille au complet pour pouvoir voir les coups plus complexes
+			(roque, promotion et en passant)*/
 			afficher_grille(&etat_jeu);
 
 			/*si tout s'est bien passe (le coup est joué) on change de joueur*/
