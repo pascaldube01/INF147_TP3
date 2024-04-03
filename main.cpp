@@ -304,6 +304,9 @@ int main()
 		//initialisation de la liste de coup (mise a 0 et allocation du pointeur)
 		init_liste_coups(&liste_coups);
 
+		/*affichage de la grille actuelle*/
+		afficher_grille(&etat_jeu);
+
 		do
 		{
 			/*pour debug*/
@@ -312,8 +315,7 @@ int main()
 			vider_liste_coups(&liste_coups);
 			generer_liste_coups(&etat_jeu, &liste_coups, verif_roque(&etat_jeu));
 
-			/*affichage de la grille actuelle*/
-			afficher_grille(&etat_jeu);
+
 
 
 			/*affichage du joueur courant*/
@@ -420,10 +422,10 @@ int main()
 			{
 				/*si c'est le tour de l'ordi, il joue un coup au hasard, on l'affiche et on le joue*/
 				coup = choix_coup_ordi(&liste_coups);
-				afficher_coup(get_piece_case(&etat_jeu, col_choisi[0], lig_choisi[0]),
-					col_choisi[0], lig_choisi[0],
-					get_piece_case(&etat_jeu, col_choisi[1], lig_choisi[1]),
-					col_choisi[1], lig_choisi[1]);
+				afficher_coup(get_piece_case(&etat_jeu, coup.col, coup.lig),
+					coup.col, coup.lig,
+					get_piece_case(&etat_jeu, coup.col_dest, coup.lig_dest),
+					coup.col_dest, coup.lig_dest);
 				capture = jouer_coup(&etat_jeu, &coup);
 			}
 

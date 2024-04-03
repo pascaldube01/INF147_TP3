@@ -194,9 +194,15 @@ void afficher_coup(t_piece piece_src, int col_src, int ran_src,
 	t_piece piece_dest, int col_dest, int ran_dest)
 {
 	/*affichage de la piece a la destination*/
-	afficher_piece(ran_dest, col_dest,
+	afficher_piece(ran_dest * TAILLE_BMP, col_dest * TAILLE_BMP,
 		images[pale_foncer(ran_dest, col_dest)][piece_src].header.height,
 		images[pale_foncer(ran_dest, col_dest)][piece_src].header.width,
 		images[pale_foncer(ran_dest, col_dest)][piece_src].image_data);
+
+	/*mise a vide de la case source*/
+	afficher_piece(ran_src * TAILLE_BMP, col_src * TAILLE_BMP,
+		images[pale_foncer(ran_src, col_src)][VIDE].header.height,
+		images[pale_foncer(ran_src, col_src)][VIDE].header.width,
+		images[pale_foncer(ran_src, col_src)][VIDE].image_data);
 
 }
