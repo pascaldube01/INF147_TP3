@@ -296,6 +296,8 @@ int main()
 	/*boucle de jeu incluant initialisation (si on clique reset, on recommence ici)*/
 	do
 	{
+		/*pour debug*/
+		printf("\ninit du jeu");
 
 		/*initialisation de l'etat du jeu (aux echecs le joueur blanc est toujours le premier a
 		jouer)*/
@@ -309,8 +311,7 @@ int main()
 
 		do
 		{
-			/*pour debug*/
-			printf("\ninit du jeu");
+
 			/*generation de la liste de coups en partant de la grille actuelle*/
 			vider_liste_coups(&liste_coups);
 			generer_liste_coups(&etat_jeu, &liste_coups, verif_roque(&etat_jeu));
