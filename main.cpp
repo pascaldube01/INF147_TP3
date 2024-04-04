@@ -20,11 +20,9 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "affichage.hpp"
 #include <assert.h>
-#include "SOURISLIB.h"
-#include "utilitaire_affichage.h"
-#include "winBGIm.h"
+
+#include "affichage.hpp"
 
 /*=========================================================*/
 /*                  LES CONSTANTES                         */
