@@ -105,6 +105,17 @@ X est le joueur actuel.
 Si le joueur actuel est BLANCS, on retourne 0, sinon 7.*/
 #define PROMOTION(x) ((x) ? (NOIRS) : (TAILLE-1))
 
+/*La fonction privée POS_TOUR est une fonction qui sert a savoir sur quelle colonne
+placer la tour lors du roque.*/
+#define POS_TOUR(col_case2) ((col_case2) < 4) ? 3 : 5
+
+/* La macrofonction LIG_VIDE_EP est une fonction accesseur qui sert a savoir de quel
+ligne vider les cases ayant des VIDE_EP datant du dernier coup du même joueur. S'il y avait un
+vide ep sur la ligne 2 et que les blancs ont joués mais qu'aucun pion blanc n'a capturer un vide
+ep adverse durant ce coup, alors on doit effacer ce vide ep, car les vide ep sont seulement
+affichés lors du prochain tour de l'adversaire après celui où le vide ep a apparu.*/
+#define LIG_VIDE_EP(joueur) ((joueur) ? 2: 5)
+
 /***************************************************************************************/
 /*                              DECLARATIONS DES TYPES                                 */
 /***************************************************************************************/

@@ -170,43 +170,6 @@ static int sens_du_jeu(t_etat_jeu* jeu)
 		return get_joueur(jeu) ? -1 : 1;
 }
 
-/*************************************************************************************************
-OBJECTIF : La fonction privée vider_VIDE_EP est une fonction accesseur qui sert a savoir de quel
-ligne vider les cases ayant des VIDE_EP datant du dernier coup du même joueur. S'il y avait un
-vide ep sur la ligne 2 et que les blancs ont joués mais qu'aucun pion blanc n'a capturer un vide
-ep adverse durant ce coup, alors on doit effacer ce vide ep, car les vide ep sont seulement
-affichés lors du prochain tour de l'adversaire après celui où le vide ep a apparu.
-
-	PARAMETRES :   jeu : pour avoir le joueur courrant
-
-	SORTIES : retourne 2 si on est les blancs, retourne 5 si on est les noirs.
-
-	Spécifications: On veut effacer les vide ep mis par l'adversaire au tour précédent.
-
-*************************************************************************************************/
-static int vider_VIDE_EP(t_etat_jeu* jeu)
-{
-	return (jeu->joueur) ? 2 : 5;
-}
-
-/*************************************************************************************************
-	OBJECTIF :	La fonction privée POS_TOUR est une fonction qui sert a savoir sur quelle colonne
-				placer la tour lors du roque.
-
-	PARAMETRES : coup : le pointeur de la variable qui contient le coup jouer 
-
-	SORTIES : Retourne 3 si on veut faire le grand roque.
-			  Retourne 5 si on veut faire le petit roque.
-
-	Spécifications: Si la colonne de la case secondaire est plus petite que 4,
-				    on veut faire le grand roque, sinon le petit roque.
-
-*************************************************************************************************/
-static int POS_TOUR(const t_coup* coup)
-{
-	return (coup->col_case2 < 4) ? 3 : 5;
-}
-
 /************************************************************************************************/
 void init_jeu(t_etat_jeu* grille_jeu, int joueur_dep)
 {
@@ -335,7 +298,9 @@ int generer_liste_coups(t_etat_jeu* jeu, t_liste_coups* liste_coups, int check_r
 			}
 		}
 	}
-	/*On retourne le nombre de coup*/
+
+	/*On retourne le nombre de coup. On aurait aimé le faire avec un accesseur, 
+	  mais on peut pas include la liste_coup selon les règles */
 	return liste_coups->nb_noeuds;
 }
 
@@ -815,7 +780,7 @@ t_piece jouer_coup(t_etat_jeu* jeu, const t_coup* coup)
 		{
 			//Calcul de la colonne qu'on met la tour 
 			//Si on est les blancs (ou les noirs) on va à la ligne 7 (ou 0), colonne 3 (ou 5)
-			set_piece_case(jeu, (t_piece)(TOUR_N + joueur), POS_TOUR(coup), ROQUE_ROI(joueur));
+			set_piece_case(jeu, (t_piece)(TOUR_N + joueur), POS_TOUR(coup->col_case2), ROQUE_ROI(joueur));
 			//On vide la case où il y avait la tour avant le roque 
 			set_piece_case(jeu, VIDE, coup->col_case2, coup->lig_case2);
 			//On désactive la permission de faire le roque pour le joueur
@@ -849,8 +814,8 @@ t_piece jouer_coup(t_etat_jeu* jeu, const t_coup* coup)
 	l'équipe du joueur adverse pour savoir quelle ligne regarder. De plus, on ne veut pas modifier
 	l'état des cases de la ligne de l'équipe actuelle */
 	for (int colonne = 0; colonne < TAILLE; colonne++)
-		if (get_piece_case(jeu, colonne, vider_VIDE_EP(jeu)) == VIDE_EP)
-			set_piece_case(jeu, VIDE, colonne, vider_VIDE_EP(jeu));
+		if (get_piece_case(jeu, colonne, LIG_VIDE_EP(get_joueur(jeu))) == VIDE_EP)
+			set_piece_case(jeu, VIDE, colonne, LIG_VIDE_EP(get_joueur(jeu)));
 	
 	//On vide la case de la piece à déplacer
 	set_piece_case(jeu, VIDE, coup->col, coup->lig);
