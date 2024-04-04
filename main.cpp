@@ -236,6 +236,7 @@ int main()
 /*=========================================================*/
  
 #if JOUER_UNE_PARTIE_BGI == 1
+void faire_un_reset(t_liste_coups* liste_coups, t_etat_jeu* jeu);
 int main()
 {
 	/*piece qui a ete capturee (s'il y en a une), utilise pour terminer le jeu si on capture
@@ -274,53 +275,55 @@ int main()
 	afficher_bouton(POSY_BOUT_QUIT, POSX_BOUT_QUIT, "ABANDONNER");
 	afficher_bouton(POSY_BOUT_RESET, POSX_BOUT_RESET, "RECOMMENCER");
 
-	/*boucle de jeu incluant initialisation (si on clique reset, on recommence ici)*/
+	
+	/*pour debug*/
+	printf("\ninit du jeu");
+
+	/*initialisation de l'etat du jeu (aux echecs le joueur blanc est toujours le premier a
+	jouer)*/
+	init_jeu(&etat_jeu, BLANCS);
+
+	//initialisation de la liste de coup (mise a 0 et allocation du pointeur)
+	init_liste_coups(&liste_coups);
+
+	/*affichage de la grille actuelle*/
+	afficher_grille(&etat_jeu);
+
 	do
 	{
-		/*pour debug*/
-		printf("\ninit du jeu");
+		/*generation de la liste de coups en partant de la grille actuelle*/
+		
+		generer_liste_coups(&etat_jeu, &liste_coups, verif_roque(&etat_jeu));
 
-		/*initialisation de l'etat du jeu (aux echecs le joueur blanc est toujours le premier a
-		jouer)*/
-		init_jeu(&etat_jeu, BLANCS);
-
-		//initialisation de la liste de coup (mise a 0 et allocation du pointeur)
-		init_liste_coups(&liste_coups);
-
-		/*affichage de la grille actuelle*/
-		afficher_grille(&etat_jeu);
-
-		do
+		/*affichage du nombre de coups possible*/
+		afficher_info("%d coups generes", get_nb_coups(&liste_coups));
+		/*Si on c'est au joueur blanc à jouer*/
+		if (get_joueur(&etat_jeu))
 		{
-			/*generation de la liste de coups en partant de la grille actuelle*/
-			vider_liste_coups(&liste_coups);
-			generer_liste_coups(&etat_jeu, &liste_coups, verif_roque(&etat_jeu));
+			/*demande de l'input du joueur*/
+			bouton_clique = saisir_coup(&etat_jeu, &liste_coups, &coup);
 
-			/*affichage du nombre de coups possible*/
-			afficher_info("%d coups generes", get_nb_coups(&liste_coups));
-
-			if (get_joueur(&etat_jeu))
+			/*evaluation de la condition de sortie du jeu par les boutons*/
+			if (bouton_clique == RESET)
 			{
+				/*On fait un reset*/
+				faire_un_reset(&liste_coups, &etat_jeu);
+				/*generation de la liste de coups en partant de la grille actuelle*/
+				generer_liste_coups(&etat_jeu, &liste_coups, verif_roque(&etat_jeu));
 				/*demande de l'input du joueur*/
 				bouton_clique = saisir_coup(&etat_jeu, &liste_coups, &coup);
-
-				/*evaluation de la condition de sortie du jeu par les boutons*/
-				if (bouton_clique == RESET)
-				{
-					init_jeu(&etat_jeu, BLANCS);
-					afficher_grille(&etat_jeu);
-					continue;
-				}
-				else if (bouton_clique == QUITTER)
-					goto fin_du_jeu;
 			}
-			else //tour de l'ordi
-			{
-				/*si c'est le tour de l'ordi, il joue un coup au hasard, on l'affiche et on le joue*/
-				afficher_message("Attendez SVP, je réfléchis...");
-				coup = choix_coup_ordi(&liste_coups);
-			}
-
+			else if (bouton_clique == QUITTER)
+				capture = ROI_N;
+		}
+		else //tour de l'ordi
+		{
+			/*si c'est le tour de l'ordi, il joue un coup au hasard, on l'affiche et on le joue*/
+			afficher_message("Attendez SVP, je réfléchis...");
+			coup = choix_coup_ordi(&liste_coups);
+		}
+		if (capture != ROI_B && capture != ROI_N)
+		{
 			/*on affiche et on joue le coup*/
 			afficher_coup(get_piece_case(&etat_jeu, coup.col, coup.lig),
 				coup.col, coup.lig,
@@ -328,7 +331,7 @@ int main()
 				coup.col_dest, coup.lig_dest);
 
 			capture = jouer_coup(&etat_jeu, &coup);
-			
+
 			/*apres avoir affiche le mouvement de la piece (avec afficher_coup()), on doit
 			re-afficher la grille au complet pour pouvoir voir les coups plus complexes
 			(roque, promotion et en passant)*/
@@ -336,33 +339,29 @@ int main()
 
 			/*si tout s'est bien passe (le coup est joué) on change de joueur*/
 			set_joueur(&etat_jeu, INVERSER_JOUEUR(etat_jeu.joueur));
-
-		} while (capture != ROI_B && capture != ROI_N);
-
-		//Si la pièce capturée est le roi blanc, le joueur noir gagne la partie 
-		if (capture == ROI_B)
-			afficher_message("le joueur noir gagne, quitter ou reset");
-		//Sinon, c'est le joueur blanc qui gagne
-		else if (capture == ROI_N)
-			afficher_message("le joueur blanc gagne quitter ou reset");
-		//Sinon, le joueur blanc abandonne ou bien quitte
+			vider_liste_coups(&liste_coups);
+		}
 		else
-			afficher_message("le joueur blanc abandonne quitter ou reset");
+		{
+			//Si la pièce capturée est le roi blanc, le joueur noir gagne la partie 
+			if (capture == ROI_B)
+				afficher_message("le joueur noir gagne, quitter ou reset");
+			//Sinon, c'est le joueur blanc qui gagne
+			else if (capture == ROI_N)
+				afficher_message("le joueur blanc gagne quitter ou reset");
+			//Sinon, le joueur blanc abandonne ou bien quitte
+			else
+				afficher_message("le joueur blanc abandonne quitter ou reset");
 
-		
-
-		while (bouton_clique != QUITTER && bouton_clique != RESET)
-			bouton_clique = saisir_coup(&etat_jeu, &liste_coups, &coup);
-		if (bouton_clique == QUITTER)
-			goto fin_du_jeu;
-
-	} while (1);
-	/*cette boucle est infinie mais on peut quand meme sortir en cliquant sur le bouton reset*/
-
-	/*comme il faut sortir de plusieurs boucles en meme temps et qu'on peut pas juste faire un
-	return (il faut liberer la memoire), on envoie toutes les condition causant la fin du jeu
-	a la fin de la fonction main*/
-	fin_du_jeu:
+			while (bouton_clique != QUITTER && bouton_clique != RESET)
+				bouton_clique = saisir_coup(&etat_jeu, &liste_coups, &coup);
+			if(bouton_clique == RESET)
+				faire_un_reset(&liste_coups, &etat_jeu);
+			
+			if (bouton_clique == QUITTER)
+				capture = ROI_N;
+		}
+	} while (capture != ROI_B && capture != ROI_N);
 
 	//Si le joueur souhaite quitter, on lui demande d'appuyer sur une touche avant
 	afficher_message("Au revoir :-( Appuyer sur une touche pour quitter.");
@@ -378,6 +377,21 @@ int main()
 	return EXIT_SUCCESS;
 }
 
+void faire_un_reset(t_liste_coups* liste_coups, t_etat_jeu* jeu)
+{
+	/*On doit recommencer du début*/
+	vider_liste_coups(liste_coups);
+	detruire_grille(jeu->grille_jeu);
+	/*initialisation de l'etat du jeu (aux echecs le joueur blanc est toujours le premier a
+	jouer)*/
+	init_jeu(jeu, BLANCS);
+	//initialisation de la liste de coup (mise a 0 et allocation du pointeur)
+	init_liste_coups(liste_coups);
+	/*On affiche la grille nouvellement créer*/
+	afficher_grille(jeu);
+	/*On affiche un messsage de reset sur le terminal*/
+	printf("\nRESET du jeu");
+}
 #endif
 
 
