@@ -61,8 +61,8 @@
 /*                 LES LIBRAIRIES                          */
 /*=========================================================*/
 
-#include "test_generer_liste.hpp"
-#include"grille_echecs.hpp"
+#include "test_generer_liste.h"
+#include"grille_echecs.h"
 
 /*=========================================================*/
 /*                  LES FONCTIONS                          */
@@ -626,6 +626,7 @@ void roque_du_roi(t_etat_jeu* jeu, t_liste_coups* liste, int check_roq)
 	int flag_petit_roque = 1;		//Drapeau pour le petit roque 
 	int non_validation_case = 0;	//Variable pour voir si les cases sont en danger
 	int joueur = get_joueur(jeu);   //Variable pour le joueur actuel
+
 	/*check_roq a 1 veut dire qu'on doit verifier le roque car, pour ce joueur, c'est encore
 	possible*/
 	if (check_roq)
@@ -654,6 +655,7 @@ void roque_du_roi(t_etat_jeu* jeu, t_liste_coups* liste, int check_roq)
 				//On inverse le joueur
 					
 				set_joueur(jeu, INVERSER_JOUEUR(joueur));
+
 				/*On doit s'assurer que le roi n'est pas en danger lorsqu'il se déplace
 				on met donc temporairement des rois sur les cases que le roi va se déplacer*/
 				set_piece_case(jeu, (t_piece)(ROI_N + joueur), 5, ROQUE_ROI(joueur));

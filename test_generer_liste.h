@@ -23,7 +23,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include"grille_echecs.hpp"
+#include"grille_echecs.h"
 
 /*=========================================================*/
 /*                  LES PROTOTYPES                         */

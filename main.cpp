@@ -22,7 +22,7 @@
 #include <stdlib.h>
 #include <assert.h>
 
-#include "affichage.hpp"
+#include "affichage.h"
 
 /*=========================================================*/
 /*                           prototypes                    */

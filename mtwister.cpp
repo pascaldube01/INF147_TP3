@@ -44,7 +44,7 @@
 
 
 
-#include "mtwister.hpp"
+#include "mtwister.h"
 
 
 // Period parameters
