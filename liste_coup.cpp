@@ -106,7 +106,7 @@ int valider_coup(t_liste_coups* liste_coups, char* texte_coup, t_coup* coup)
 	replacer_pc_debut(liste_coups);
 
 	//Tant qu'on est pas à la fin de la liste
-	while (liste_coups->p_courant->suivant != NULL)
+	while (liste_coups->p_courant->suivant != NULL)   //avancer_pc
 	{
 		//On compare le pointeur_courant avec le texte_coup
 		if (strcmp(liste_coups->p_courant->coup.texte_coup, texte_coup) == 0)
@@ -114,7 +114,7 @@ int valider_coup(t_liste_coups* liste_coups, char* texte_coup, t_coup* coup)
 			//On copie le texte_coup de la liste avec le texte_coup reçu
 			strcpy(coup->texte_coup, liste_coups->p_courant->coup.texte_coup);
 			/*On effectue le coup*/
-			set_coup(coup, liste_coups->p_courant->coup.col, liste_coups->p_courant->coup.lig,
+			set_coup(coup, liste_coups->p_courant->coup.col, liste_coups->p_courant->coup.lig,     // copie!!
 				liste_coups->p_courant->coup.col_dest, liste_coups->p_courant->coup.lig_dest,
 				liste_coups->p_courant->coup.col_case2, liste_coups->p_courant->coup.lig_case2);
 			return 1;
@@ -153,6 +153,7 @@ int valider_case_dest(t_liste_coups* liste_coups, int col, int lig)
 		if (liste_coups->p_courant->coup.lig_dest == lig &&
 			liste_coups->p_courant->coup.col_dest == col)
 			return 1;
+	      //avancer_pc
 	}
 
 	return 0;
@@ -173,7 +174,7 @@ int ajouter_coup(t_liste_coups* liste_coups, const t_coup* coup)
 		return 0;
 
 	/*On set le coup dans element*/
-	set_coup(&(element->coup), coup->col, coup->lig, coup->col_dest, coup->lig_dest,
+	set_coup(&(element->coup), coup->col, coup->lig, coup->col_dest, coup->lig_dest,   //copie!!
 		coup->col_case2, coup->lig_case2);
 
 	/*on met le suivant de l'élément à NULL car c'est le dernier de la liste*/
@@ -189,7 +190,7 @@ int ajouter_coup(t_liste_coups* liste_coups, const t_coup* coup)
 	else
 	{
 		liste_coups->fin->suivant = element;
-
+//pc = 
 		/*on met la fin à l'élément*/
 		liste_coups->fin = element;
 	}
@@ -217,7 +218,7 @@ int ajouter_coup_debut(t_liste_coups* liste_coups, const t_coup* coup)
 	//On replace le pointeur courant au début de la liste
 	replacer_pc_debut(liste_coups);
 
-	set_coup(&element->coup, coup->col, coup->lig, coup->col_dest, coup->lig_dest,
+	set_coup(&element->coup, coup->col, coup->lig, coup->col_dest, coup->lig_dest,   //copie!
 		coup->col_case2, coup->lig_case2);
 
 	/*Si la liste est vide*/
@@ -236,7 +237,7 @@ int ajouter_coup_debut(t_liste_coups* liste_coups, const t_coup* coup)
 
 		/*On pointe la tete sur l'élément*/
 		liste_coups->tete = element;
-
+		// pc =
 	}
 
 	//On incrémente le nombre de noeud, car on ajoute un nouvel élément
@@ -352,7 +353,8 @@ void detruire_un_coup(t_liste_coups* liste_coups)
 	/*On le met au début de la liste*/
 	ptr_debut = liste_coups->tete;
 	/*On met la tete sur le noeud suivant*/
-	liste_coups->tete = liste_coups->p_courant;
+	liste_coups->tete = liste_coups->p_courant;   //tete-­suivant
+	//pc = tete
 	//On libère la tête
 	free(ptr_debut);
 }
