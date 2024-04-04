@@ -306,7 +306,11 @@ int main()
 
 				/*evaluation de la condition de sortie du jeu par les boutons*/
 				if (bouton_clique == RESET)
-					break;
+				{
+					init_jeu(&etat_jeu, BLANCS);
+					afficher_grille(&etat_jeu);
+					continue;
+				}
 				else if (bouton_clique == QUITTER)
 					goto fin_du_jeu;
 			}
