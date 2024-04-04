@@ -63,5 +63,8 @@ t_saisie choix_case(int* col_case, int* lig_case);
 /* pièce (ou case vide) "piece_dest" qui se trouve à la case-destination(col_dest, ran_dest) */
 void afficher_coup(t_piece piece_src, int col_src, int ran_src,
                    t_piece piece_dest, int col_dest, int ran_dest);
-
+/*Cette fonction permet d'afficher le gagnant du jeu sur winBGIm                             */
+/*On reçoit la valeur du joueur est paramètre et on affiche un message de victoire           */
+/*personnaliser en fonction du joueur reçu en paramètre.                                      */
+void afficher_gagnant(int joueur);
 #endif

@@ -234,3 +234,13 @@ void afficher_coup(t_piece piece_src, int col_src, int ran_src,
 		delai_ecran(200);
 	}
 }
+
+void afficher_gagnant(int joueur)
+{
+	/*Si le joueur est blanc*/
+	if (joueur)
+		afficher_message("Le gagnant est le joueur blanc!");
+	else
+		/*Si le joueur est noir*/
+		afficher_message("Le gagnant est le joueur noir!");
+}

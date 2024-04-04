@@ -295,15 +295,15 @@ int main()
 		
 		generer_liste_coups(&etat_jeu, &liste_coups, verif_roque(&etat_jeu));
 
-			/*affichage du nombre de coups possible*/
-			afficher_info("%d coups generes", get_nb_coups(&liste_coups));
+		/*affichage du nombre de coups possible*/
+		afficher_info("%d coups generes", get_nb_coups(&liste_coups));
 
-			if (get_joueur(&etat_jeu))
-			{
-				/*le message changera une fois la premiere case selectionnee et reviendera si le coup n'est pas valide*/
-				afficher_message("BLANCS: Veuillez cliquer sur la case-source");
-				/*demande de l'input du joueur*/
-				bouton_clique = saisir_coup(&etat_jeu, &liste_coups, &coup);
+		if (get_joueur(&etat_jeu))
+		{
+			/*le message changera une fois la premiere case selectionnee et reviendera si le coup n'est pas valide*/
+			afficher_message("BLANCS: Veuillez cliquer sur la case-source");
+			/*demande de l'input du joueur*/
+			bouton_clique = saisir_coup(&etat_jeu, &liste_coups, &coup);
 
 			/*evaluation de la condition de sortie du jeu par les boutons*/
 			if (bouton_clique == RESET)
@@ -312,10 +312,12 @@ int main()
 				faire_un_reset(&liste_coups, &etat_jeu);
 				/*generation de la liste de coups en partant de la grille actuelle*/
 				generer_liste_coups(&etat_jeu, &liste_coups, verif_roque(&etat_jeu));
+				/*affichage du nombre de coups possible*/
+				afficher_info("%d coups generes", get_nb_coups(&liste_coups));
 				/*demande de l'input du joueur*/
 				bouton_clique = saisir_coup(&etat_jeu, &liste_coups, &coup);
 			}
-			else if (bouton_clique == QUITTER)
+			if (bouton_clique == QUITTER)
 				capture = ROI_N;
 		}
 		else //tour de l'ordi
@@ -324,7 +326,7 @@ int main()
 			afficher_message("Attendez SVP, je réfléchis...");
 			coup = choix_coup_ordi(&liste_coups);
 		}
-		if (capture != ROI_B && capture != ROI_N)
+		if (capture != ROI_N + INVERSER_JOUEUR(get_joueur(&etat_jeu)))
 		{
 			/*on affiche et on joue le coup*/
 			afficher_coup(get_piece_case(&etat_jeu, coup.col, coup.lig),
@@ -333,36 +335,22 @@ int main()
 				coup.col_dest, coup.lig_dest);
 
 			capture = jouer_coup(&etat_jeu, &coup);
-
-			/*apres avoir affiche le mouvement de la piece (avec afficher_coup()), on doit
+			/*Si la capture est un roi de l'équipe adverse, alors la partie est terminée*/
+			if (capture == ROI_N + INVERSER_JOUEUR(get_joueur(&etat_jeu)))
+				afficher_gagnant(get_joueur(&etat_jeu));
+			else
+			{
+				/*apres avoir affiche le mouvement de la piece (avec afficher_coup()), on doit
 			re-afficher la grille au complet pour pouvoir voir les coups plus complexes
 			(roque, promotion et en passant)*/
-			afficher_grille(&etat_jeu);
+				afficher_grille(&etat_jeu);
 
-			/*si tout s'est bien passe (le coup est joué) on change de joueur*/
-			set_joueur(&etat_jeu, INVERSER_JOUEUR(etat_jeu.joueur));
-			vider_liste_coups(&liste_coups);
+				/*si tout s'est bien passe (le coup est joué) on change de joueur*/
+				set_joueur(&etat_jeu, INVERSER_JOUEUR(get_joueur(&etat_jeu)));
+				vider_liste_coups(&liste_coups);
+			}
 		}
-		else
-		{
-			//Si la pièce capturée est le roi blanc, le joueur noir gagne la partie 
-			if (capture == ROI_B)
-				afficher_message("le joueur noir gagne, quitter ou reset");
-			//Sinon, c'est le joueur blanc qui gagne
-			else if (capture == ROI_N)
-				afficher_message("le joueur blanc gagne quitter ou reset");
-			//Sinon, le joueur blanc abandonne ou bien quitte
-			else
-				afficher_message("le joueur blanc abandonne quitter ou reset");
-
-			while (bouton_clique != QUITTER && bouton_clique != RESET)
-				bouton_clique = saisir_coup(&etat_jeu, &liste_coups, &coup);
-			if(bouton_clique == RESET)
-				faire_un_reset(&liste_coups, &etat_jeu);
-			
-			if (bouton_clique == QUITTER)
-				capture = ROI_N;
-		}
+		
 	} while (capture != ROI_B && capture != ROI_N);
 
 	//Si le joueur souhaite quitter, on lui demande d'appuyer sur une touche avant
