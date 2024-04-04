@@ -20,7 +20,6 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "liste_coup.hpp"
 #include "grille_echecs.hpp"
 #include "affichage.hpp"
 #include <assert.h>
