@@ -1,12 +1,12 @@
 /*===========================================================*/
-/* 	INF147 - Travail Pratique #2                             */
+/* 	INF147 - Travail Pratique #3                             */
 /*===========================================================*/
 //Par: Simon Des-Alliers, Victor Poulin et Pascal Dubé
-//Date de création : 12 février 2024
+//Date de création : 11 mars 2024
 //Groupe : 01
 //Description: Programme principal permettant de simuler un 
-//             jeu d'échec non-intelligent entre l'ordinateur
-//             et l'humain pour le projet 2 dans le cadre du 
+//             jeu d'échec intelligent entre l'ordinateur
+//             et l'humain pour le projet 3 dans le cadre du 
 //             cours INF147.
 // 
 //Présenté à: Éric Thé
