@@ -20,7 +20,6 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "grille_echecs.hpp"
 #include "affichage.hpp"
 #include <assert.h>
 #include "SOURISLIB.h"
