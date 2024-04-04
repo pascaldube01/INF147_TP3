@@ -473,3 +473,93 @@ t_saisie saisir_coup(t_etat_jeu* jeu, t_liste_coups* liste_coups, t_coup* coup)
 	return POS_VALIDE;
 	
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/******************************************************************************/
+
+void min_max(t_etat_jeu* jeu0, t_coup* coup)
+{
+	t_liste_coups liste_coups_ordi;    //Liste de coups des noirs
+	t_liste_coups liste_coups_joueur;  //Liste de coups des blancs
+	int min;                           //Valeur minimal
+	int max;                           //Valeur maximal
+	int valeur_grille;                 //Valeur grille
+	t_coup coupOrdi;                   //Coup joué par l'ordinateur
+	t_etat_jeu jeu1;                   //État du jeu après 1 coup
+	t_etat_jeu jeu2;                   //État du jeu après 2 coup
+
+	//On initialise les 2 listes pour les noirs et les blancs
+	init_liste_coups(&liste_coups_ordi);
+	init_liste_coups(&liste_coups_joueur);
+
+	//On génère tous les coups possibles de l'ordinateur à partir de l'état de jeu0
+	generer_liste_coups(jeu0, &liste_coups_ordi, verif_roque(jeu0));
+
+	//Une valeur minimale de départ
+	max = -999;
+
+	//On remet le pc au début
+	replacer_pc_debut(&liste_coups_ordi);
+
+	//Pour tous les coups de l'ordi
+	for (int i = 0; i < get_nb_coups(&liste_coups_ordi); i++)
+	{
+		//Faire une copie de l'état de jeu actuel
+		/****FONCTION À FAIRE****/
+
+		//On avance le pointeur courant
+		avancer_pc(&liste_coups_ordi);
+
+		//Changer de joueur dans l'état de jeu 1
+		jeu1.joueur = get_joueur(&jeu1);
+		jeu1.joueur = INVERSER_JOUEUR(jeu1.joueur);
+		
+		//Génération des coups du joueur à partir du jeu1
+		generer_liste_coups(&jeu1, &liste_coups_joueur, verif_roque(&jeu1));
+
+		/*NIVEAU 1: On cherche le meilleur coup possible (le MIN) du 
+		joueur si l'ordi joue le coup coupOrdi. Il est à noter que
+		plus la valeur est petite, plus le coup du joueur est bon*/
+
+		//Une valeur maximale de départ
+		min = 999;
+
+	}
+
+}

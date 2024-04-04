@@ -357,5 +357,6 @@ void detruire_un_coup(t_liste_coups* liste_coups)
 	//pc = tete
 	//On libère la tête
 	free(ptr_debut);
+
 	ptr_debut = NULL;
 }
