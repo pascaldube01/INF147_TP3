@@ -193,42 +193,44 @@ void detruire_images()
 void afficher_coup(t_piece piece_src, int col_src, int ran_src,
 	t_piece piece_dest, int col_dest, int ran_dest)
 {
+	/*on se sert de pointeurs vers les fichiers images en memoire pour simplifier la lecture*/
+	t_image_BMP * origine_origine = &images[pale_foncer(ran_src, col_src)][piece_src];
+	t_image_BMP * origine_destination = &images[pale_foncer(ran_dest, col_dest)][piece_dest];
+	t_image_BMP * piece_a_destination = &images[pale_foncer(ran_dest, col_dest)][piece_src];
+	t_image_BMP * vide_origine = &images[pale_foncer(ran_src, col_src)][VIDE];
 
 	/*on clignote le coup de son etat present a son etat futur*/
 	for (int i = 0; i < 3; i++)
 	{
 		/*remise de la piece source a la source*/
 		afficher_piece(ran_src * TAILLE_BMP, col_src * TAILLE_BMP,
-			images[pale_foncer(ran_src, col_src)][piece_src].header.height,
-			images[pale_foncer(ran_src, col_src)][piece_src].header.width,
-			images[pale_foncer(ran_src, col_src)][piece_src].image_data);
+			origine_origine->header.height,
+			origine_origine->header.width,
+			origine_origine->image_data);
 
 		/*remise de la piece destination a la destination*/
 		afficher_piece(ran_dest * TAILLE_BMP, col_dest * TAILLE_BMP,
-			images[pale_foncer(ran_dest, col_dest)][piece_dest].header.height,
-			images[pale_foncer(ran_dest, col_dest)][piece_dest].header.width,
-			images[pale_foncer(ran_dest, col_dest)][piece_dest].image_data);
-
+			origine_destination->header.height,
+			origine_destination->header.width,
+			origine_destination->image_data);
 
 
 		delai_ecran(200);
+
 
 		/*affichage de la piece a la destination*/
 		afficher_piece(ran_dest * TAILLE_BMP, col_dest * TAILLE_BMP,
-			images[pale_foncer(ran_dest, col_dest)][piece_src].header.height,
-			images[pale_foncer(ran_dest, col_dest)][piece_src].header.width,
-			images[pale_foncer(ran_dest, col_dest)][piece_src].image_data);
+			piece_a_destination->header.height,
+			piece_a_destination->header.width,
+			piece_a_destination->image_data);
 
 		/*mise a vide de la case source*/
 		afficher_piece(ran_src * TAILLE_BMP, col_src * TAILLE_BMP,
-			images[pale_foncer(ran_src, col_src)][VIDE].header.height,
-			images[pale_foncer(ran_src, col_src)][VIDE].header.width,
-			images[pale_foncer(ran_src, col_src)][VIDE].image_data);
-
+			vide_origine->header.height,
+			vide_origine->header.width,
+			vide_origine->image_data);
 
 
 		delai_ecran(200);
-
 	}
-
 }

@@ -295,13 +295,15 @@ int main()
 		
 		generer_liste_coups(&etat_jeu, &liste_coups, verif_roque(&etat_jeu));
 
-		/*affichage du nombre de coups possible*/
-		afficher_info("%d coups generes", get_nb_coups(&liste_coups));
-		/*Si on c'est au joueur blanc à jouer*/
-		if (get_joueur(&etat_jeu))
-		{
-			/*demande de l'input du joueur*/
-			bouton_clique = saisir_coup(&etat_jeu, &liste_coups, &coup);
+			/*affichage du nombre de coups possible*/
+			afficher_info("%d coups generes", get_nb_coups(&liste_coups));
+
+			if (get_joueur(&etat_jeu))
+			{
+				/*le message changera une fois la premiere case selectionnee et reviendera si le coup n'est pas valide*/
+				afficher_message("BLANCS: Veuillez cliquer sur la case-source");
+				/*demande de l'input du joueur*/
+				bouton_clique = saisir_coup(&etat_jeu, &liste_coups, &coup);
 
 			/*evaluation de la condition de sortie du jeu par les boutons*/
 			if (bouton_clique == RESET)
@@ -415,8 +417,6 @@ t_saisie saisir_coup(t_etat_jeu* jeu, t_liste_coups* liste_coups, t_coup* coup)
 
 	while (coup_valide)
 	{
-		/*le message changera une fois la premiere case selectionnee et reviendera si le coup n'est pas valide*/
-		afficher_message("BLANCS: Veuillez cliquer sur la case-source");
 		for (int i = 0; i < 2; i++)
 		{
 			/*demande d'une case au joueur*/
