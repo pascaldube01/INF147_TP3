@@ -40,7 +40,7 @@
 /************************************************************************************************
     OBJECTIF : Permet de savoir si la liste contient des éléments ou non
 
-    PARAMETRES : La liste chaînée de coups
+    PARAMETRES : Le nombre de coups dans la liste
 
     SORTIES :	Retourne 1 si la liste est vide, 0 sinon.
 
