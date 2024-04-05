@@ -240,14 +240,14 @@ void afficher_gagnant(int joueur)
 	/*Si le joueur est blanc*/
 	if (joueur)
 	{
-		afficher_message("Le gagnant est le joueur blanc!");
-		delai_ecran(1500);
+		afficher_info("Le gagnant est le joueur blanc!", joueur);
+		delai_ecran(500);
 	}
 	else
 	{
 		/*Si le joueur est noir*/
-		afficher_message("Le gagnant est le joueur noir!");
-		delai_ecran(1500);
+		afficher_info("Le gagnant est le joueur noir!", joueur);
+		delai_ecran(500);
 	}
 		
 }
