@@ -37,6 +37,16 @@
 #define COL_A_CH(c)  ((c) + 'a')
 #define RAN_A_NO(r)  (TAILLE_GR - (r) + '0')
 
+/************************************************************************************************
+    OBJECTIF : Permet de savoir si la liste contient des éléments ou non
+
+    PARAMETRES : La liste chaînée de coups
+
+    SORTIES :	Retourne 1 si la liste est vide, 0 sinon.
+
+    écrit par Pascal Dubé, Victor Poulin et Simon Des-Alliers
+***********************************************************************************************/
+#define LISTE_EST_VIDE(nb_coups) ((nb_coups) ? 0 : 1)
 /*-------------------------------------------------------------------*/
 /*                    TYPES POINTEURS ET STRUCT                      */
 /*-------------------------------------------------------------------*/
@@ -260,17 +270,6 @@ void afficher_liste_coups(t_liste_coups* liste_coups);
     écrit par Pascal Dubé, Victor Poulin et Simon Des-Alliers
 ***********************************************************************************************/
 void detruire_liste_coups(t_liste_coups* liste_coups);
-
-/************************************************************************************************
-    OBJECTIF : Permet de savoir si la liste contient des éléments ou non
-
-    PARAMETRES : La liste chaînée de coups
-
-    SORTIES :	Retourne 1 si la liste est vide, 0 sinon.
-
-    écrit par Pascal Dubé, Victor Poulin et Simon Des-Alliers
-***********************************************************************************************/
-int liste_est_vide(t_liste_coups* liste_coups);
 
 /**********************************************************************************************
     OBJECTIF : Permet de détruire un coup de la liste à partir du début

@@ -106,37 +106,20 @@ int valider_coup(t_liste_coups* liste_coups, char* texte_coup, t_coup* coup)
 	replacer_pc_debut(liste_coups);
 
 	//Tant qu'on est pas à la fin de la liste
-	while (liste_coups->p_courant->suivant != NULL)   //avancer_pc
+	while (liste_coups->p_courant != NULL)   //avancer_pc
 	{
 		//On compare le pointeur_courant avec le texte_coup
 		if (strcmp(liste_coups->p_courant->coup.texte_coup, texte_coup) == 0)
 		{
-			//On copie le texte_coup de la liste avec le texte_coup reçu
-			strcpy(coup->texte_coup, liste_coups->p_courant->coup.texte_coup);
 			/*On effectue le coup*/
-			set_coup(coup, liste_coups->p_courant->coup.col, liste_coups->p_courant->coup.lig,     // copie!!
-				liste_coups->p_courant->coup.col_dest, liste_coups->p_courant->coup.lig_dest,
-				liste_coups->p_courant->coup.col_case2, liste_coups->p_courant->coup.lig_case2);
+			*coup = liste_coups->p_courant->coup;
 			return 1;
 		}
-
 		//On avance le pointeur courant
 		avancer_pc(liste_coups);
 	}
-	/*********************************On est à la fin de la liste***************************************/
-	/****************CAS POUR LA FIN DE LA LISTE (PAS LE CHOIX SINON CA PLANTE(BOUCLE INFINIE à l'avant-dernier coup) SI COUP PAS DANS LA LISTE)*********/
-	//On compare le pointeur_courant avec le texte_coup
-	if (strcmp(liste_coups->p_courant->coup.texte_coup, texte_coup) == 0)
-	{
-		//On copie le texte_coup de la liste avec le texte_coup reçu
-		strcpy(coup->texte_coup, liste_coups->p_courant->coup.texte_coup);
-		/*On effectue le coup*/
-		set_coup(coup, liste_coups->p_courant->coup.col, liste_coups->p_courant->coup.lig,
-			liste_coups->p_courant->coup.col_dest, liste_coups->p_courant->coup.lig_dest,
-			liste_coups->p_courant->coup.col_case2, liste_coups->p_courant->coup.lig_case2);
-		return 1;
-	}
-	
+	//On remet le pointeur courant au début de la liste
+	replacer_pc_debut(liste_coups);
 	return 0;
 }
 
@@ -223,7 +206,7 @@ int ajouter_coup_debut(t_liste_coups* liste_coups, const t_coup* coup)
 		//coup->col_case2, coup->lig_case2);
 	element->coup = *coup;
 	/*Si la liste est vide*/
-	if (liste_est_vide(liste_coups))
+	if (LISTE_EST_VIDE(get_nb_coups(liste_coups)))
 	{
 		element->suivant = NULL;
 		
@@ -304,7 +287,7 @@ t_coup choix_coup_ordi(t_liste_coups* liste_coups)
 	replacer_pc_debut(liste_coups);
 
 	/*On s'assure que la liste n'est pas vide */
-	if (!liste_est_vide(liste_coups))
+	if (!LISTE_EST_VIDE(get_nb_coups(liste_coups)))
 	{
 		/*On génère le nombre aléatoire*/
 		coup_choisi = mt_randU(get_nb_coups(liste_coups));
@@ -319,18 +302,6 @@ t_coup choix_coup_ordi(t_liste_coups* liste_coups)
 
 	/*Sinon on renvoie un coup vide*/
 	return t_coup({ 0 });
-}
-
-/*****************************************************************************/
-
-int liste_est_vide(t_liste_coups* liste_coups)
-{
-	//Si le nombre de noeud est à zéro la liste est vide
-	if (!get_nb_coups(liste_coups))
-	{
-		return 1;
-	}
-	return 0;
 }
 
 /*****************************************************************************/
@@ -353,6 +324,5 @@ void detruire_un_coup(t_liste_coups* liste_coups)
 	replacer_pc_debut(liste_coups);
 	//On libère la tête
 	free(ptr_debut);
-
 	ptr_debut = NULL;
 }
