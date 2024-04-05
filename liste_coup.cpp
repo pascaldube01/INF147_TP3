@@ -284,7 +284,7 @@ void replacer_pc_debut(t_liste_coups* liste_coups)
 int  avancer_pc(t_liste_coups* liste_coups) 
 {
 	/*Si on n'est pas à la fin de la liste*/
-	if (liste_coups->p_courant->suivant != NULL) 
+	if (liste_coups->p_courant != NULL) 
 	{
 		liste_coups->p_courant = liste_coups->p_courant->suivant;
 		return 1;
@@ -310,7 +310,7 @@ t_coup choix_coup_ordi(t_liste_coups* liste_coups)
 		coup_choisi = mt_randU(get_nb_coups(liste_coups));
 
 		/*On retourne le coup qui est à la liste aléatoire*/
-		for (int i = 0; i <= coup_choisi; i++)
+		for (int i = 0; i < coup_choisi; i++)
 		{
 			avancer_pc(liste_coups);
 		}
