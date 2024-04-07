@@ -57,6 +57,9 @@
 #define TESTER_ROQUE 0		//Permet de tester la condition du roque du roi
 #define NORMAL 1			//Fonctionnement du jeu normal normal (avec toutes les pièces)
 
+const int PTS_PIECES[16] = { 0,  1,  5,  5,  3,  3,  9,  100,   //NOIRS  = points positifs
+				             0, -1, -5, -5, -3, -3, -9, -100 }; //BLANCS = points négatifs
+
 /*=========================================================*/
 /*                 LES LIBRAIRIES                          */
 /*=========================================================*/
@@ -67,9 +70,6 @@
 /*=========================================================*/
 /*                  LES FONCTIONS                          */
 /*=========================================================*/
-
-const int PTS_PIECES[16] = { 0,  1,  5,  5,  3,  3,  9,  100,  //NOIRS  = points positifs
-				  0, -1, -5, -5, -3, -3, -9, -100 };           //BLANCS = points négatifs
 
 /*************************************************************************************************
 	OBJECTIF : Fonction qui verifie si la position (ran, col) est bien sur le plateau,
@@ -882,7 +882,63 @@ void detruire_grille(t_grille grille_jeu)
 /***********************************************************************************************/
 void mise_a_jour_score(t_etat_jeu* jeu, int capture)
 {
-	//À FAIRE
+	int equivalence_piece; //Le score correspondant à la pièce capturée
+
+	//On associe à chaque pièce capturée, un score;
+	switch (capture)
+	{
+	case VIDE:
+		equivalence_piece = 0;
+		break;
+	case PION_N:
+		equivalence_piece = 1;
+		break;
+	case TOURI_N:
+		equivalence_piece = 5;
+		break;
+	case TOUR_N:
+		equivalence_piece = 5;
+		break;
+	case CAV_N:
+		equivalence_piece = 3;
+		break;
+	case FOU_N:
+		equivalence_piece = 3;
+		break;
+	case DAME_N:
+		equivalence_piece = 9;
+		break;
+	case ROI_N:
+		equivalence_piece = 100;
+		break;
+	case VIDE_EP:
+		equivalence_piece = 0;
+		break;
+	case PION_B:
+		equivalence_piece = -1;
+		break;
+	case TOURI_B:
+		equivalence_piece = -5;
+		break;
+	case TOUR_B:
+		equivalence_piece = -5;
+		break;
+	case CAV_B:
+		equivalence_piece = -3;
+		break;
+	case FOU_B:
+		equivalence_piece = -3;
+		break;
+	case DAME_B:
+		equivalence_piece = -9;
+		break;
+	case ROI_B:
+		equivalence_piece = -100;
+		break;
+	}
+
+	//On soustrait la valeur associée à la pièce capturée au score actuel de la grille
+	jeu->score_grille -= equivalence_piece;
 }
 
 /***********************************************************************************************/

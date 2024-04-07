@@ -470,14 +470,18 @@ int min_max(t_etat_jeu* jeu0, t_coup* coup)
 {
 	t_liste_coups liste_coups_ordi;    //Liste de coups des noirs
 	t_liste_coups liste_coups_joueur;  //Liste de coups des blancs
-	int min;                           //Valeur minimal
-	int max;                           //Valeur maximal
+
+	int min;                           //Valeur minimale
+	int max;                           //Valeur maximale
 	int valeur_grille;                 //Valeur grille
+
 	t_coup coupOrdi;                   //Coup joué par l'ordinateur
 	t_coup coupJr;                     //Coup joué par l'ordinateur
 	t_coup coup_max;                   //Coup maximal
+
 	t_etat_jeu jeu1;                   //État du jeu après 1 coup
 	t_etat_jeu jeu2;                   //État du jeu après 2 coup
+
 
 	//On initialise les 2 listes pour les noirs et les blancs
 	init_liste_coups(&liste_coups_ordi);
