@@ -888,52 +888,52 @@ void mise_a_jour_score(t_etat_jeu* jeu, int capture)
 	switch (capture)
 	{
 	case VIDE:
-		equivalence_piece = 0;
+		equivalence_piece = PTS_PIECES[0];
 		break;
 	case PION_N:
-		equivalence_piece = 1;
+		equivalence_piece = PTS_PIECES[1];
 		break;
 	case TOURI_N:
-		equivalence_piece = 5;
+		equivalence_piece = PTS_PIECES[2];
 		break;
 	case TOUR_N:
-		equivalence_piece = 5;
+		equivalence_piece = PTS_PIECES[3];
 		break;
 	case CAV_N:
-		equivalence_piece = 3;
+		equivalence_piece = PTS_PIECES[4];
 		break;
 	case FOU_N:
-		equivalence_piece = 3;
+		equivalence_piece = PTS_PIECES[5];
 		break;
 	case DAME_N:
-		equivalence_piece = 9;
+		equivalence_piece = PTS_PIECES[6];
 		break;
 	case ROI_N:
-		equivalence_piece = 100;
+		equivalence_piece = PTS_PIECES[7];
 		break;
 	case VIDE_EP:
-		equivalence_piece = 0;
+		equivalence_piece = PTS_PIECES[8];
 		break;
 	case PION_B:
-		equivalence_piece = -1;
+		equivalence_piece = PTS_PIECES[9];
 		break;
 	case TOURI_B:
-		equivalence_piece = -5;
+		equivalence_piece = PTS_PIECES[10];
 		break;
 	case TOUR_B:
-		equivalence_piece = -5;
+		equivalence_piece = PTS_PIECES[11];
 		break;
 	case CAV_B:
-		equivalence_piece = -3;
+		equivalence_piece = PTS_PIECES[12];
 		break;
 	case FOU_B:
-		equivalence_piece = -3;
+		equivalence_piece = PTS_PIECES[13];
 		break;
 	case DAME_B:
-		equivalence_piece = -9;
+		equivalence_piece = PTS_PIECES[14];
 		break;
 	case ROI_B:
-		equivalence_piece = -100;
+		equivalence_piece = PTS_PIECES[15];
 		break;
 	}
 
