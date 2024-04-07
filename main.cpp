@@ -30,6 +30,7 @@
 
 t_saisie saisir_coup(t_etat_jeu* jeu, t_liste_coups* liste_coups, t_coup* coup);
 int min_max(t_etat_jeu* jeu0, t_coup* coup);
+void copier_etat_jeu(t_etat_jeu *jeu0, t_etat_jeu *jeu1);
 
 /*=========================================================*/
 /*                  LES CONSTANTES                         */
@@ -473,7 +474,7 @@ int min_max(t_etat_jeu* jeu0, t_coup* coup)
 
 	int min;                           //Valeur minimale
 	int max;                           //Valeur maximale
-	int valeur_grille;                 //Valeur grille
+	int valeur_grille = 0;                 //Valeur grille
 
 	t_coup coupOrdi;                   //Coup joué par l'ordinateur
 	t_coup coupJr;                     //Coup joué par l'ordinateur
@@ -481,6 +482,10 @@ int min_max(t_etat_jeu* jeu0, t_coup* coup)
 
 	t_etat_jeu jeu1;                   //État du jeu après 1 coup
 	t_etat_jeu jeu2;                   //État du jeu après 2 coup
+
+	/*comme les grilles de jeu sont des double pointeurs, il faut faure une allocation dynamique*/
+	jeu1.grille_jeu = creer_grille();
+	jeu2.grille_jeu = creer_grille();
 
 
 	//On initialise les 2 listes pour les noirs et les blancs
@@ -500,8 +505,9 @@ int min_max(t_etat_jeu* jeu0, t_coup* coup)
 	for (int i = 0; i < get_nb_coups(&liste_coups_ordi); i++)
 	{
 		//On fait une copie de l'état de jeu actuel
-		jeu1.grille_jeu = jeu0->grille_jeu;
-		jeu1.joueur = jeu0->joueur;
+		//jeu1.grille_jeu = jeu0->grille_jeu;
+		//jeu1.joueur = jeu0->joueur;
+		copier_etat_jeu(jeu0, &jeu1);
 
 		//On effectue le coup
 		ajouter_coup(&liste_coups_ordi, &coupOrdi);
@@ -527,8 +533,7 @@ int min_max(t_etat_jeu* jeu0, t_coup* coup)
 		for (int j = 0; j < get_nb_coups(&liste_coups_joueur); j++)
 		{
 			//On fait une copie de l'état de jeu suivant
-			jeu2.grille_jeu = jeu1.grille_jeu;
-			jeu2.joueur = jeu1.joueur;
+			copier_etat_jeu(&jeu1, &jeu2);
 
 			//On effectue le coup
 			ajouter_coup(&liste_coups_joueur, &coupJr);
@@ -539,13 +544,13 @@ int min_max(t_etat_jeu* jeu0, t_coup* coup)
 			//revenir au 1ier joueur dans l’état jeu2 
 			jeu2.joueur = INVERSER_JOUEUR(jeu2.joueur);
 
-			/*  Obtenir la valeur de la grille du jeu 2
+			/* Obtenir la valeur de la grille du jeu 2*/
 			valeur_grille;
 
 			if (valeur_grille < min)
 			{
 				min = valeur_grille;
-			}   */
+			}   
 		}
 
 	   /* Si le meilleur coup du joueur quand l’ordi a joué le coupOrdi */
@@ -567,5 +572,27 @@ int min_max(t_etat_jeu* jeu0, t_coup* coup)
 	//On retourne le coup max en référence
 	*coup = coup_max;
 
+	/*on doit detruire les grilles de jeu qui ont ete allouees dynamiquement*/
+	detruire_grille(jeu1.grille_jeu);
+	detruire_grille(jeu2.grille_jeu);
+
 	return max;
+}
+
+
+/******************************************************************************/
+
+void copier_etat_jeu(t_etat_jeu *jeu, t_etat_jeu *jeu_copie)
+{
+	/*la grille de jeu est un double pointeur (8x8), on copie donc les lignes une a une*/
+	for (int i = 0; i < TAILLE_GR; i++)
+	{
+		memcpy(jeu_copie->grille_jeu[i], jeu->grille_jeu[i], sizeof(t_piece) *8);
+	}
+
+	/*le reste sont juste des entiers, on peut les copier directement*/
+	jeu_copie->joueur = jeu->joueur;
+	jeu_copie->roque_permis[0] = jeu->roque_permis[0];
+	jeu_copie->roque_permis[1] = jeu->roque_permis[1];
+	jeu_copie->score_grille = jeu->score_grille;
 }
