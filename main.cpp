@@ -384,7 +384,7 @@ void faire_un_reset(t_liste_coups* liste_coups, t_etat_jeu* jeu)
 }
 #endif
 
-
+/******************************************************************************/
 
 t_saisie saisir_coup(t_etat_jeu* jeu, t_liste_coups* liste_coups, t_coup* coup)
 {
@@ -462,46 +462,9 @@ t_saisie saisir_coup(t_etat_jeu* jeu, t_liste_coups* liste_coups, t_coup* coup)
 	
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 /******************************************************************************/
 
-void min_max(t_etat_jeu* jeu0, t_coup* coup)
+int min_max(t_etat_jeu* jeu0, t_coup* coup)
 {
 	t_liste_coups liste_coups_ordi;    //Liste de coups des noirs
 	t_liste_coups liste_coups_joueur;  //Liste de coups des blancs
@@ -509,6 +472,8 @@ void min_max(t_etat_jeu* jeu0, t_coup* coup)
 	int max;                           //Valeur maximal
 	int valeur_grille;                 //Valeur grille
 	t_coup coupOrdi;                   //Coup joué par l'ordinateur
+	t_coup coupJr;                     //Coup joué par l'ordinateur
+	t_coup coup_max;                   //Coup maximal
 	t_etat_jeu jeu1;                   //État du jeu après 1 coup
 	t_etat_jeu jeu2;                   //État du jeu après 2 coup
 
@@ -528,8 +493,12 @@ void min_max(t_etat_jeu* jeu0, t_coup* coup)
 	//Pour tous les coups de l'ordi
 	for (int i = 0; i < get_nb_coups(&liste_coups_ordi); i++)
 	{
-		//Faire une copie de l'état de jeu actuel
-		/****FONCTION À FAIRE****/
+		//On fait une copie de l'état de jeu actuel
+		jeu1.grille_jeu = jeu0->grille_jeu;
+		jeu1.joueur = jeu0->joueur;
+
+		//On effectue le coup
+		ajouter_coup(&liste_coups_ordi, &coupOrdi);
 
 		//On avance le pointeur courant
 		avancer_pc(&liste_coups_ordi);
@@ -548,6 +517,49 @@ void min_max(t_etat_jeu* jeu0, t_coup* coup)
 		//Une valeur maximale de départ
 		min = 999;
 
+		//Pour tous les coups coupJr dans liste_coups_joueur
+		for (int i = 0; i < get_nb_coups(&liste_coups_joueur); i++)
+		{
+			//On fait une copie de l'état de jeu suivant
+			jeu2.grille_jeu = jeu1.grille_jeu;
+			jeu2.joueur = jeu1.joueur;
+
+			//On effectue le coup
+			ajouter_coup(&liste_coups_joueur, &coupJr);
+
+			//On avance le pointeur courant
+			avancer_pc(&liste_coups_joueur);
+
+			//revenir au 1ier joueur dans l’état jeu2 
+			jeu2.joueur = INVERSER_JOUEUR(jeu2.joueur);
+
+			/*  Obtenir la valeur de la grille du jeu 2
+			valeur_grille;
+
+			if (valeur_grille < min)
+			{
+				min = valeur_grille;
+			}   */
+		}
+
+	   /* Si le meilleur coup du joueur quand l’ordi a joué le coupOrdi */
+	   /* donne un meilleur pointage (max) que le celui du coup maximal */
+	   /* jusqu'à date, alors on garde coupOrdi comme coup maximal.     */
+		if (min > max)
+		{
+			max = min;
+			coup_max = coupOrdi;
+		}
+
+		//On vide la liste du joueur
+		vider_liste_coups(&liste_coups_joueur);
 	}
 
+	//On vide la liste de l'ordi
+	vider_liste_coups(&liste_coups_joueur);
+
+	//On retourne le coup max en référence
+	*coup = coup_max;
+
+	return max;
 }

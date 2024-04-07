@@ -68,6 +68,9 @@
 /*                  LES FONCTIONS                          */
 /*=========================================================*/
 
+const int PTS_PIECES[16] = { 0,  1,  5,  5,  3,  3,  9,  100,  //NOIRS  = points positifs
+				  0, -1, -5, -5, -3, -3, -9, -100 };           //BLANCS = points négatifs
+
 /*************************************************************************************************
 	OBJECTIF : Fonction qui verifie si la position (ran, col) est bien sur le plateau,
 			   et pas a l'exterieur on retourne true seulement si toutes les valeurs 
@@ -859,4 +862,17 @@ void detruire_grille(t_grille grille_jeu)
 	//On detruit le tableau de pointeurs des lignes
 	free(grille_jeu);
 	grille_jeu = NULL;
+}
+
+/***********************************************************************************************/
+void mise_a_jour_score(t_etat_jeu* jeu, int capture)
+{
+
+}
+
+/***********************************************************************************************/
+int get_score_grille(const t_etat_jeu* jeu)
+{
+	//On retourne le score de la grille
+	return jeu->score_grille;
 }
