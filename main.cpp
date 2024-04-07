@@ -524,7 +524,7 @@ int min_max(t_etat_jeu* jeu0, t_coup* coup)
 		min = 999;
 
 		//Pour tous les coups coupJr dans liste_coups_joueur
-		for (int i = 0; i < get_nb_coups(&liste_coups_joueur); i++)
+		for (int j = 0; j < get_nb_coups(&liste_coups_joueur); j++)
 		{
 			//On fait une copie de l'état de jeu suivant
 			jeu2.grille_jeu = jeu1.grille_jeu;
