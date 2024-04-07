@@ -561,7 +561,7 @@ int min_max(t_etat_jeu* jeu0, t_coup* coup)
 		vider_liste_coups(&liste_coups_joueur);
 	}
 
-	//On vide la liste de l'ordi
+	//On vide la liste du joueur
 	vider_liste_coups(&liste_coups_joueur);
 
 	//On retourne le coup max en référence
