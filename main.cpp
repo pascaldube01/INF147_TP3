@@ -548,7 +548,7 @@ int min_max(t_etat_jeu* jeu0, t_coup* coup)
 			jeu2.joueur = INVERSER_JOUEUR(jeu2.joueur);
 
 			/* Obtenir la valeur de la grille du jeu 2*/
-			valeur_grille;
+			valeur_grille = 3;
 
 			if (valeur_grille < min)
 			{
