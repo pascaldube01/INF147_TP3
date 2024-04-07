@@ -510,13 +510,13 @@ int min_max(t_etat_jeu* jeu0, t_coup* coup)
 		copier_etat_jeu(jeu0, &jeu1);
 
 		//On effectue le coup
-		ajouter_coup(&liste_coups_ordi, &coupOrdi);
+		coupOrdi = get_coup_pc(&liste_coups_ordi);
+		jouer_coup(&jeu1, &coupOrdi);
 
 		//On avance le pointeur courant
 		avancer_pc(&liste_coups_ordi);
 
 		//Changer de joueur dans l'état de jeu 1
-		jeu1.joueur = get_joueur(&jeu1);
 		jeu1.joueur = INVERSER_JOUEUR(jeu1.joueur);
 		
 		//Génération des coups du joueur à partir du jeu1
@@ -529,6 +529,8 @@ int min_max(t_etat_jeu* jeu0, t_coup* coup)
 		//Une valeur maximale de départ
 		min = 999;
 
+		replacer_pc_debut(&liste_coups_joueur);
+
 		//Pour tous les coups coupJr dans liste_coups_joueur
 		for (int j = 0; j < get_nb_coups(&liste_coups_joueur); j++)
 		{
@@ -536,7 +538,8 @@ int min_max(t_etat_jeu* jeu0, t_coup* coup)
 			copier_etat_jeu(&jeu1, &jeu2);
 
 			//On effectue le coup
-			ajouter_coup(&liste_coups_joueur, &coupJr);
+			coupJr = get_coup_pc(&liste_coups_joueur);
+			jouer_coup(&jeu2, &coupJr);
 
 			//On avance le pointeur courant
 			avancer_pc(&liste_coups_joueur);
