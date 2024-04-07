@@ -214,7 +214,9 @@ void init_jeu(t_etat_jeu* grille_jeu, int joueur_dep)
 	/*activation des permissions pour le roque*/
 	grille_jeu->roque_permis[0] = 1;
 	grille_jeu->roque_permis[1] = 1;
-	
+
+	//On initialise le score à 0
+	grille_jeu->score_grille = 0;
 }
 
 /************************************************************************************************/
@@ -802,7 +804,20 @@ t_piece jouer_coup(t_etat_jeu* jeu, const t_coup* coup)
 		//Si le joueur désire mettre le pion sur la ligne 0 ou 7, 
 		//on effectue une promotion et le pion devient une dame 
 		if (coup->lig_dest == PROMOTION(joueur))
+		{
 			set_piece_case(jeu, (t_piece)(DAME_N + joueur), coup->col_dest, coup->lig_dest);
+
+			//Si on fait une promotion et que le joueur est noir, on fait +8 au score
+			if (joueur == NOIRS)
+			{
+				jeu->score_grille += 8;
+			}
+			//Sinon on fait -8 
+			else
+			{
+				jeu->score_grille -= 8;
+			}
+		}
 		//Sinon, on peut placer la pièce à déplacer dans la case destination
 		else
 			set_piece_case(jeu, piece_a_deplacer, coup->col_dest, coup->lig_dest);
@@ -867,7 +882,7 @@ void detruire_grille(t_grille grille_jeu)
 /***********************************************************************************************/
 void mise_a_jour_score(t_etat_jeu* jeu, int capture)
 {
-
+	//À FAIRE
 }
 
 /***********************************************************************************************/

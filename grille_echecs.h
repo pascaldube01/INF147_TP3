@@ -391,7 +391,6 @@ t_grille creer_grille(void);
 **************************************************************************************************/
 void detruire_grille(t_grille jeu);
 
-
 /************************************************************************************************
 	OBJECTIF : Mutateur du score de la grille. On ajoute la valeur associée à la pièce
                « capture » au score actuel de la grille.
@@ -409,8 +408,6 @@ void mise_a_jour_score(t_etat_jeu* jeu, int capture);
 
 	RETOUR: int
 **************************************************************************************************/
-
-
 int get_score_grille(const t_etat_jeu* jeu);
 
 #endif
