@@ -29,6 +29,7 @@
 /*=========================================================*/
 
 t_saisie saisir_coup(t_etat_jeu* jeu, t_liste_coups* liste_coups, t_coup* coup);
+int min_max(t_etat_jeu* jeu0, t_coup* coup);
 
 /*=========================================================*/
 /*                  LES CONSTANTES                         */
@@ -324,7 +325,8 @@ int main()
 		{
 			/*si c'est le tour de l'ordi, il joue un coup au hasard, on l'affiche et on le joue*/
 			afficher_message("Attendez SVP, je réfléchis...");
-			coup = choix_coup_ordi(&liste_coups);
+			//coup = choix_coup_ordi(&liste_coups);
+			min_max(&etat_jeu, &coup);
 		}
 		if (capture != ROI_N + INVERSER_JOUEUR(get_joueur(&etat_jeu)))
 		{
