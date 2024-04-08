@@ -476,7 +476,7 @@ t_saisie saisir_coup(t_etat_jeu* jeu, t_liste_coups* liste_coups, t_coup* coup)
 		else //Si le coup n'est opas valide, on affiche un message d'erreur
 		{	
 			afficher_message("ERREUR! Coup non-permis, recommencez..");
-			delai_ecran(2000);
+			delai_ecran(1000);
 		}
 	}
 
