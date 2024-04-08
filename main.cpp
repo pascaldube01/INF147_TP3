@@ -29,7 +29,7 @@
 /*=========================================================*/
 
 t_saisie saisir_coup(t_etat_jeu* jeu, t_liste_coups* liste_coups, t_coup* coup);
-int min_max(t_etat_jeu* jeu0, t_coup* coup);
+int min_max(t_etat_jeu* jeu0, t_coup* coup, int niveau, int max_niveau);
 void copier_etat_jeu(t_etat_jeu *jeu0, t_etat_jeu *jeu1);
 
 /*=========================================================*/
@@ -260,6 +260,10 @@ int main()
 	t_liste_coups liste_coups;
 	/*Le score de la grille*/
 	int score = 0;
+	//Le niveau initiale commemce à 2, puis à chaque récursion on fait +2
+	int niveau = 2;
+	//Le niveau maximal qu'on souhaite atteindre (4 = intermédiaire; 6 = expert)
+	int max_niveau = 4;
 
 	/*ouverture de la fenetre graphique*/
 	init_graphe();
@@ -332,7 +336,7 @@ int main()
 			/*si c'est le tour de l'ordi, il joue un coup au hasard, on l'affiche et on le joue*/
 			afficher_message("Attendez SVP, je réfléchis...");
 			//coup = choix_coup_ordi(&liste_coups);
-			min_max(&etat_jeu, &coup);
+			min_max(&etat_jeu, &coup, niveau, max_niveau);
 		}
 		if (capture != ROI_N + INVERSER_JOUEUR(get_joueur(&etat_jeu)))
 		{
@@ -482,7 +486,7 @@ t_saisie saisir_coup(t_etat_jeu* jeu, t_liste_coups* liste_coups, t_coup* coup)
 
 /******************************************************************************/
 
-int min_max(t_etat_jeu* jeu0, t_coup* coup)
+int min_max(t_etat_jeu* jeu0, t_coup* coup, int niveau, int max_niveau)
 {
 	t_liste_coups liste_coups_ordi;    //Liste de coups des noirs
 	t_liste_coups liste_coups_joueur;  //Liste de coups des blancs
@@ -561,8 +565,18 @@ int min_max(t_etat_jeu* jeu0, t_coup* coup)
 			//revenir au 1ier joueur dans l’état jeu2 
 			jeu2.joueur = INVERSER_JOUEUR(jeu2.joueur);
 
-			/* Obtenir la valeur de la grille du jeu 2*/
-			valeur_grille = 3;
+			//Appel récursif
+			if (niveau == max_niveau)
+			{
+				/* Obtenir la valeur de la grille du jeu 2*/
+				valeur_grille = get_score_grille(&jeu2);
+			}
+			else
+			{
+				//Effectuer la récursion avec une profondeur plus élevée
+				valeur_grille = min_max(&jeu2, coup, niveau + 2, max_niveau);
+			}
+			
 
 			if (valeur_grille < min)
 			{
