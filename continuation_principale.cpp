@@ -36,7 +36,16 @@ t_table_CP creer_table_CP(int taille)
 /******************************************************************************/
 void detruire_table_CP(t_table_CP tab_2d, int taille)
 {
+	//On detruit chaque tableau de colonne de chaque ligne qui été alloué
+	for (int i = 0; (i < taille) && tab_2d[i] != NULL; i++)
+	{
+		free(tab_2d[i]);
+		tab_2d[i] = NULL;
+	}
 
+	//On detruit le tableau de pointeurs des lignes
+	free(tab_2d);
+	tab_2d = NULL;
 }
 
 /******************************************************************************/
