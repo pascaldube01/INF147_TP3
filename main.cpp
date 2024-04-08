@@ -502,6 +502,8 @@ int min_max(t_etat_jeu* jeu0, t_coup* coup, int niveau, int max_niveau)
 	t_etat_jeu jeu1;                   //État du jeu après 1 coup
 	t_etat_jeu jeu2;                   //État du jeu après 2 coup
 
+	t_piece capture;				   //piece capturee
+
 	/*comme les grilles de jeu sont des double pointeurs, il faut faure une allocation dynamique*/
 	jeu1.grille_jeu = creer_grille();
 	jeu2.grille_jeu = creer_grille();
@@ -540,6 +542,7 @@ int min_max(t_etat_jeu* jeu0, t_coup* coup, int niveau, int max_niveau)
 		//Génération des coups du joueur à partir du jeu1
 		generer_liste_coups(&jeu1, &liste_coups_joueur, verif_roque(&jeu1));
 
+
 		/*NIVEAU 1: On cherche le meilleur coup possible (le MIN) du 
 		joueur si l'ordi joue le coup coupOrdi. Il est à noter que
 		plus la valeur est petite, plus le coup du joueur est bon*/
@@ -557,7 +560,7 @@ int min_max(t_etat_jeu* jeu0, t_coup* coup, int niveau, int max_niveau)
 
 			//On effectue le coup
 			coupJr = get_coup_pc(&liste_coups_joueur);
-			jouer_coup(&jeu2, &coupJr);
+			capture = jouer_coup(&jeu2, &coupJr);
 
 			//On avance le pointeur courant
 			avancer_pc(&liste_coups_joueur);
@@ -569,6 +572,7 @@ int min_max(t_etat_jeu* jeu0, t_coup* coup, int niveau, int max_niveau)
 			if (niveau == max_niveau)
 			{
 				/* Obtenir la valeur de la grille du jeu 2*/
+				mise_a_jour_score(&jeu2, capture);
 				valeur_grille = get_score_grille(&jeu2);
 			}
 			else
@@ -597,8 +601,8 @@ int min_max(t_etat_jeu* jeu0, t_coup* coup, int niveau, int max_niveau)
 		vider_liste_coups(&liste_coups_joueur);
 	}
 
-	//On vide la liste du joueur
-	vider_liste_coups(&liste_coups_joueur);
+	//On vide la liste de l'ordi
+	vider_liste_coups(&liste_coups_ordi);
 
 	//On retourne le coup max en référence
 	*coup = coup_max;
