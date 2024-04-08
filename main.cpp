@@ -260,7 +260,7 @@ int main()
 	t_liste_coups liste_coups;
 	/*Le score de la grille*/
 	int score = 0;
-	//Le niveau initiale commemce à 2, puis à chaque récursion on fait +2
+	//Le niveau initiale commence à 2, puis à chaque récursion on fait +2
 	int niveau = 2;
 	//Le niveau maximal qu'on souhaite atteindre (4 = intermédiaire; 6 = expert)
 	int max_niveau = 4;
@@ -479,9 +479,7 @@ t_saisie saisir_coup(t_etat_jeu* jeu, t_liste_coups* liste_coups, t_coup* coup)
 		}
 	}
 
-	
 	return POS_VALIDE;
-	
 }
 
 /******************************************************************************/
@@ -580,7 +578,7 @@ int min_max(t_etat_jeu* jeu0, t_coup* coup, int niveau, int max_niveau)
 				//Effectuer la récursion avec une profondeur plus élevée
 				valeur_grille = min_max(&jeu2, coup, niveau + 2, max_niveau);
 			}
-			
+
 
 			if (valeur_grille < min)
 			{
@@ -613,7 +611,6 @@ int min_max(t_etat_jeu* jeu0, t_coup* coup, int niveau, int max_niveau)
 
 	return max;
 }
-
 
 /******************************************************************************/
 
