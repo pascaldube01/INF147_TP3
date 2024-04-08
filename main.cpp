@@ -258,6 +258,8 @@ int main()
 	/*la liste de coup, etant une structure, elle doit etre initialisee dans la fonction
 	init_liste_coup*/
 	t_liste_coups liste_coups;
+	/*Le score de la grille*/
+	int score;
 
 	/*ouverture de la fenetre graphique*/
 	init_graphe();
@@ -338,6 +340,16 @@ int main()
 				coup.col_dest, coup.lig_dest);
 
 			capture = jouer_coup(&etat_jeu, &coup);
+
+			//On met a jour le score de la grille de jeu
+			mise_a_jour_score(&etat_jeu, capture);
+
+			//On appel la fonction accesseur pour obtenir le score de la grille mis à jour
+			score = get_score_grille(&etat_jeu);
+
+			//On affiche le score sur l'écran
+			afficher_score(score);
+
 			/*Si la capture est un roi de l'équipe adverse, alors la partie est terminée*/
 			if (capture == ROI_N + INVERSER_JOUEUR(get_joueur(&etat_jeu)))
 				afficher_gagnant(get_joueur(&etat_jeu));
@@ -474,7 +486,7 @@ int min_max(t_etat_jeu* jeu0, t_coup* coup)
 
 	int min;                           //Valeur minimale
 	int max;                           //Valeur maximale
-	int valeur_grille = 0;                 //Valeur grille
+	int valeur_grille = 0;             //Valeur grille
 
 	t_coup coupOrdi;                   //Coup joué par l'ordinateur
 	t_coup coupJr;                     //Coup joué par l'ordinateur
@@ -486,7 +498,6 @@ int min_max(t_etat_jeu* jeu0, t_coup* coup)
 	/*comme les grilles de jeu sont des double pointeurs, il faut faure une allocation dynamique*/
 	jeu1.grille_jeu = creer_grille();
 	jeu2.grille_jeu = creer_grille();
-
 
 	//On initialise les 2 listes pour les noirs et les blancs
 	init_liste_coups(&liste_coups_ordi);
