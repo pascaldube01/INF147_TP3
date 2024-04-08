@@ -25,7 +25,12 @@
 /******************************************************************************/
 t_table_CP creer_table_CP(int taille)
 {
-    t_table_CP tab_CP = malloc(sizeof(taille));
+    t_table_CP tab_CP = (t_table_CP) malloc(sizeof(taille));
+    for (int i = taille; i != 0; i--)
+    {
+        tab_CP[taille - i] = (t_texte_coup * ) malloc(sizeof(t_texte_coup) * i);
+    }
+    return tab_CP;
 }
 
 /******************************************************************************/
