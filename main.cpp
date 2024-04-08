@@ -496,7 +496,7 @@ int min_max(t_etat_jeu* jeu0, t_coup* coup, int niveau, int max_niveau)
 
 	t_coup coupOrdi;                   //Coup joué par l'ordinateur
 	t_coup coupJr;                     //Coup joué par l'ordinateur
-	t_coup coup_max;                   //Coup maximal
+	t_coup coup_max = { 0 };           //Coup maximal
 
 	t_etat_jeu jeu1;                   //État du jeu après 1 coup
 	t_etat_jeu jeu2;                   //État du jeu après 2 coup
@@ -530,11 +530,11 @@ int min_max(t_etat_jeu* jeu0, t_coup* coup, int niveau, int max_niveau)
 
 		//On effectue le coup
 		coupOrdi = get_coup_pc(&liste_coups_ordi);
-		jouer_coup(&jeu1, &coupOrdi);
 
 		//On avance le pointeur courant
 		avancer_pc(&liste_coups_ordi);
-
+		/*On effectue la mise a jour du score*/
+		mise_a_jour_score(&jeu1, jouer_coup(&jeu1, &coupOrdi));
 		//Changer de joueur dans l'état de jeu 1
 		jeu1.joueur = INVERSER_JOUEUR(jeu1.joueur);
 		
