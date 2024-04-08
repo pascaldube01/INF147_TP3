@@ -259,7 +259,7 @@ int main()
 	init_liste_coup*/
 	t_liste_coups liste_coups;
 	/*Le score de la grille*/
-	int score;
+	int score = 0;
 
 	/*ouverture de la fenetre graphique*/
 	init_graphe();
@@ -292,6 +292,9 @@ int main()
 
 	/*affichage de la grille actuelle*/
 	afficher_grille(&etat_jeu);
+
+	//On initialise l'affichage du score à 0
+	afficher_score(score);
 
 	do
 	{
