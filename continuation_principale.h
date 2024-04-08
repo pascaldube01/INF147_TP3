@@ -1,6 +1,9 @@
 #ifndef CP_H
 #define CP_H 1
 
+/*on en a besoin pour malloc et free*/
+#include<stdlib.h>
+
 typedef char t_texte_coup[6];       //pour retenir un titre de coup (eg. "a2-a3")
 typedef t_texte_coup** t_table_CP;  //tableau 2D dynamique de la cont. principale
 

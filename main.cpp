@@ -23,6 +23,7 @@
 #include <assert.h>
 
 #include "affichage.h"
+#include "continuation_principale.h"
 
 /*=========================================================*/
 /*                           prototypes                    */
