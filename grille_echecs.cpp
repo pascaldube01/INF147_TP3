@@ -369,7 +369,8 @@ void ajouter_coup_pion(t_liste_coups* liste_coups, t_etat_jeu* etat_jeu, int col
 	NOIRS et que le pions se situe sur la ligne 1*/
 	if (((sens_du_jeu(etat_jeu) < 0) && lig == 6) || ((sens_du_jeu(etat_jeu) > 0) && lig == 1))
 		if (verifier_position_plateau_jeu_valide(colonne, ligne))
-			if (get_piece_case(etat_jeu, colonne, ligne - sens_du_jeu(etat_jeu)) == VIDE)
+			if (get_piece_case(etat_jeu, colonne, ligne - sens_du_jeu(etat_jeu)) == VIDE &&
+				get_piece_case(etat_jeu, colonne, ligne) == VIDE)
 			{/*On ne peut pas mettre ce cas dans la fonction ajouter_coup_si_valide, 
 			 car col2 et lig2 sont différents de POS_VIDE*/
 				set_coup(&coup, col, lig, colonne, ligne,
