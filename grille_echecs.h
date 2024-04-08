@@ -43,6 +43,8 @@
 /*                     t_grille creer_grille(void)                                       */
 /*                     void detruire_grille(t_grille jeu)                                */
 /*                     int verifier_alloc_grille(t_grille jeu)                           */
+/*                     void mise_a_jour_score(t_etat_jeu* jeu, int capture)              */
+/*                     int get_score_grille(const t_etat_jeu* jeu)                       */
 /*****************************************************************************************/
 
 #if !defined(TAILLE)
@@ -132,7 +134,7 @@ typedef struct
     t_grille grille_jeu;   //la grille 8x8 du jeu
     int roque_permis[2];   //indique si le roque est permis: [0] = NOIRS, [1] = BLANCS
     int joueur;            //le joueur, NOIRS ou BLANCS, a jouer
-	int score_grille;       //Score de la grille
+	int score_grille;      //Score de la grille
 } t_etat_jeu;
 
 /***************************************************************************************/
@@ -406,7 +408,7 @@ void mise_a_jour_score(t_etat_jeu* jeu, int capture);
 
 	PARAMETRE :	Le jeu 
 
-	RETOUR: int
+	RETOUR: Le score de la grille
 **************************************************************************************************/
 int get_score_grille(const t_etat_jeu* jeu);
 
