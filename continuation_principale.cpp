@@ -52,6 +52,26 @@ void detruire_table_CP(t_table_CP tab_2d, int taille)
 void mise_a_jour_CP(t_table_CP tab_CP, int niv, int max_niv,
     t_texte_coup texte_coup)
 {
+	int col;
+
+	if (niv == 0)
+	{
+		*tab_CP[niv][max_niv - 1] = *texte_coup;
+	}
+	else if(niv == max_niv - 1)
+	{
+		*tab_CP[niv][0] = *texte_coup;
+	}
+
+	//colonne de la diagonale secondaire -1
+	col = 0;
+
+	while (col >= 0)
+	{
+		*tab_CP[niv][col] = *tab_CP[niv + 1][col];
+		col--;
+	}
+
 
 }
 
