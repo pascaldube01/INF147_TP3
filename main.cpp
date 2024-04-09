@@ -30,7 +30,7 @@
 /*=========================================================*/
 
 t_saisie saisir_coup(t_etat_jeu* jeu, t_liste_coups* liste_coups, t_coup* coup);
-int min_max(t_etat_jeu* jeu0, t_coup* coup, int niveau, int max_niveau);
+int min_max(t_etat_jeu* jeu0, t_coup* coup, int niveau, int max_niveau, t_table_CP tab_CP);
 void copier_etat_jeu(t_etat_jeu *jeu0, t_etat_jeu *jeu1);
 
 /*=========================================================*/
@@ -262,10 +262,14 @@ int main()
 	/*Le score de la grille*/
 	int score = 0;
 	//Le niveau maximal qu'on souhaite atteindre (4 = intermédiaire; 6 = expert)
-	int max_niveau = 0;
+	int max_niveau = 0; 
+	/*variable qui servira a afficher les coups que l'ordinateur a calcule dans la console*/
+	t_table_CP tab_CP = creer_table_CP(6);
 
+	/*on demande le niveaux de difficulte voulu au joueur dans la console*/
 	printf("niveaux de difficulte : \n\n 2 - facile\n\n 4 - moyen\n\n 6 - difficile\n\n choix :");
 	scanf("%d", &max_niveau);
+
 
 	/*ouverture de la fenetre graphique*/
 	init_graphe();
@@ -338,7 +342,8 @@ int main()
 			/*si c'est le tour de l'ordi, il joue un coup au hasard, on l'affiche et on le joue*/
 			afficher_message("Attendez SVP, je réfléchis...");
 			//coup = choix_coup_ordi(&liste_coups);
-			min_max(&etat_jeu, &coup, 2, max_niveau);
+			min_max(&etat_jeu, &coup, 2, max_niveau, tab_CP);
+			imprimer_table_CP(tab_CP, max_niveau);
 		}
 		if (capture != ROI_N + INVERSER_JOUEUR(get_joueur(&etat_jeu)))
 		{
@@ -486,7 +491,7 @@ t_saisie saisir_coup(t_etat_jeu* jeu, t_liste_coups* liste_coups, t_coup* coup)
 
 /******************************************************************************/
 
-int min_max(t_etat_jeu* jeu0, t_coup* coup, int niveau, int max_niveau)
+int min_max(t_etat_jeu* jeu0, t_coup* coup, int niveau, int max_niveau, t_table_CP tab_CP)
 {
 	t_liste_coups liste_coups_ordi;    //Liste de coups des noirs
 	t_liste_coups liste_coups_joueur;  //Liste de coups des blancs
@@ -578,13 +583,14 @@ int min_max(t_etat_jeu* jeu0, t_coup* coup, int niveau, int max_niveau)
 			else
 			{
 				//Effectuer la récursion avec une profondeur plus élevée
-				valeur_grille = min_max(&jeu2, coup, niveau + 2, max_niveau);
+				valeur_grille = min_max(&jeu2, coup, niveau + 2, max_niveau, tab_CP);
 			}
 
 
 			if (valeur_grille < min)
 			{
 				min = valeur_grille;
+				mise_a_jour_CP(tab_CP, niveau-1, max_niveau, coupJr.texte_coup);
 			}   
 		}
 
@@ -595,6 +601,7 @@ int min_max(t_etat_jeu* jeu0, t_coup* coup, int niveau, int max_niveau)
 		{
 			max = min;
 			coup_max = coupOrdi;
+			mise_a_jour_CP(tab_CP, niveau - 2, max_niveau, coupOrdi.texte_coup);
 		}
 
 		//On vide la liste du joueur
