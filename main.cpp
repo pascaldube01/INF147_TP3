@@ -261,10 +261,11 @@ int main()
 	t_liste_coups liste_coups;
 	/*Le score de la grille*/
 	int score = 0;
-	//Le niveau initiale commence à 2, puis à chaque récursion on fait +2
-	int niveau = 2;
 	//Le niveau maximal qu'on souhaite atteindre (4 = intermédiaire; 6 = expert)
-	int max_niveau = 4;
+	int max_niveau = 0;
+
+	printf("niveaux de difficulte : \n\n 2 - facile\n\n 4 - moyen\n\n 6 - difficile\n\n choix :");
+	scanf("%d", &max_niveau);
 
 	/*ouverture de la fenetre graphique*/
 	init_graphe();
@@ -337,7 +338,7 @@ int main()
 			/*si c'est le tour de l'ordi, il joue un coup au hasard, on l'affiche et on le joue*/
 			afficher_message("Attendez SVP, je réfléchis...");
 			//coup = choix_coup_ordi(&liste_coups);
-			min_max(&etat_jeu, &coup, niveau, max_niveau);
+			min_max(&etat_jeu, &coup, 2, max_niveau);
 		}
 		if (capture != ROI_N + INVERSER_JOUEUR(get_joueur(&etat_jeu)))
 		{
