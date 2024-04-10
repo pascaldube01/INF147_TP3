@@ -456,11 +456,12 @@ t_saisie saisir_coup(t_etat_jeu* jeu, t_liste_coups* liste_coups, t_coup* coup)
 				return QUITTER;
 			}
 
-			//Affiche sur la console les cases choisies
+/*			//Affiche sur la console les cases choisies
 			if (!i)
 				printf("\nchoix de la case source : %d, %d", lig_choisi[i], col_choisi[i]);
 			else
 				printf("\nchoix de la case destination : %d, %d", lig_choisi[i], col_choisi[i]);
+*/
 		}
 
 		/*pour pouvoir chercher le coup avec valider coup, il faut construire sa string*/
@@ -475,7 +476,6 @@ t_saisie saisir_coup(t_etat_jeu* jeu, t_liste_coups* liste_coups, t_coup* coup)
 			joue, sinon, on en demande un autre en retournant en haut de la boucle*/
 		if (valider_coup(liste_coups, coup_input_string, coup))
 		{
-			printf("\ncoup valide");
 			coup_valide = 0;
 			/*si le coup est valide, on affiche et joue le coup*/
 		}

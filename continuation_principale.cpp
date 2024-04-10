@@ -25,11 +25,11 @@
 /******************************************************************************/
 t_table_CP creer_table_CP(int taille)
 {
-    t_table_CP tab_CP = (t_table_CP)malloc(taille * sizeof(t_texte_coup*));
+    t_table_CP tab_CP = (t_table_CP)calloc(taille, sizeof(t_table_CP));
 	assert(tab_CP);
     for (int i = taille; i != 0; i--)
     {
-        tab_CP[taille - i] = (t_texte_coup *)malloc(sizeof(t_texte_coup) * i);
+        tab_CP[taille - i] = (t_texte_coup*)calloc(i, sizeof(t_texte_coup));
 		assert(tab_CP[taille - i]);
     }
 	
@@ -55,14 +55,14 @@ void detruire_table_CP(t_table_CP tab_2d, int taille)
 void mise_a_jour_CP(t_table_CP tab_CP, int niv, int max_niv,
     t_texte_coup texte_coup)
 {
-	int col = max_niv-niv;
+	int diag_sec = (max_niv - 1) - niv;
+	int col = diag_sec -1;
 
-	strcpy(tab_CP[niv][col], texte_coup);
+	strcpy(tab_CP[niv][diag_sec], texte_coup);
 
-	//colonne de la diagonale secondaire -1
 	while (col >= 0)
 	{
-		strcpy(tab_CP[niv +1][col], tab_CP[niv][col]);
+		strcpy(tab_CP[niv][col], tab_CP[niv +1][col]);
 		col--;
 	}
 }
