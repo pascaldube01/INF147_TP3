@@ -548,7 +548,7 @@ int min_max(t_etat_jeu* jeu0, t_coup* coup, int niveau, int max_niveau, t_table_
 
 	t_coup coupOrdi;                   //Coup joué par l'ordinateur
 	t_coup coupJr;                     //Coup joué par l'ordinateur
-	t_coup coup_max = { 0 };           //Coup maximal
+	t_coup coup_max = { COUP_VIDE };           //Coup maximal
 
 	t_etat_jeu jeu1;                   //État du jeu après 1 coup
 	t_etat_jeu jeu2;                   //État du jeu après 2 coup
