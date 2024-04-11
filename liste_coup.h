@@ -37,16 +37,6 @@
 #define COL_A_CH(c)  ((c) + 'a')
 #define RAN_A_NO(r)  (TAILLE_GR - (r) + '0')
 
-/************************************************************************************************
-    OBJECTIF : Permet de savoir si la liste contient des éléments ou non
-
-    PARAMETRES : Le nombre de coups dans la liste
-
-    SORTIES :	Retourne 1 si la liste est vide, 0 sinon.
-
-    écrit par Pascal Dubé, Victor Poulin et Simon Des-Alliers
-***********************************************************************************************/
-#define LISTE_EST_VIDE(nb_coups) ((nb_coups) ? 0 : 1)
 /*-------------------------------------------------------------------*/
 /*                    TYPES POINTEURS ET STRUCT                      */
 /*-------------------------------------------------------------------*/
@@ -233,32 +223,6 @@ void replacer_pc_debut(t_liste_coups* liste_coups);
     écrit par Pascal Dubé, Victor Poulin et Simon Des-Alliers
 ***********************************************************************************************/
 int  avancer_pc(t_liste_coups* liste_coups);
-
-/************************************************************************************************
-    OBJECTIF :   Effectue un choix de coup aléatoire dans la liste de coups. On génére une position  
-                 aléatoirement entre [0..nb_noeuds-1] et on parcours la liste à partir du début en   
-                 faisant "pos_alea" déplacements (avec le "p_courant").  On retourne le coup qui se  
-                 trouve dans le noeud suite aux "pos_alea" déplacements (utilisée pour le MANDAT 1) 
-
-    PARAMETRES : La liste chaînée de coups
-
-    SORTIES :	Renvoie le coup choisit aléatoirement
-
-    écrit par Pascal Dubé, Victor Poulin et Simon Des-Alliers
-***********************************************************************************************/
-t_coup choix_coup_ordi(t_liste_coups* liste_coups);
-
-/************************************************************************************************
-    OBJECTIF :   Affiche le contenu de la liste dans la console-texte (SANS le "Winconsole" pour 
-                 la version finale du projet). Sera utile pour les débuggages seulement.
-
-    PARAMETRES : La liste chaînée de coups
-
-    SORTIES :	Ne retourne rien (void)
-
-    écrit par Pascal Dubé, Victor Poulin et Simon Des-Alliers
-***********************************************************************************************/ 
-void afficher_liste_coups(t_liste_coups* liste_coups);
 
 /************************************************************************************************
     OBJECTIF : Détruire la liste de coups.

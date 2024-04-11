@@ -203,7 +203,7 @@ int ajouter_coup_debut(t_liste_coups* liste_coups, const t_coup* coup)
 	/*On transfert le coup appelé en paramètre*/
 	element->coup = *coup;
 	/*Si la liste est vide*/
-	if (LISTE_EST_VIDE(get_nb_coups(liste_coups)))
+	if (!get_nb_coups(liste_coups))
 	{
 		element->suivant = NULL;
 		
@@ -272,34 +272,6 @@ int  avancer_pc(t_liste_coups* liste_coups)
 	/*Sinon on remet le pc au début pour ne pas prendre de risque*/
 	replacer_pc_debut(liste_coups);
 	return 0;
-}
-
-/*****************************************************************************/
-
-t_coup choix_coup_ordi(t_liste_coups* liste_coups) 
-{
-	int coup_choisi; //Variable pour prendre le nombre aléatoire est généré
-
-	/*On doit replacer le pc au début de la liste car on a changer de joueur*/
-	/*Cette ligne va être enlever pour la mettre dans le main */
-	replacer_pc_debut(liste_coups);
-
-	/*On s'assure que la liste n'est pas vide */
-	if (!LISTE_EST_VIDE(get_nb_coups(liste_coups)))
-	{
-		/*On génère le nombre aléatoire*/
-		coup_choisi = mt_randU(get_nb_coups(liste_coups));
-
-		/*On retourne le coup qui est à la liste aléatoire*/
-		for (int i = 0; i < coup_choisi; i++)
-		{
-			avancer_pc(liste_coups);
-		}
-		return get_coup_pc(liste_coups);
-	}
-
-	/*Sinon on renvoie un coup vide*/
-	return t_coup({ 0 });
 }
 
 /*****************************************************************************/
