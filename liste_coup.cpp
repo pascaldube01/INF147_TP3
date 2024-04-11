@@ -190,7 +190,7 @@ int ajouter_coup_debut(t_liste_coups* liste_coups, const t_coup* coup)
 	t_lien element; //Variable représentant un nouvel élément dans la liste
 
 	//On alloue de l'espace mémoire pour une nouvel élément
-	element = (t_lien)malloc(sizeof(t_lien));
+	element = (t_lien)malloc(sizeof(t_noeud));
 
 	//On vérifie que l'allocation dynamique s'est bien effectuée
 	if (element == NULL)
