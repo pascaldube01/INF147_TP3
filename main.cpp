@@ -294,7 +294,7 @@ int main()
 
 	/*on demande le niveaux de difficulte voulu au joueur dans la console*/
 
-	while(max_niveau <=0 || max_niveau >= 4)
+	while(max_niveau <=0 && max_niveau >= 4)
 	{
 		printf("Bonjour je m'appelle Maitre ROCH\n\n");
 		printf("Veuillez choisir votre niveau de jeu : \n\n 1 - debutant\n\n 2 - intermediaire\n\n 3 - expert\n\n choix :");
