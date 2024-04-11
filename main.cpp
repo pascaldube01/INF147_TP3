@@ -267,8 +267,9 @@ int main()
 	t_table_CP tab_CP = creer_table_CP(6);
 
 	/*on demande le niveaux de difficulte voulu au joueur dans la console*/
-	printf("niveaux de difficulte : \n\n 2 - facile\n\n 4 - moyen\n\n 6 - difficile\n\n choix :");
+	printf("niveaux de difficulte : \n\n 1 - facile\n\n 2 - moyen\n\n 3 - difficile\n\n choix :");
 	scanf("%d", &max_niveau);
+	max_niveau *= 2;
 
 
 	/*ouverture de la fenetre graphique*/
@@ -483,6 +484,7 @@ t_saisie saisir_coup(t_etat_jeu* jeu, t_liste_coups* liste_coups, t_coup* coup)
 		{	
 			afficher_message("ERREUR! Coup non-permis, recommencez..");
 			delai_ecran(1000);
+			afficher_message("BLANCS: Veuillez cliquer sur la case-source");
 		}
 	}
 
