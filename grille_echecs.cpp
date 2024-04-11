@@ -60,8 +60,8 @@
 #define TESTER_TOUR 0		//Permet de tester la pièce de la tour seulement
 #define TESTER_FOU 0		//Permet de tester la pièce du fou seulement
 #define TESTER_ROQUE 0		//Permet de tester la condition du roque du roi
-#define NORMAL 0			//Fonctionnement du jeu normal normal (avec toutes les pièces)
-#define TESTER_DEBUG 1		//debug vide pour faire des tests rapide
+#define NORMAL 1			//Fonctionnement du jeu normal normal (avec toutes les pièces)
+#define TESTER_DEBUG 0		//debug vide pour faire des tests rapide
 
 const int PTS_PIECES[16] = { 0,  1,  5,  5,  3,  3,  9,  100,   //NOIRS  = points positifs
 				             0, -1, -5, -5, -3, -3, -9, -100 }; //BLANCS = points négatifs
