@@ -440,10 +440,13 @@ int main()
 	return EXIT_SUCCESS;
 }
 
+/******************************************************************************/
+
 void faire_un_reset(t_liste_coups* liste_coups, t_etat_jeu* jeu)
 {
 	/*On doit recommencer du début*/
 	vider_liste_coups(liste_coups);
+	/*On détruit la grille*/
 	detruire_grille(jeu->grille_jeu);
 	/*initialisation de l'etat du jeu (aux echecs le joueur blanc est toujours le premier a
 	jouer)*/
@@ -461,7 +464,7 @@ void faire_un_reset(t_liste_coups* liste_coups, t_etat_jeu* jeu)
 
 t_saisie saisir_coup(t_etat_jeu* jeu, t_liste_coups* liste_coups, t_coup* coup)
 {
-	/*contiendera la string qu'il faudra chercher dans la liste pour valider le coup*/
+	/*contiendra la string qu'il faudra chercher dans la liste pour valider le coup*/
 	char coup_input_string[6] = { 0 };
 	/*contiens le bouton qui sera clique par le joueur*/
 	t_saisie bouton_clique = POS_VALIDE;
@@ -676,7 +679,6 @@ int min_max(t_etat_jeu* jeu0, t_coup* coup, int niveau, int max_niveau, t_table_
 }
 
 /******************************************************************************/
-
 void copier_etat_jeu(t_etat_jeu *jeu, t_etat_jeu *jeu_copie)
 {
 	/*la grille de jeu est un double pointeur (8x8), on copie donc les lignes une a une*/
