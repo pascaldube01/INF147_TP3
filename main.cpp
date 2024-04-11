@@ -29,7 +29,6 @@
 /*                           prototypes                    */
 /*=========================================================*/
 
-
 t_saisie saisir_coup(t_etat_jeu* jeu, t_liste_coups* liste_coups, t_coup* coup);
 int min_max(t_etat_jeu* jeu0, t_coup* coup, int niveau, int max_niveau, t_table_CP tab_CP, int tab_score[]);
 void copier_etat_jeu(t_etat_jeu *jeu0, t_etat_jeu *jeu1);
@@ -294,7 +293,7 @@ int main()
 
 	/*on demande le niveaux de difficulte voulu au joueur dans la console*/
 
-	while(max_niveau <=0 && max_niveau >= 4)
+	while(max_niveau <=0 || max_niveau >= 4)
 	{
 		printf("Bonjour je m'appelle Maitre ROCH\n\n");
 		printf("Veuillez choisir votre niveau de jeu : \n\n 1 - debutant\n\n 2 - intermediaire\n\n 3 - expert\n\n choix :");
@@ -380,6 +379,7 @@ int main()
 		{
 			/*si c'est le tour de l'ordi, il joue un coup au hasard, on l'affiche et on le joue*/
 			afficher_message("Attendez SVP, je réfléchis...");
+			//coup = choix_coup_ordi(&liste_coups);
 			min_max(&etat_jeu, &coup, 2, max_niveau, tab_CP, tab_score);
 			imprimer_table_CP(tab_CP, max_niveau, log_file);
 		}
