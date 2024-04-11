@@ -147,7 +147,7 @@ static int ajouter_coup_si_valide(t_etat_jeu *etat_jeu, t_liste_coups *liste_cou
 		if (COMPARER_TYPE(piece_destination, joueur_adverse))
 		{
 			set_coup(&coup, col, lig, col_dest, lig_dest, POS_VIDE, POS_VIDE);
-			ajouter_coup(liste_coups, &coup);
+			ajouter_coup_debut(liste_coups, &coup);
 		}
 		/*On retourne 1 car on veut activer les break_flag de la tour et du fou,
 		car ils ne peuvent pas passer par dessus une autre piece*/
@@ -349,9 +349,7 @@ void initialiser_grille(t_grille grille_jeu)
 void ajouter_coup_pion(t_liste_coups* liste_coups, t_etat_jeu* etat_jeu, int col, int lig)
 {
 	//Variable utiliser pour créer un nouveau coup et ajouter ce coup à la liste
-	t_coup coup;    
-	//Variable utiliser pour savoir si on est une piece pion
-	static int pion = 1;       
+	t_coup coup;         
 	//Variable pour la ligne et la colonne destination
 	int ligne = lig, colonne = col; 
 	//Paramètre pour effectuer deux fois l'algorithme du mouvement en diagonale 
@@ -365,7 +363,7 @@ void ajouter_coup_pion(t_liste_coups* liste_coups, t_etat_jeu* etat_jeu, int col
 	if (verifier_position_plateau_jeu_valide(colonne, ligne))
 		/*On peut mettre ce cas dans la fonction ajouter_coup_si_valide,
 		car col2 et lig2 sont POS_VIDE*/
-		ajouter_coup_si_valide(etat_jeu, liste_coups, lig, col, ligne, colonne, pion);
+		ajouter_coup_si_valide(etat_jeu, liste_coups, lig, col, ligne, colonne, 1);
 
 	//Possibilité 2 : on avance de deux cases (si on peut)
 	ligne += sens_du_jeu(etat_jeu); //On avance vers l'avant de deux cases
@@ -407,7 +405,7 @@ void ajouter_coup_pion(t_liste_coups* liste_coups, t_etat_jeu* etat_jeu, int col
 						/*Alors on peut aller à la case en diagonale et capturer VIDE_EP et le
 						pion ennemi, qui est sur la même ligne que le pion du joueur actuel */
 						set_coup(&coup, col, lig, colonne, ligne, colonne, lig);
-						ajouter_coup(liste_coups, &coup);
+						ajouter_coup_debut(liste_coups, &coup);
 					}
 					//Sinon on capture la pièce en diagonale de la position actuelle du pion
 					else
@@ -416,7 +414,7 @@ void ajouter_coup_pion(t_liste_coups* liste_coups, t_etat_jeu* etat_jeu, int col
 						pour empêcher la possibilité 1 d'ajouter des coups errronés, 
 						soit pour l'empêcher de manger une piece sur la ligne en avant du pion*/
 						set_coup(&coup, col, lig, colonne, ligne, POS_VIDE, POS_VIDE);
-						ajouter_coup(liste_coups, &coup);
+						ajouter_coup_debut(liste_coups, &coup);
 					}
 				}
 	}
@@ -427,7 +425,6 @@ void ajouter_coup_cavalier(t_liste_coups* liste_coups, t_etat_jeu* etat_jeu, int
 {
 	int col_dest;        //Colonne destination sur les 8 cases possibles
 	int lig_dest;        //Ligne destination sur les 8 cases possibles
-	static int pion = 0; //Variable utilisée pour savoir si on est une piece pion
 
 	for (int i = 0; i < 8; i++)
 	{
@@ -484,7 +481,7 @@ void ajouter_coup_cavalier(t_liste_coups* liste_coups, t_etat_jeu* etat_jeu, int
 		if (verifier_position_plateau_jeu_valide(col_dest, lig_dest))
 		{	
 			//Si le coup est valide, on l'ajoute
-			ajouter_coup_si_valide(etat_jeu, liste_coups, lig, col, lig_dest, col_dest, pion);
+			ajouter_coup_si_valide(etat_jeu, liste_coups, lig, col, lig_dest, col_dest, 0);
 		}
 	}
 }
@@ -494,7 +491,7 @@ void ajouter_coup_tour(t_liste_coups* liste_coups, t_etat_jeu* etat_jeu, int col
 {                      
 	int ligne = lig, colonne = col; //ligne et colonne de destination
 	int break_flag = 0;             //Drapeau qui s'active à 1 ou se desactive a 0
-	static int pion = 0;            //Variable utilisée pour savoir si on est une piece pion
+	
 
 	/*avant d'ajouter un coup a la liste, il faut s'assurer qu'il est possible en etant sur que
 	la case soit dans les mouvementa possibles de la tour (elle peut bouger vers haut bas gauche
@@ -506,7 +503,7 @@ void ajouter_coup_tour(t_liste_coups* liste_coups, t_etat_jeu* etat_jeu, int col
 	while (verifier_position_plateau_jeu_valide(colonne, ligne) && !break_flag) 
 	{ /*S'il y avait une piece sur la case destination, le break_flag s'active 
 	  et la boucle s'arrête, car une tour ne peut pas passer par dessus une autre piece*/
-		break_flag = ajouter_coup_si_valide(etat_jeu, liste_coups,lig, col, ligne, colonne, pion);
+		break_flag = ajouter_coup_si_valide(etat_jeu, liste_coups,lig, col, ligne, colonne, 0);
 		ligne--;
 	}
 
@@ -515,7 +512,7 @@ void ajouter_coup_tour(t_liste_coups* liste_coups, t_etat_jeu* etat_jeu, int col
 	break_flag = 0;
 	while (verifier_position_plateau_jeu_valide(colonne, ligne) && !break_flag)
 	{ //S'il y avait une piece sur la case destination, le break_flag s'active et la boucle s'arrête
-		break_flag = ajouter_coup_si_valide(etat_jeu, liste_coups, lig, col, ligne, colonne, pion);
+		break_flag = ajouter_coup_si_valide(etat_jeu, liste_coups, lig, col, ligne, colonne, 0);
 		ligne++;
 	}
 
@@ -525,7 +522,7 @@ void ajouter_coup_tour(t_liste_coups* liste_coups, t_etat_jeu* etat_jeu, int col
 	break_flag = 0;
 	while (verifier_position_plateau_jeu_valide(colonne, ligne) && !break_flag)
 	{//S'il y avait une piece sur la case destination, le break_flag s'active et la boucle s'arrête
-		break_flag = ajouter_coup_si_valide(etat_jeu, liste_coups, lig, col, ligne, colonne, pion);
+		break_flag = ajouter_coup_si_valide(etat_jeu, liste_coups, lig, col, ligne, colonne, 0);
 		colonne++;
 	}
 
@@ -534,7 +531,7 @@ void ajouter_coup_tour(t_liste_coups* liste_coups, t_etat_jeu* etat_jeu, int col
 	break_flag = 0;
 	while (verifier_position_plateau_jeu_valide(colonne, ligne) && !break_flag)
 	{//S'il y avait une piece sur la case destination, le break_flag s'active et la boucle s'arrête
-		break_flag = ajouter_coup_si_valide(etat_jeu, liste_coups, lig, col, ligne, colonne, pion);
+		break_flag = ajouter_coup_si_valide(etat_jeu, liste_coups, lig, col, ligne, colonne, 0);
 		colonne--;
 	}
 }
@@ -549,8 +546,6 @@ int verif_roque(t_etat_jeu* jeu)
 void ajouter_coup_roi(t_liste_coups* liste_coups, t_etat_jeu* etat_jeu, int col, int lig,
 					  int check_roq)
 {
-	static int pion = 0; //Variable utilisée pour savoir si on est une piece pion
-
 	/*le roi ne peut bouger que d'une seule case (sauf pour le roque), on peut donc simplement
 	verifier les positions autour de la piece (de -1 a +1 autour du roi)*/
 	for(int lig_dest_offset = -1; lig_dest_offset <= 1; lig_dest_offset++)
@@ -559,7 +554,7 @@ void ajouter_coup_roi(t_liste_coups* liste_coups, t_etat_jeu* etat_jeu, int col,
 			sur le plateau de jeu*/
 			if (verifier_position_plateau_jeu_valide(col + col_dest_offset, lig + lig_dest_offset))
 				ajouter_coup_si_valide(etat_jeu, liste_coups, lig, col, (lig + lig_dest_offset), 
-					                  (col + col_dest_offset), pion);
+					                  (col + col_dest_offset), 0);
 	/*On ajoute les coups de roque possibles pour le joueur à la liste de coups, par rapport à
 	l'état du jeu actuel*/
 	roque_du_roi(etat_jeu, liste_coups, check_roq);
@@ -571,7 +566,6 @@ void ajouter_coup_fou(t_liste_coups* liste_coups, t_etat_jeu* etat_jeu, int col,
 {
 	int ligne;           //ligne de la case destination
 	int colonne;         //colonne de la case destination
-	static int pion = 0; //Variable utilisée pour savoir si on est une piece pion
 	int break_flag = 0;  //Drapeau qui s'active ou bien se desactive
 
 	//Pour aller vers nord-est
@@ -580,7 +574,7 @@ void ajouter_coup_fou(t_liste_coups* liste_coups, t_etat_jeu* etat_jeu, int col,
 	while (verifier_position_plateau_jeu_valide(colonne, ligne) && !break_flag)
 	{ /*S'il y avait une piece sur la case destination, le break_flag s'active et la boucle
 	  s'arrête, car un fou ne peut pas passer par dessus une autre piece*/
-		break_flag = ajouter_coup_si_valide(etat_jeu, liste_coups, lig, col, ligne, colonne, pion);
+		break_flag = ajouter_coup_si_valide(etat_jeu, liste_coups, lig, col, ligne, colonne, 0);
 		ligne--;   //On veut aller vers le haut de la grille
 		colonne++; //On veut aller vers la droite de la grille
 	}
@@ -591,7 +585,7 @@ void ajouter_coup_fou(t_liste_coups* liste_coups, t_etat_jeu* etat_jeu, int col,
 	break_flag = 0;
 	while (verifier_position_plateau_jeu_valide(colonne, ligne) && !break_flag)
 	{//S'il y avait une piece sur la case destination, le break_flag s'active et la boucle s'arrête
-		break_flag = ajouter_coup_si_valide(etat_jeu, liste_coups, lig, col, ligne, colonne, pion);
+		break_flag = ajouter_coup_si_valide(etat_jeu, liste_coups, lig, col, ligne, colonne, 0);
 		ligne--;   //On veut aller vers le haut de la grille
 		colonne--; //On veut aller vers la gauche de la grille 
 	}
@@ -602,7 +596,7 @@ void ajouter_coup_fou(t_liste_coups* liste_coups, t_etat_jeu* etat_jeu, int col,
 	break_flag = 0;
 	while (verifier_position_plateau_jeu_valide(colonne, ligne) && !break_flag)
 	{//S'il y avait une piece sur la case destination, le break_flag s'active et la boucle s'arrête
-		break_flag = ajouter_coup_si_valide(etat_jeu, liste_coups, lig, col, ligne, colonne, pion);
+		break_flag = ajouter_coup_si_valide(etat_jeu, liste_coups, lig, col, ligne, colonne, 0);
 		ligne++;   //On veut aller vers le bas de la grille
 		colonne--; //On veut aller vers la gauche de la grille
 	}
@@ -613,7 +607,7 @@ void ajouter_coup_fou(t_liste_coups* liste_coups, t_etat_jeu* etat_jeu, int col,
 	break_flag = 0;
 	while (verifier_position_plateau_jeu_valide(colonne, ligne) && !break_flag)
 	{//S'il y avait une piece sur la case destination, le break_flag s'active et la boucle s'arrête 
-		break_flag = ajouter_coup_si_valide(etat_jeu, liste_coups, lig, col, ligne, colonne, pion);
+		break_flag = ajouter_coup_si_valide(etat_jeu, liste_coups, lig, col, ligne, colonne, 0);
 		ligne++;   //On veut aller vers le bas de la grille 
 		colonne++; //On veut aller vers la droite de la grille 
 	}
@@ -813,16 +807,8 @@ t_piece jouer_coup(t_etat_jeu* jeu, const t_coup* coup)
 		{
 			set_piece_case(jeu, (t_piece)(DAME_N + joueur), coup->col_dest, coup->lig_dest);
 
-			//Si on fait une promotion et que le joueur est noir, on fait +8 au score
-			if (joueur == NOIRS)
-			{
-				jeu->score_grille += 8;
-			}
-			//Sinon on fait -8 
-			else
-			{
-				jeu->score_grille -= 8;
-			}
+			//Si on fait une promotion et que le joueur est noir, on fait +8 au score, sinon -8
+				jeu->score_grille += sens_du_jeu(jeu)*BLANCS;
 		}
 		//Sinon, on peut placer la pièce à déplacer dans la case destination
 		else
