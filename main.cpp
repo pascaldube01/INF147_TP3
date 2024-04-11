@@ -29,9 +29,56 @@
 /*                       LES PROTOTYPES                    */
 /*=========================================================*/
 
+/************************************************************************************************
+	OBJECTIF : cette fonction sert a demander au joueur quel coup il veut jouer
+
+	PARAMETRES  : etat_jeu : etat du jeu (grille, joueur courant, etc.)
+				: liste_coup : liste chainee contenant les coups possibles
+				: coup : pointeur dans lequel retourner le coup choisi par le joueur
+	SORTIES :	indique si on a choisi une case sur le jeu ou un bouton
+
+	écrit par Pascal Dubé, Victor Poulin et Simon Des-Alliers
+**************************************************************************************************/
 t_saisie saisir_coup(t_etat_jeu* jeu, t_liste_coups* liste_coups, t_coup* coup);
-int min_max(t_etat_jeu* jeu0, t_coup* coup, int niveau, int max_niveau, t_table_CP tab_CP, int tab_score[]);
+
+/************************************************************************************************
+	OBJECTIF : algorithme qui decide (recursivement) le prochain coup de l'ia
+
+	PARAMETRES  : jeu0 : l'etat du jeu a l'entree de cette iteration de minmax 
+				: t_coup : un pointeur pour retourner le coup choisi une fois la selection terminee
+				: niveau : le present niveau de recursion
+				: max_niveau : le niveau de recursion maximal (depend de la difficultee choisie)
+				: tab_CP : le pointeur contenant le tableau de la continuation principale
+				: tab_score : utilise pour verifier si on doit arreter l'exploration d'une branche
+					qui serait trop mauvaise
+	SORTIES :	grille de jeu initialisee
+
+	écrit par Pascal Dubé, Victor Poulin et Simon Des-Alliers
+**************************************************************************************************/
+int min_max(t_etat_jeu* jeu0, t_coup* coup, int niveau, int max_niveau, t_table_CP tab_CP,
+			int tab_score[]);
+
+/************************************************************************************************
+	OBJECTIF : copie un etat de jeu a une autre addresse
+
+	PARAMETRES  : jeu0 : jeu de source
+				: jeu1 : jeu de destination
+	SORTIES :	copie des donnees seulement
+
+	écrit par Pascal Dubé, Victor Poulin et Simon Des-Alliers
+**************************************************************************************************/
 void copier_etat_jeu(t_etat_jeu *jeu0, t_etat_jeu *jeu1);
+
+/************************************************************************************************
+	OBJECTIF : remet le jeu a son etat initial
+
+	PARAMETRES  : jeu : etat actuel du jeu a reinitialiser
+				: liste_coups : la liste de coups a vider
+
+	SORTIES :	aucune sortie directe
+
+	écrit par Pascal Dubé, Victor Poulin et Simon Des-Alliers
+**************************************************************************************************/
 void faire_un_reset(t_liste_coups* liste_coups, t_etat_jeu* jeu);
 
 /*************************************************************************************************
