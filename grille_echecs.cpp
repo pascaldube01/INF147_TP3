@@ -914,7 +914,7 @@ void imprimer_grille_fich(const t_etat_jeu* jeu, FILE* fich_log)
 /***********************************************************************************************/
 void ecrire_coup_log_file(int joueur, t_coup * coup, FILE * log_file)
 {
-	//On écrit la couleur couleur du joueur et le coup
+	//On écrit la couleur du joueur et le coup
 	fprintf(log_file, "\n");
 	if (joueur)
 		fprintf(log_file, "BLANC");
