@@ -43,6 +43,11 @@
 /*                     t_grille creer_grille(void)                                       */
 /*                     void detruire_grille(t_grille jeu)                                */
 /*                     int verifier_alloc_grille(t_grille jeu)                           */
+/*                     void mise_a_jour_score(t_etat_jeu* jeu, int capture)              */
+/*                     int get_score_grille(const t_etat_jeu* jeu)                       */
+/*                     void imprimer_grille_fich(const t_etat_jeu* jeu, FILE* fich_log)  */
+/*                     void ecrire_coup_log_file(int joueur, t_coup* coup,               */
+/*                          FILE* log_file)                                              */
 /*****************************************************************************************/
 
 /*=========================================================*/
@@ -909,6 +914,7 @@ void imprimer_grille_fich(const t_etat_jeu* jeu, FILE* fich_log)
 	}
 }
 
+/***********************************************************************************************/
 void ecrire_coup_log_file(int joueur, t_coup * coup, FILE * log_file)
 {
 	fprintf(log_file, "\n");
