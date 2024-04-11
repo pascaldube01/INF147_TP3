@@ -295,7 +295,8 @@ int main()
 
 	while(max_niveau <=0 || max_niveau >= 4)
 	{
-		printf("niveaux de difficulte : \n\n 1 - facile\n\n 2 - moyen\n\n 3 - difficile\n\n choix :");
+		printf("Bonjour je m'appelle Maitre ROCH\n\n");
+		printf("Veuillez choisir votre niveau de jeu : \n\n 1 - debutant\n\n 2 - intermediaire\n\n 3 - expert\n\n choix :");
 		scanf("%d", &max_niveau);
 		FFLUSH();
 	}
