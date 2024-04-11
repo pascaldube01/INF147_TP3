@@ -107,4 +107,16 @@ void initialiser_grille_test_roi(t_grille grille_jeu);
 **************************************************************************************************/
 void initialiser_grille_test_roque_roi(t_grille grille_jeu);
 
+/************************************************************************************************
+	OBJECTIF : Cette fonction initialise la grille de jeu avec une certaine configuration pour
+			   tester differentes configuration rapidement
+
+	PARAMETRES : grille_jeu :  la grille de jeu qui doit être initialisée
+								(c'est un tableau donc un pointeur)
+	SORTIES :	grille de jeu initialisee
+
+	écrit par Pascal Dubé, Victor Poulin et Simon Des-Alliers
+**************************************************************************************************/
+void initialiser_grille_test_debug(t_grille grille_jeu);
+
 #endif
