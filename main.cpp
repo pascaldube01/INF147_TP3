@@ -510,6 +510,8 @@ void faire_un_reset(t_liste_coups* liste_coups, t_etat_jeu* jeu)
 	init_liste_coups(liste_coups);
 	/*On affiche la grille nouvellement créer*/
 	afficher_grille(jeu);
+	/*on remet le score a 0*/
+	afficher_score(0);
 	/*On affiche un messsage de reset sur le terminal*/
 	printf("\nRESET du jeu");
 }
