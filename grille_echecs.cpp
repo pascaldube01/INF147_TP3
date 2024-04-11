@@ -233,24 +233,28 @@ void init_jeu(t_etat_jeu* grille_jeu, int joueur_dep)
 /************************************************************************************************/
 int  get_joueur(const t_etat_jeu* jeu)
 {
+	//On retourne le joueur
 	return jeu->joueur;
 }
 
 /************************************************************************************************/
 void set_joueur(t_etat_jeu* jeu, int joueur)
 {
+	//On programme le joueur
 	jeu->joueur = joueur;
 }
 
 /***********************************************************************************************/
 int** get_grille_jeu(const t_etat_jeu* jeu)
 {
+	//On retourne la grille de jeu
 	return (jeu->grille_jeu);
 }
 
 /************************************************************************************************/
 t_piece get_piece_case(const t_etat_jeu* jeu, int col, int ran)
 {
+	//On retourne la pièce à la case souhaitée
 	return (t_piece)jeu->grille_jeu[ran][col];
 }
 
@@ -745,8 +749,6 @@ void roque_du_roi(t_etat_jeu* jeu, t_liste_coups* liste, int check_roq)
 				//on réinverse le joueur 
 				set_joueur(jeu, joueur);
 				detruire_liste_coups(&coups_tmp);
-				
-				
 			}
 		}
 	}
@@ -780,6 +782,7 @@ t_piece jouer_coup(t_etat_jeu* jeu, const t_coup* coup)
 		//On met donc le type VIDE_EP à cette case
 		if (piece_case_secondaire == VIDE)
 			set_piece_case(jeu, VIDE_EP, coup->col_case2, coup->lig_case2);
+
 		/*Si la pièce à la case destination est de type VIDE_EP*/
 		else if (piece_case_destination == VIDE_EP)
 		{
@@ -805,6 +808,7 @@ t_piece jouer_coup(t_etat_jeu* jeu, const t_coup* coup)
 	//Si on veut déplacer une tour qui n'a pas encore été déplacée on doit modifier la valeur
 	if (piece_a_deplacer == TOURI_N + joueur)
 		set_piece_case(jeu, (t_piece)(TOUR_N + joueur), coup->col_dest, coup->lig_dest);
+
 	//Sinon, si on veut déplacer un pion qui est à l'extrémité de la grille 
 	else if (piece_a_deplacer == PION_N + joueur)
 	{
@@ -896,7 +900,7 @@ int get_score_grille(const t_etat_jeu* jeu)
 void imprimer_grille_fich(const t_etat_jeu* jeu, FILE* fich_log)
 {
 	fprintf(fich_log, "\n");
-	/*on parcour la grille de case en case et on ecrit ce qu'il y a dans le fichier texte*/
+	/*on parcourt la grille de case en case et on ecrit ce qu'il y a dans le fichier texte*/
 	for (int i = 0; i < TAILLE; i++)
 	{
 		fprintf(fich_log, "\n");
@@ -910,6 +914,7 @@ void imprimer_grille_fich(const t_etat_jeu* jeu, FILE* fich_log)
 /***********************************************************************************************/
 void ecrire_coup_log_file(int joueur, t_coup * coup, FILE * log_file)
 {
+	//On écrit la couleur couleur du joueur et le coup
 	fprintf(log_file, "\n");
 	if (joueur)
 		fprintf(log_file, "BLANC");
