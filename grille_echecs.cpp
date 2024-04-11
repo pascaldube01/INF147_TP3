@@ -517,7 +517,7 @@ void ajouter_coup_tour(t_liste_coups* liste_coups, t_etat_jeu* etat_jeu, int col
 	ligne = lig + 1;
 	break_flag = 0;
 	while (verifier_position_plateau_jeu_valide(colonne, ligne) && !break_flag)
-	{ //S'il y avait une piece sur la case destination, le break_flag s'active et la boucle s'arrête
+	{//S'il y avait une piece sur la case destination, le break_flag s'active et la boucle s'arrête
 		break_flag = ajouter_coup_si_valide(etat_jeu, liste_coups, lig, col, ligne, colonne, 0);
 		ligne++;
 	}

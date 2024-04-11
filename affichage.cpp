@@ -233,7 +233,6 @@ void afficher_coup(t_piece piece_src, int col_src, int ran_src,
 			vide_origine->header.width,
 			vide_origine->image_data);
 
-
 		delai_ecran(200);
 	}
 }

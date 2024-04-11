@@ -46,8 +46,8 @@ typedef enum { QUITTER = -1, RESET, POS_VALIDE } t_saisie;
 /*-------------------------------------------------------------------*/
 
 //Permet de retourner 1 ou 0 dépendamment de la parité de la case
-//#define PALE_FONCER(i, j) ((((i) + (j)) % 2) ? 1 : 0);
 #define PALE_FONCER(i, j) ((((i)+(j)) % 2) ? 1:0)
+
 /*-------------------------------------------------------------------*/
 /*                       FONCTIONS PUBLIQUES                         */
 /*-------------------------------------------------------------------*/
