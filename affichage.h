@@ -15,7 +15,6 @@
 #include"utilitaire_affichage.h"
 #include"grille_echecs.h"
 #include"SOURISLIB.h"
-#include "winBGIm.h"
 
 //position du bouton-Abandon
 #define POSY_BOUT_QUIT   20
