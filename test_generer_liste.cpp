@@ -12,6 +12,7 @@
 /*                      void initialiser_grille_test_cavalier(t_grille grille_jeu)     */
 /*                      void initialiser_grille_test_roi(t_grille grille_jeu)          */
 /*                      void initialiser_grille_test_roque_roi(t_grille grille_jeu)    */
+/*						void initialiser_grille_test_debug(t_grille grille_jeu)        */
 /***************************************************************************************/
 
 /*=========================================================*/
@@ -169,4 +170,18 @@ void initialiser_grille_test_roque_roi(t_grille grille_jeu)
 			grille_jeu[0][0] = TOURI_N;
 			grille_jeu[0][7] = TOURI_N;
 	}
+}
+
+
+/*****************************************************************************/
+void initialiser_grille_test_debug(t_grille grille_jeu)
+{
+	/*l'ordre des pieces sur la premiere et derniere ligne est cree comme suit il sera copie dans
+les lignes directement. Comme se sont les pieces noires il faudra ajouter 8 a chaque valeurs
+pour les changer en blanches lors de la copie*/
+	t_piece lignes_de_pieces[8] = { TOURI_N, CAV_N, FOU_N, DAME_N, ROI_N, FOU_N, CAV_N, TOURI_N };
+
+
+	grille_jeu[1][1] = PION_B;
+	grille_jeu[6][6] = PION_N;
 }

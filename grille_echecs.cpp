@@ -61,6 +61,7 @@
 #define TESTER_FOU 0		//Permet de tester la pièce du fou seulement
 #define TESTER_ROQUE 0		//Permet de tester la condition du roque du roi
 #define NORMAL 1			//Fonctionnement du jeu normal normal (avec toutes les pièces)
+#define TESTER_DEBUG 0		//debug vide pour faire des tests rapide
 
 const int PTS_PIECES[16] = { 0,  1,  5,  5,  3,  3,  9,  100,   //NOIRS  = points positifs
 				             0, -1, -5, -5, -3, -3, -9, -100 }; //BLANCS = points négatifs
@@ -210,6 +211,9 @@ void init_jeu(t_etat_jeu* grille_jeu, int joueur_dep)
 #if TESTER_ROQUE == 1
 		initialiser_grille_test_roque_roi(get_grille_jeu(grille_jeu));
 #endif
+#if TESTER_DEBUG == 1
+		initialiser_grille_test_debug(get_grille_jeu(grille_jeu));
+#endif
 		/*grille du programme normal*/
 #if NORMAL == 1
 		initialiser_grille(get_grille_jeu(grille_jeu));
@@ -270,7 +274,7 @@ int generer_liste_coups(t_etat_jeu* jeu, t_liste_coups* liste_coups, int check_r
 {
 	/*il faut faire tous les coups possibles pour toutes les pieces, on parcout la grille au
 	complet et, dependament de quelle piece il s'agit, on ajoute les coups possible a la grille*/
-	for (int rangee = 0; rangee < TAILLE; rangee++)
+	for (int rangee = TAILLE -1; rangee >= 0; rangee--)
 	{
 		for (int colonne = 0; colonne < TAILLE; colonne++)
 		{
