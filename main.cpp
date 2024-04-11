@@ -362,6 +362,8 @@ int main()
 			{
 				/*On fait un reset*/
 				faire_un_reset(&liste_coups, &etat_jeu);
+				fprintf(log_file, "\n\n\n ---RESET DU JEU---");
+				imprimer_grille_fich(&etat_jeu, log_file);
 				/*generation de la liste de coups en partant de la grille actuelle*/
 				generer_liste_coups(&etat_jeu, &liste_coups, verif_roque(&etat_jeu));
 				/*affichage du nombre de coups possible*/
