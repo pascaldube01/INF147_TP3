@@ -24,7 +24,7 @@
 /*                       t_coup choix_coup_ordi(t_liste_coups* liste_coups)               */
 /*                       void afficher_liste_coups(t_liste_coups* liste_coups)            */
 /*                       void detruire_liste_coups(t_liste_coups* liste_coups)            */
-/*                       int liste_est_vide(t_liste_coups* liste)                         */
+/*                       void detruire_un_coup(t_liste_coups* liste_coups)                */
 /*                                                                                        */
 /******************************************************************************************/
 
@@ -193,7 +193,8 @@ int ajouter_coup_debut(t_liste_coups* liste_coups, const t_coup* coup)
 	element = (t_lien)malloc(sizeof(t_lien));
 
 	//On vérifie que l'allocation dynamique s'est bien effectuée
-	if (element == NULL) {
+	if (element == NULL)
+	{
 		return 0;
 	}
 
@@ -224,7 +225,6 @@ int ajouter_coup_debut(t_liste_coups* liste_coups, const t_coup* coup)
 	//On incrémente le nombre de noeud, car on ajoute un nouvel élément
 	liste_coups->nb_noeuds++;
 	return 1;
-
 }
 
 /*****************************************************************************/

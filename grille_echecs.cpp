@@ -147,6 +147,7 @@ static int ajouter_coup_si_valide(t_etat_jeu *etat_jeu, t_liste_coups *liste_cou
 		if (COMPARER_TYPE(piece_destination, joueur_adverse))
 		{
 			set_coup(&coup, col, lig, col_dest, lig_dest, POS_VIDE, POS_VIDE);
+
 			ajouter_coup_debut(liste_coups, &coup);
 		}
 		/*On retourne 1 car on veut activer les break_flag de la tour et du fou,
