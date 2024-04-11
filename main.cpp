@@ -30,8 +30,9 @@
 /*=========================================================*/
 
 t_saisie saisir_coup(t_etat_jeu* jeu, t_liste_coups* liste_coups, t_coup* coup);
-int min_max(t_etat_jeu* jeu0, t_coup* coup, int niveau, int max_niveau, t_table_CP tab_CP);
+int min_max(t_etat_jeu* jeu0, t_coup* coup, int niveau, int max_niveau, t_table_CP tab_CP, int tab_score[]);
 void copier_etat_jeu(t_etat_jeu *jeu0, t_etat_jeu *jeu1);
+void faire_un_reset(t_liste_coups* liste_coups, t_etat_jeu* jeu);
 
 /*=========================================================*/
 /*                  LES CONSTANTES                         */
@@ -39,6 +40,9 @@ void copier_etat_jeu(t_etat_jeu *jeu0, t_etat_jeu *jeu1);
 
 //Le fichier contenant les images
 #define FICHIER_IMAGES "imagesBMP.bin"
+
+/*le nombre maximal de recursion de minmax sur la plus grande difficultee*/
+#define MAX_NIV 6
 
 /*activation du main de test pour verifier le bon fonctionnement de toutes les fonctions du module
 liste_coup.c*/
@@ -239,7 +243,6 @@ int main()
 /*=========================================================*/
  
 #if JOUER_UNE_PARTIE_BGI == 1
-void faire_un_reset(t_liste_coups* liste_coups, t_etat_jeu* jeu);
 int main()
 {
 	/*piece qui a ete capturee (s'il y en a une), utilise pour terminer le jeu si on capture
@@ -264,7 +267,9 @@ int main()
 	//Le niveau maximal qu'on souhaite atteindre (4 = intermédiaire; 6 = expert)
 	int max_niveau = 0; 
 	/*variable qui servira a afficher les coups que l'ordinateur a calcule dans la console*/
-	t_table_CP tab_CP = creer_table_CP(6);
+	t_table_CP tab_CP = creer_table_CP(MAX_NIV);
+	/*utilise pour garder le score de alpha_beta*/
+	int tab_score[MAX_NIV];
 
 	/*on demande le niveaux de difficulte voulu au joueur dans la console*/
 	printf("niveaux de difficulte : \n\n 1 - facile\n\n 2 - moyen\n\n 3 - difficile\n\n choix :");
@@ -343,7 +348,7 @@ int main()
 			/*si c'est le tour de l'ordi, il joue un coup au hasard, on l'affiche et on le joue*/
 			afficher_message("Attendez SVP, je réfléchis...");
 			//coup = choix_coup_ordi(&liste_coups);
-			min_max(&etat_jeu, &coup, 2, max_niveau, tab_CP);
+			min_max(&etat_jeu, &coup, 2, max_niveau, tab_CP, tab_score);
 			imprimer_table_CP(tab_CP, max_niveau);
 		}
 		if (capture != ROI_N + INVERSER_JOUEUR(get_joueur(&etat_jeu)))
@@ -493,13 +498,11 @@ t_saisie saisir_coup(t_etat_jeu* jeu, t_liste_coups* liste_coups, t_coup* coup)
 
 /******************************************************************************/
 
-int min_max(t_etat_jeu* jeu0, t_coup* coup, int niveau, int max_niveau, t_table_CP tab_CP)
+int min_max(t_etat_jeu* jeu0, t_coup* coup, int niveau, int max_niveau, t_table_CP tab_CP, int tab_score[])
 {
 	t_liste_coups liste_coups_ordi;    //Liste de coups des noirs
 	t_liste_coups liste_coups_joueur;  //Liste de coups des blancs
 
-	int min;                           //Valeur minimale
-	int max;                           //Valeur maximale
 	int valeur_grille = 0;             //Valeur grille
 
 	t_coup coupOrdi;                   //Coup joué par l'ordinateur
@@ -523,7 +526,10 @@ int min_max(t_etat_jeu* jeu0, t_coup* coup, int niveau, int max_niveau, t_table_
 	generer_liste_coups(jeu0, &liste_coups_ordi, verif_roque(jeu0));
 
 	//Une valeur minimale de départ
-	max = -999;
+	if (niveau <= 2)
+		tab_score[niveau - 2] = -999;
+	else
+		tab_score[niveau - 2] = tab_score[niveau - 4];
 
 	//On remet le pc au début
 	replacer_pc_debut(&liste_coups_ordi);
@@ -555,7 +561,9 @@ int min_max(t_etat_jeu* jeu0, t_coup* coup, int niveau, int max_niveau, t_table_
 		plus la valeur est petite, plus le coup du joueur est bon*/
 
 		//Une valeur maximale de départ
-		min = 999;
+		tab_score[niveau-1] = 999;
+		if (niveau > 2)
+			tab_score[niveau - 1] = tab_score[niveau - 3];
 
 		replacer_pc_debut(&liste_coups_joueur);
 
@@ -585,25 +593,29 @@ int min_max(t_etat_jeu* jeu0, t_coup* coup, int niveau, int max_niveau, t_table_
 			else
 			{
 				//Effectuer la récursion avec une profondeur plus élevée
-				valeur_grille = min_max(&jeu2, coup, niveau + 2, max_niveau, tab_CP);
+				valeur_grille = min_max(&jeu2, coup, niveau + 2, max_niveau, tab_CP, tab_score);
 			}
 
 
-			if (valeur_grille < min)
+			if (valeur_grille < tab_score[niveau-1])
 			{
-				min = valeur_grille;
+				tab_score[niveau-1] = valeur_grille;
 				mise_a_jour_CP(tab_CP, niveau-1, max_niveau, coupJr.texte_coup);
+				if (tab_score[niveau - 1] <= tab_score[niveau - 2])
+					break;
 			}   
 		}
 
 	   /* Si le meilleur coup du joueur quand l’ordi a joué le coupOrdi */
 	   /* donne un meilleur pointage (max) que le celui du coup maximal */
 	   /* jusqu'à date, alors on garde coupOrdi comme coup maximal.     */
-		if (min > max)
+		if (tab_score[niveau-1] > tab_score[niveau-2])
 		{
-			max = min;
+			tab_score[niveau-2] = tab_score[niveau-1];
 			coup_max = coupOrdi;
 			mise_a_jour_CP(tab_CP, niveau - 2, max_niveau, coupOrdi.texte_coup);
+			if (niveau > 2 && tab_score[niveau - 2] >= tab_score[niveau - 3])
+				break;
 		}
 
 		//On vide la liste du joueur
@@ -620,7 +632,7 @@ int min_max(t_etat_jeu* jeu0, t_coup* coup, int niveau, int max_niveau, t_table_
 	detruire_grille(jeu1.grille_jeu);
 	detruire_grille(jeu2.grille_jeu);
 
-	return max;
+	return tab_score[niveau -2];
 }
 
 /******************************************************************************/
