@@ -909,7 +909,7 @@ void imprimer_grille_fich(const t_etat_jeu* jeu, FILE* fich_log)
 		fprintf(fich_log, "\n");
 		for (int j = 0; j < TAILLE; j++)
 		{
-			fprintf(fich_log, "%2d ", get_piece_case(jeu, j, i));
+			fprintf(fich_log, "%3d ", get_piece_case(jeu, j, i));
 		}
 	}
 }
