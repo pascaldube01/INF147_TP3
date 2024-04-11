@@ -643,6 +643,9 @@ int min_max(t_etat_jeu* jeu0, t_coup* coup, int niveau, int max_niveau, t_table_
 			}   
 		}
 
+		//On vide la liste du joueur
+		vider_liste_coups(&liste_coups_joueur);
+
 	   /* Si le meilleur coup du joueur quand l’ordi a joué le coupOrdi */
 	   /* donne un meilleur pointage (max) que le celui du coup maximal */
 	   /* jusqu'à date, alors on garde coupOrdi comme coup maximal.     */
@@ -655,8 +658,7 @@ int min_max(t_etat_jeu* jeu0, t_coup* coup, int niveau, int max_niveau, t_table_
 				break;
 		}
 
-		//On vide la liste du joueur
-		vider_liste_coups(&liste_coups_joueur);
+
 	}
 
 	//On vide la liste de l'ordi
