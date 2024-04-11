@@ -34,6 +34,18 @@ int min_max(t_etat_jeu* jeu0, t_coup* coup, int niveau, int max_niveau, t_table_
 void copier_etat_jeu(t_etat_jeu *jeu0, t_etat_jeu *jeu1);
 void faire_un_reset(t_liste_coups* liste_coups, t_etat_jeu* jeu);
 
+/*************************************************************************************************
+	OBJECTIF : cette macrofonction nettoie le buffer d'entree de scanf
+
+	PARAMETRES : aucun
+	SORTIES :	aucune
+
+	SPEC :
+
+	Ecrit par Pascal Dube, Victor Poulin et Simon Des-Alliers
+**************************************************************************************************/
+#define FFLUSH() while(getchar() != '\n') {}
+
 /*=========================================================*/
 /*                  LES CONSTANTES                         */
 /*=========================================================*/
@@ -58,6 +70,10 @@ liste_coup.c*/
 
 /*activation du main pour faire rouler le programme principal en mode graphique */
 #define JOUER_UNE_PARTIE_BGI 1
+
+
+
+
 
 /*=========================================================*/
 /*                  PROGRAMME DE TESTS                     */
@@ -276,8 +292,14 @@ int main()
 	assert(log_file);
 
 	/*on demande le niveaux de difficulte voulu au joueur dans la console*/
-	printf("niveaux de difficulte : \n\n 1 - facile\n\n 2 - moyen\n\n 3 - difficile\n\n choix :");
-	scanf("%d", &max_niveau);
+
+	while(max_niveau <=0 || max_niveau >= 4)
+	{
+		printf("niveaux de difficulte : \n\n 1 - facile\n\n 2 - moyen\n\n 3 - difficile\n\n choix :");
+		scanf("%d", &max_niveau);
+		FFLUSH();
+	}
+
 	max_niveau *= 2;
 
 	fprintf(log_file, "NIVEAU DE DIFFICULTE : %d", max_niveau);
