@@ -26,7 +26,7 @@
 #include "continuation_principale.h"
 
 /*=========================================================*/
-/*                           prototypes                    */
+/*                       LES PROTOTYPES                    */
 /*=========================================================*/
 
 /************************************************************************************************
@@ -117,10 +117,6 @@ liste_coup.c*/
 
 /*activation du main pour faire rouler le programme principal en mode graphique */
 #define JOUER_UNE_PARTIE_BGI 1
-
-
-
-
 
 /*=========================================================*/
 /*                  PROGRAMME DE TESTS                     */
@@ -311,35 +307,45 @@ int main()
 	/*piece qui a ete capturee (s'il y en a une), utilise pour terminer le jeu si on capture
 	un roi*/
 	t_piece capture = VIDE;
+
 	/*coup (complet) qui sera retourne par valider_coup()*/
 	t_coup coup;
+
 	/*la variable etat_jeu sert a contenir l'etat du jeu courant (permission pour le roque,
 	grille de jeu et joueur courant)*/
 	t_etat_jeu etat_jeu;
+
 	/*contiens la selection du joueur (boutons ou plateau de jeu)*/
 	t_saisie bouton_clique = POS_VALIDE;
+
 	/*indique le succes de la lecture du fichier contenant les bitmaps des pieces*/
 	int succes_lire_images = 1;
+
 	/*flag indiquant qu'il faut remettre le jeu a 0 (joueur a clique sur reset)*/
 	int flag_reset = 0;
+
 	/*la liste de coup, etant une structure, elle doit etre initialisee dans la fonction
 	init_liste_coup*/
 	t_liste_coups liste_coups;
+
 	/*Le score de la grille*/
 	int score = 0;
+
 	//Le niveau maximal qu'on souhaite atteindre (4 = intermédiaire; 6 = expert)
 	int max_niveau = 0; 
+
 	/*variable qui servira a afficher les coups que l'ordinateur a calcule dans la console*/
 	t_table_CP tab_CP = creer_table_CP(MAX_NIV);
+
 	/*utilise pour garder le score de alpha_beta*/
 	int tab_score[MAX_NIV];
+
 	/*logfile du deroulement du jeu, on ouvre le fichier en "w+" car on veut creer un fichier vide
 	pour toutes les parties on verifie egalement si le fichier s'est bien ouvert*/
 	FILE* log_file = fopen("logfile_jeu.txt", "w+");
 	assert(log_file);
 
-	/*on demande le niveaux de difficulte voulu au joueur dans la console*/
-
+	/*on demande le niveau de difficulté voulu au joueur dans la console*/
 	while(max_niveau <=0 || max_niveau >= 4)
 	{
 		printf("Bonjour je m'appelle Maitre ROCH\n\n");
@@ -351,7 +357,6 @@ int main()
 	max_niveau *= 2;
 
 	fprintf(log_file, "NIVEAU DE DIFFICULTE : %d", max_niveau);
-
 
 	/*ouverture de la fenetre graphique*/
 	init_graphe();
@@ -371,7 +376,6 @@ int main()
 	afficher_bouton(POSY_BOUT_QUIT, POSX_BOUT_QUIT, "ABANDONNER");
 	afficher_bouton(POSY_BOUT_RESET, POSX_BOUT_RESET, "RECOMMENCER");
 
-	
 	/*pour debug*/
 	printf("\ninit du jeu");
 
@@ -459,7 +463,7 @@ int main()
 				afficher_gagnant(get_joueur(&etat_jeu));
 			else
 			{
-				/*apres avoir affiche le mouvement de la piece (avec afficher_coup()), on doit
+			/*apres avoir affiche le mouvement de la piece (avec afficher_coup()), on doit
 			re-afficher la grille au complet pour pouvoir voir les coups plus complexes
 			(roque, promotion et en passant)*/
 				afficher_grille(&etat_jeu);
@@ -533,6 +537,7 @@ t_saisie saisir_coup(t_etat_jeu* jeu, t_liste_coups* liste_coups, t_coup* coup)
 			/*demande d'une case au joueur*/
 			bouton_clique = choix_case(&col_choisi[i], &lig_choisi[i]);
 
+			//Si le bouton n'est pas RESET ou QUITTER 
 			if (bouton_clique != RESET && bouton_clique != QUITTER)
 			{
 				//On demande la case-destination au joueur
@@ -549,13 +554,6 @@ t_saisie saisir_coup(t_etat_jeu* jeu, t_liste_coups* liste_coups, t_coup* coup)
 			case QUITTER: //fin du jeu
 				return QUITTER;
 			}
-
-/*			//Affiche sur la console les cases choisies
-			if (!i)
-				printf("\nchoix de la case source : %d, %d", lig_choisi[i], col_choisi[i]);
-			else
-				printf("\nchoix de la case destination : %d, %d", lig_choisi[i], col_choisi[i]);
-*/
 		}
 
 		/*pour pouvoir chercher le coup avec valider coup, il faut construire sa string*/
@@ -571,7 +569,6 @@ t_saisie saisir_coup(t_etat_jeu* jeu, t_liste_coups* liste_coups, t_coup* coup)
 		if (valider_coup(liste_coups, coup_input_string, coup))
 		{
 			coup_valide = 0;
-			/*si le coup est valide, on affiche et joue le coup*/
 		}
 		else //Si le coup n'est opas valide, on affiche un message d'erreur
 		{	
@@ -595,7 +592,7 @@ int min_max(t_etat_jeu* jeu0, t_coup* coup, int niveau, int max_niveau, t_table_
 
 	t_coup coupOrdi;                   //Coup joué par l'ordinateur
 	t_coup coupJr;                     //Coup joué par l'ordinateur
-	t_coup coup_max = { COUP_VIDE };           //Coup maximal
+	t_coup coup_max = { COUP_VIDE };   //Coup maximal
 
 	t_etat_jeu jeu1;                   //État du jeu après 1 coup
 	t_etat_jeu jeu2;                   //État du jeu après 2 coup
@@ -626,8 +623,6 @@ int min_max(t_etat_jeu* jeu0, t_coup* coup, int niveau, int max_niveau, t_table_
 	for (int i = 0; i < get_nb_coups(&liste_coups_ordi); i++)
 	{
 		//On fait une copie de l'état de jeu actuel
-		//jeu1.grille_jeu = jeu0->grille_jeu;
-		//jeu1.joueur = jeu0->joueur;
 		copier_etat_jeu(jeu0, &jeu1);
 
 		//On effectue le coup
@@ -635,18 +630,15 @@ int min_max(t_etat_jeu* jeu0, t_coup* coup, int niveau, int max_niveau, t_table_
 
 		//On avance le pointeur courant
 		avancer_pc(&liste_coups_ordi);
+
 		/*On effectue la mise a jour du score*/
 		mise_a_jour_score(&jeu1, jouer_coup(&jeu1, &coupOrdi));
+
 		//Changer de joueur dans l'état de jeu 1
 		jeu1.joueur = INVERSER_JOUEUR(jeu1.joueur);
 		
 		//Génération des coups du joueur à partir du jeu1
 		generer_liste_coups(&jeu1, &liste_coups_joueur, verif_roque(&jeu1));
-
-
-		/*NIVEAU 1: On cherche le meilleur coup possible (le MIN) du 
-		joueur si l'ordi joue le coup coupOrdi. Il est à noter que
-		plus la valeur est petite, plus le coup du joueur est bon*/
 
 		//Une valeur maximale de départ
 		tab_score[niveau-1] = 999;
@@ -668,7 +660,7 @@ int min_max(t_etat_jeu* jeu0, t_coup* coup, int niveau, int max_niveau, t_table_
 			//On avance le pointeur courant
 			avancer_pc(&liste_coups_joueur);
 
-			//revenir au 1ier joueur dans l’état jeu2 
+			//revenir au 1er joueur dans l’état jeu2 
 			jeu2.joueur = INVERSER_JOUEUR(jeu2.joueur);
 
 			//Appel récursif
@@ -684,7 +676,6 @@ int min_max(t_etat_jeu* jeu0, t_coup* coup, int niveau, int max_niveau, t_table_
 				valeur_grille = min_max(&jeu2, coup, niveau + 2, max_niveau, tab_CP, tab_score);
 			}
 
-
 			if (valeur_grille < tab_score[niveau-1])
 			{
 				tab_score[niveau-1] = valeur_grille;
@@ -697,9 +688,9 @@ int min_max(t_etat_jeu* jeu0, t_coup* coup, int niveau, int max_niveau, t_table_
 		//On vide la liste du joueur
 		vider_liste_coups(&liste_coups_joueur);
 
-	   /* Si le meilleur coup du joueur quand l’ordi a joué le coupOrdi */
-	   /* donne un meilleur pointage (max) que le celui du coup maximal */
-	   /* jusqu'à date, alors on garde coupOrdi comme coup maximal.     */
+	   /* Si le meilleur coup du joueur quand coupOrdi a été joué */
+	   /* donne un meilleur coup que le celui du coup max         */
+	   /* alors, on garde coupOrdi comme coup max.                */
 		if (tab_score[niveau-1] > tab_score[niveau-2])
 		{
 			tab_score[niveau-2] = tab_score[niveau-1];
@@ -726,6 +717,7 @@ int min_max(t_etat_jeu* jeu0, t_coup* coup, int niveau, int max_niveau, t_table_
 }
 
 /******************************************************************************/
+
 void copier_etat_jeu(t_etat_jeu *jeu, t_etat_jeu *jeu_copie)
 {
 	/*la grille de jeu est un double pointeur (8x8), on copie donc les lignes une a une*/
