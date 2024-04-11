@@ -315,12 +315,18 @@ void detruire_liste_coups(t_liste_coups* liste_coups)
 void detruire_un_coup(t_liste_coups* liste_coups)
 {
 	t_lien ptr_debut; //Pointeur sur le coup à supprimer
+
 	/*On le met au début de la liste*/
 	ptr_debut = liste_coups->tete;
+
 	/*On met la tete sur le noeud suivant*/
 	liste_coups->tete = liste_coups->tete->suivant;  
+
+	/*On replace le pointeur courant au début*/
 	replacer_pc_debut(liste_coups);
+
 	//On libère la tête
 	free(ptr_debut);
+
 	ptr_debut = NULL;
 }

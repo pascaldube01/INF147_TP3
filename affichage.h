@@ -1,13 +1,23 @@
 /*******************************************************************************
-    AFFICHAGE.H  (version pour le TP3)
-    Auteurs :
+    AFFICHAGE.H 
+    Auteurs :Éric Thé et modifié par Victor Poulin, Pascal Dube et Simon Des-Alliers   
+    Date: 18 mars 2024
 
     Module qui contient les fonctions de gestion de l'affichage de la grille et
     des coups jouées avec des images Bitmap en mode graphique.
     Les outils et fonctions d'affichages utilisée proviennent du module 
     "utilitaire_affichage.h" et les fonctions de gestion de la souris sont
     importées du module "SOURISLIB.h". Ce module inclut aussi "grille_echecs.h".
+
+    Liste des fonctions:t_saisie choix_case(int* col_case, int* lig_case)
+	                    void afficher_grille(const t_etat_jeu* jeu)
+	                    int lire_images(const char* nom_fich_bin)
+                        void detruire_images()
+                       	void afficher_coup(t_piece piece_src, int col_src, int ran_src,
+	                         t_piece piece_dest, int col_dest, int ran_dest)
+                        void afficher_gagnant(int joueur)
 *******************************************************************************/
+
 #ifndef _AFF_LIB_H
 #define _AFF_LIB_H 1
 
@@ -31,6 +41,12 @@
 //QUITTER = bouton "ABANDONNER", RESET = bouton "RECOMMENCER", POS_VALIDE = une case valide
 typedef enum { QUITTER = -1, RESET, POS_VALIDE } t_saisie;
 
+/*-------------------------------------------------------------------*/
+/*                       MACROFONCTION                               */
+/*-------------------------------------------------------------------*/
+
+//Permet de retourner 1 ou 0 dépendamment de la parité de la case
+#define PALE_FONCER(i,j) ((((i) + (j)) % 2) ? 1 : 0);
 
 /*-------------------------------------------------------------------*/
 /*                       FONCTIONS PUBLIQUES                         */
@@ -64,6 +80,6 @@ void afficher_coup(t_piece piece_src, int col_src, int ran_src,
                    t_piece piece_dest, int col_dest, int ran_dest);
 /*Cette fonction permet d'afficher le gagnant du jeu sur winBGIm                             */
 /*On reçoit la valeur du joueur est paramètre et on affiche un message de victoire           */
-/*personnaliser en fonction du joueur reçu en paramètre.                                      */
+/*personnaliser en fonction du joueur reçu en paramètre.                                     */
 void afficher_gagnant(int joueur);
 #endif

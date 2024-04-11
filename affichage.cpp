@@ -1,9 +1,18 @@
 /*******************************************************************************
 	AFFICHAGE.CPP  (version pour le TP3)
-	Auteurs :
+	Auteurs : Victor Poulin, Pascal Dube et Simon Des-Alliers
+	Date: 18 mars 2024
 
 	Module qui contient les fonctions de gestion de l'affichage de la grille et
 	des coups jouées avec des images Bitmap en mode graphique.
+
+	Liste des fonctions:t_saisie choix_case(int* col_case, int* lig_case)
+	                    void afficher_grille(const t_etat_jeu* jeu)
+	                    int lire_images(const char* nom_fich_bin)
+                        void detruire_images()
+                       	void afficher_coup(t_piece piece_src, int col_src, int ran_src,
+	                         t_piece piece_dest, int col_dest, int ran_dest)
+                        void afficher_gagnant(int joueur)
 *******************************************************************************/
 #define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
@@ -111,12 +120,6 @@ t_saisie choix_case(int* col_case, int* lig_case)
 
 }
 
-static int pale_foncer(int i, int j)
-{
-	//Permet de retourner 1 ou 0 dépendamment de la parité de la case
-	return (i + j) % 2 ? 1 : 0;
-}
-
 void afficher_grille(const t_etat_jeu* jeu)
 {
 	int piece; //Contient la pièce à la colonne et la rangée choisit
@@ -134,9 +137,9 @@ void afficher_grille(const t_etat_jeu* jeu)
 
 			//On affiche la pièce sur la grille
 			afficher_piece(i * TAILLE_BMP, j * TAILLE_BMP, 
-			images[pale_foncer(i, j)][piece].header.height, 
-			images[pale_foncer(i, j)][piece].header.width, 
-			images[pale_foncer(i, j)][piece].image_data);
+			images[PALE_FONCER(i, j)][piece].header.height,
+			images[PALE_FONCER(i, j)][piece].header.width,
+			images[PALE_FONCER(i, j)][piece].image_data);
 		}
 	}
 

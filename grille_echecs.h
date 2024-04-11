@@ -412,7 +412,6 @@ void mise_a_jour_score(t_etat_jeu* jeu, int capture);
 **************************************************************************************************/
 int get_score_grille(const t_etat_jeu* jeu);
 
-
 /************************************************************************************************
 	OBJECTIF : ecrit l'etat de la grille dans un logfile
 
