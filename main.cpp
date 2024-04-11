@@ -680,6 +680,9 @@ int min_max(t_etat_jeu* jeu0, t_coup* coup, int niveau, int max_niveau, t_table_
 				valeur_grille = min_max(&jeu2, coup, niveau + 2, max_niveau, tab_CP, tab_score);
 			}
 
+
+			/*si la valeur est trop basse, on arrete l'exploration de cette branche car les coups
+			sont trop mauvais*/
 			if (valeur_grille < tab_score[niveau-1])
 			{
 				tab_score[niveau-1] = valeur_grille;
