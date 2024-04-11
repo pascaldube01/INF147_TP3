@@ -197,10 +197,10 @@ void afficher_coup(t_piece piece_src, int col_src, int ran_src,
 	t_piece piece_dest, int col_dest, int ran_dest)
 {
 	/*on se sert de pointeurs vers les fichiers images en memoire pour simplifier la lecture*/
-	t_image_BMP * origine_origine = &images[pale_foncer(ran_src, col_src)][piece_src];
-	t_image_BMP * origine_destination = &images[pale_foncer(ran_dest, col_dest)][piece_dest];
-	t_image_BMP * piece_a_destination = &images[pale_foncer(ran_dest, col_dest)][piece_src];
-	t_image_BMP * vide_origine = &images[pale_foncer(ran_src, col_src)][VIDE];
+	t_image_BMP * origine_origine = &images[PALE_FONCER(ran_src, col_src)][piece_src];
+	t_image_BMP * origine_destination = &images[PALE_FONCER(ran_dest, col_dest)][piece_dest];
+	t_image_BMP * piece_a_destination = &images[PALE_FONCER(ran_dest, col_dest)][piece_src];
+	t_image_BMP * vide_origine = &images[PALE_FONCER(ran_src, col_src)][VIDE];
 
 	/*on clignote le coup de son etat present a son etat futur*/
 	for (int i = 0; i < 3; i++)
@@ -252,5 +252,4 @@ void afficher_gagnant(int joueur)
 		afficher_info("Le gagnant est le joueur noir!", joueur);
 		delai_ecran(500);
 	}
-		
 }
