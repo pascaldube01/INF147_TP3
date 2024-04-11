@@ -25,7 +25,6 @@
 /*                       void afficher_liste_coups(t_liste_coups* liste_coups)            */
 /*                       void detruire_liste_coups(t_liste_coups* liste_coups)            */
 /*                       void detruire_un_coup(t_liste_coups* liste_coups)                */
-/*                                                                                        */
 /******************************************************************************************/
 
 #define _CRT_SECURE_NO_WARNINGS
