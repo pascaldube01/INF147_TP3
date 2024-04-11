@@ -100,7 +100,8 @@ t_saisie choix_case(int* col_case, int* lig_case)
 			return RESET;
 		}
 
-		//À partir d'ici, on n'a pas souhaité quitter ou recommencer, donc on vérifie la validité du clic
+		//À partir d'ici, on n'a pas souhaité quitter ou recommencer, donc on vérifie la validité
+		//du clic
 
 		//pour obtenir la position-case équivalente (entre 0 - 7)
 		*col_case = ((*col_case - MARGEX) / TAILLE_BMP);

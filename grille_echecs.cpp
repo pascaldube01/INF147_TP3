@@ -140,7 +140,7 @@ static int ajouter_coup_si_valide(t_etat_jeu *etat_jeu, t_liste_coups *liste_cou
 	}
 	/*si la piece est autre chose, on verifie de quelle piece il s'agit (un joueur peut
 	en manger un autre, mais ne peut pas se manger lui-meme).On peut acceder seulement
-	a cette partie si ce n'est pas un pion, car le pion ne peut manger qu'en diagonale seulement */
+	a cette partie si ce n'est pas un pion, car le pion ne peut manger qu'en diagonale seulement*/
 	else if (!pion)
 	{
 		/*pour verifier si on doit ajouter le coup, il faut tester si la piece destination est
@@ -567,7 +567,7 @@ void ajouter_coup_roi(t_liste_coups* liste_coups, t_etat_jeu* etat_jeu, int col,
 	
 }
 
-/**************************************************************************************************/
+/*************************************************************************************************/
 void ajouter_coup_fou(t_liste_coups* liste_coups, t_etat_jeu* etat_jeu, int col, int lig)
 {
 	int ligne;           //ligne de la case destination
@@ -619,7 +619,7 @@ void ajouter_coup_fou(t_liste_coups* liste_coups, t_etat_jeu* etat_jeu, int col,
 	}
 }
 
-/**************************************************************************************************/
+/*************************************************************************************************/
 void ajouter_coup_dame(t_liste_coups* liste_coups, t_etat_jeu* etat_jeu, int col, int lig)
 {
 	/*La dame est un combinaison du fou et du roi,
@@ -793,7 +793,8 @@ t_piece jouer_coup(t_etat_jeu* jeu, const t_coup* coup)
 		{
 			//Calcul de la colonne qu'on met la tour 
 			//Si on est les blancs (ou les noirs) on va à la ligne 7 (ou 0), colonne 3 (ou 5)
-			set_piece_case(jeu, (t_piece)(TOUR_N + joueur), POS_TOUR(coup->col_case2), ROQUE_ROI(joueur));
+			set_piece_case(jeu, (t_piece)(TOUR_N + joueur), POS_TOUR(coup->col_case2),
+						   ROQUE_ROI(joueur));
 			//On vide la case où il y avait la tour avant le roque 
 			set_piece_case(jeu, VIDE, coup->col_case2, coup->lig_case2);
 			//On désactive la permission de faire le roque pour le joueur
