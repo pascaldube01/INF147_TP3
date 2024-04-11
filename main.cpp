@@ -270,11 +270,17 @@ int main()
 	t_table_CP tab_CP = creer_table_CP(MAX_NIV);
 	/*utilise pour garder le score de alpha_beta*/
 	int tab_score[MAX_NIV];
+	/*logfile du deroulement du jeu, on ouvre le fichier en "w+" car on veut creer un fichier vide
+	pour toutes les parties on verifie egalement si le fichier s'est bien ouvert*/
+	FILE* log_file = fopen("logfile_jeu.txt", "w+");
+	assert(log_file);
 
 	/*on demande le niveaux de difficulte voulu au joueur dans la console*/
 	printf("niveaux de difficulte : \n\n 1 - facile\n\n 2 - moyen\n\n 3 - difficile\n\n choix :");
 	scanf("%d", &max_niveau);
 	max_niveau *= 2;
+
+	fprintf(log_file, "NIVEAU DE DIFFICULTE : %d", max_niveau);
 
 
 	/*ouverture de la fenetre graphique*/
@@ -306,8 +312,9 @@ int main()
 	//initialisation de la liste de coup (mise a 0 et allocation du pointeur)
 	init_liste_coups(&liste_coups);
 
-	/*affichage de la grille actuelle*/
+	/*affichage de la grille de depart et ecriture dans le log*/
 	afficher_grille(&etat_jeu);
+	imprimer_grille_fich(&etat_jeu, log_file);
 
 	//On initialise l'affichage du score à 0
 	afficher_score(score);
@@ -349,8 +356,10 @@ int main()
 			afficher_message("Attendez SVP, je réfléchis...");
 			//coup = choix_coup_ordi(&liste_coups);
 			min_max(&etat_jeu, &coup, 2, max_niveau, tab_CP, tab_score);
-			imprimer_table_CP(tab_CP, max_niveau);
+			imprimer_table_CP(tab_CP, max_niveau, log_file);
 		}
+
+		/*on verifie so on a capture le roi adverse, sinon on joue le coup*/
 		if (capture != ROI_N + INVERSER_JOUEUR(get_joueur(&etat_jeu)))
 		{
 			/*on affiche et on joue le coup*/
@@ -359,7 +368,10 @@ int main()
 				get_piece_case(&etat_jeu, coup.col_dest, coup.lig_dest),
 				coup.col_dest, coup.lig_dest);
 
+			/*on joue le coup et on affiche dns le logfile*/
 			capture = jouer_coup(&etat_jeu, &coup);
+			ecrire_coup_log_file(get_joueur(&etat_jeu), &coup, log_file);
+			imprimer_grille_fich(&etat_jeu, log_file);
 
 			//On met a jour le score de la grille de jeu
 			mise_a_jour_score(&etat_jeu, capture);
@@ -398,7 +410,8 @@ int main()
 	detruire_grille(etat_jeu.grille_jeu);
 	detruire_images();
 	fermer_mode_graphique();
-	
+	fclose(log_file);
+
 	return EXIT_SUCCESS;
 }
 

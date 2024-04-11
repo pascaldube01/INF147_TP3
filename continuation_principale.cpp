@@ -68,11 +68,13 @@ void mise_a_jour_CP(t_table_CP tab_CP, int niv, int max_niv,
 }
 
 /******************************************************************************/
-void imprimer_table_CP(t_table_CP tab_CP, int max_niveau)
+void imprimer_table_CP(t_table_CP tab_CP, int max_niveau, FILE* log_file)
 {
 	printf("\n");
+	fprintf(log_file, "\n");
 	for (int i = 0; i < max_niveau; i++)
 	{
 		printf("%s->", tab_CP[0][i]);
+		fprintf(log_file, "%s->", tab_CP[0][i]);
 	}
 }

@@ -893,3 +893,28 @@ int get_score_grille(const t_etat_jeu* jeu)
 	//On retourne le score de la grille
 	return jeu->score_grille;
 }
+
+/***********************************************************************************************/
+void imprimer_grille_fich(const t_etat_jeu* jeu, FILE* fich_log)
+{
+	fprintf(fich_log, "\n");
+	/*on parcour la grille de case en case et on ecrit ce qu'il y a dans le fichier texte*/
+	for (int i = 0; i < TAILLE; i++)
+	{
+		fprintf(fich_log, "\n");
+		for (int j = 0; j < TAILLE; j++)
+		{
+			fprintf(fich_log, "%2d ", get_piece_case(jeu, j, i));
+		}
+	}
+}
+
+void ecrire_coup_log_file(int joueur, t_coup * coup, FILE * log_file)
+{
+	fprintf(log_file, "\n");
+	if (joueur)
+		fprintf(log_file, "BLANC");
+	else
+		fprintf(log_file, "NOIR");
+	fprintf(log_file," : %s", coup->texte_coup);
+}

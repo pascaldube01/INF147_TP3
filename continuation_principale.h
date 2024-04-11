@@ -68,6 +68,6 @@ void mise_a_jour_CP(t_table_CP tab_CP, int niv, int max_niv,
 
     écrit par Pascal Dubé, Victor Poulin et Simon Des-Alliers
 ***********************************************************************************************/
-void imprimer_table_CP(t_table_CP tab_CP, int max_niveau);
+void imprimer_table_CP(t_table_CP tab_CP, int max_niveau, FILE * log_file);
 
 #endif

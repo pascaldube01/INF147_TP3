@@ -412,4 +412,23 @@ void mise_a_jour_score(t_etat_jeu* jeu, int capture);
 **************************************************************************************************/
 int get_score_grille(const t_etat_jeu* jeu);
 
+
+/************************************************************************************************
+	OBJECTIF : ecrit l'etat de la grille dans un logfile
+
+	PARAMETRE :	Le jeu et le pointeur vers le fichier
+
+	RETOUR:  ecriture dans un fichier seulement
+**************************************************************************************************/
+void imprimer_grille_fich(const t_etat_jeu* jeu, FILE* fich_log);
+
+/************************************************************************************************
+	OBJECTIF : ecrit le coup joue dans le logfile
+
+	PARAMETRE :	Le joueur, le coup joue et le pointeur vers le fichier
+
+	RETOUR:  ecriture dans un fichier seulement
+**************************************************************************************************/
+void ecrire_coup_log_file(int joueur, t_coup* coup, FILE* log_file);
+
 #endif
