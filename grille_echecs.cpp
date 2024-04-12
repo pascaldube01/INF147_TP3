@@ -63,6 +63,7 @@
 #define NORMAL 1			//Fonctionnement du jeu normal normal (avec toutes les pièces)
 #define TESTER_DEBUG 0		//debug vide pour faire des tests rapide
 
+//Points attribués à chaque pièces
 const int PTS_PIECES[16] = { 0,  1,  5,  5,  3,  3,  9,  100,   //NOIRS  = points positifs
 				             0, -1, -5, -5, -3, -3, -9, -100 }; //BLANCS = points négatifs
 
@@ -95,6 +96,7 @@ static int verifier_position_plateau_jeu_valide(int col, int ran)
 {
 	if (col < 0 || col > (TAILLE-1) || ran < 0 || ran > (TAILLE-1))
 		return 0;
+
 	return 1;
 }
 
@@ -127,8 +129,10 @@ static int ajouter_coup_si_valide(t_etat_jeu *etat_jeu, t_liste_coups *liste_cou
 	NOIR et 1 si l'adversaire est BLANC, reste a mutiplier par BLANCS (8) pour obtenir le
 	joueur inverse*/
 	int joueur_adverse = INVERSER_JOUEUR(get_joueur(etat_jeu));
+
 	/*avant d'ajouter le coup,  il faut verifier s'il y a une piece a la destination*/
 	t_piece piece_destination = get_piece_case(etat_jeu, col_dest, lig_dest);
+
 	/*coup temporaire a ajouter a la liste*/
 	t_coup coup;
 
@@ -136,6 +140,7 @@ static int ajouter_coup_si_valide(t_etat_jeu *etat_jeu, t_liste_coups *liste_cou
 	if (piece_destination == VIDE || piece_destination == VIDE_EP) 
 	{
 		set_coup(&coup, col, lig, col_dest, lig_dest, POS_VIDE, POS_VIDE);
+
 		ajouter_coup(liste_coups, &coup);
 	}
 	/*si la piece est autre chose, on verifie de quelle piece il s'agit (un joueur peut
@@ -266,6 +271,7 @@ int set_piece_case(t_etat_jeu* jeu, t_piece piece, int col, int ran)
 	{
 		/*On met la pièce envoyé en paramètre sur la grille de jeu*/
 		jeu->grille_jeu[ran][col] = piece;
+
 		/*On retourne 1 pour confirmer que la pièce c'est bien envoyé*/
 		return 1;
 	}
@@ -340,6 +346,7 @@ void initialiser_grille(t_grille grille_jeu)
 		de copier directement les valeurs representant ces dernieres et comme se sont les
 		pieces noires, pas besoin d'ajouter 8*/
 		grille_jeu[0][i] = lignes_de_pieces[i];
+
 		/*la ligne suivante est composee entierement de pions noir*/
 		grille_jeu[1][i] = PION_N;
 
@@ -348,6 +355,7 @@ void initialiser_grille(t_grille grille_jeu)
 		
 		/*la ligne suivante est composee entierement de pions blanc*/
 		grille_jeu[6][i] = PION_B;
+
 		/*comme l'ordre des pieces est deja etablis dans la variable ligne_de_pieces, il suffit
 		de copier directement les valeurs représentants ces dernieres et comme se sont les pieces
 		blanches, on ajoute 8 aux pieces noires de lignes_de_pieces*/
@@ -359,9 +367,11 @@ void initialiser_grille(t_grille grille_jeu)
 void ajouter_coup_pion(t_liste_coups* liste_coups, t_etat_jeu* etat_jeu, int col, int lig)
 {
 	//Variable utiliser pour créer un nouveau coup et ajouter ce coup à la liste
-	t_coup coup;         
+	t_coup coup;   
+
 	//Variable pour la ligne et la colonne destination
 	int ligne = lig, colonne = col; 
+
 	//Paramètre pour effectuer deux fois l'algorithme du mouvement en diagonale 
 	int diagonale;                  
 
@@ -369,7 +379,9 @@ void ajouter_coup_pion(t_liste_coups* liste_coups, t_etat_jeu* etat_jeu, int col
 	//Possibilité 1 : on avance d'une seule case
 	colonne = col;
 	ligne = lig;
+
 	ligne += sens_du_jeu(etat_jeu); //On avance vers l'avant d'une seule case
+
 	if (verifier_position_plateau_jeu_valide(colonne, ligne))
 		/*On peut mettre ce cas dans la fonction ajouter_coup_si_valide,
 		car col2 et lig2 sont POS_VIDE*/
@@ -377,6 +389,7 @@ void ajouter_coup_pion(t_liste_coups* liste_coups, t_etat_jeu* etat_jeu, int col
 
 	//Possibilité 2 : on avance de deux cases (si on peut)
 	ligne += sens_du_jeu(etat_jeu); //On avance vers l'avant de deux cases
+
 	/*On doit s'assurer qu'on est sur la case de départ, sinon le pion ne peut pas avancer de
 	deux cases. Donc si on est les BLANCS et que le pion se situe sur la ligne 6, ou si on est les
 	NOIRS et que le pions se situe sur la ligne 1*/
@@ -509,6 +522,7 @@ void ajouter_coup_tour(t_liste_coups* liste_coups, t_etat_jeu* etat_jeu, int col
 
 	//Pour aller vers le haut
 	ligne--;
+
 	//tant qu'on reste sur la grille de jeu et qu'on n'est pas sur la même case qu'une autre pièce
 	while (verifier_position_plateau_jeu_valide(colonne, ligne) && !break_flag) 
 	{ /*S'il y avait une piece sur la case destination, le break_flag s'active 
@@ -581,6 +595,7 @@ void ajouter_coup_fou(t_liste_coups* liste_coups, t_etat_jeu* etat_jeu, int col,
 	//Pour aller vers nord-est
 	ligne = lig - 1;  //On veut aller vers le haut de la grille
 	colonne = col + 1;//On veut aller vers la droite de la grille
+
 	while (verifier_position_plateau_jeu_valide(colonne, ligne) && !break_flag)
 	{ /*S'il y avait une piece sur la case destination, le break_flag s'active et la boucle
 	  s'arrête, car un fou ne peut pas passer par dessus une autre piece*/
@@ -593,6 +608,7 @@ void ajouter_coup_fou(t_liste_coups* liste_coups, t_etat_jeu* etat_jeu, int col,
 	ligne = lig - 1;   //On remet la ligne à la ligne à droite de celle actuelle
 	colonne = col - 1; //On remet la colonne à la colonne à gauche de celle actuelle
 	break_flag = 0;
+
 	while (verifier_position_plateau_jeu_valide(colonne, ligne) && !break_flag)
 	{//S'il y avait une piece sur la case destination, le break_flag s'active et la boucle s'arrête
 		break_flag = ajouter_coup_si_valide(etat_jeu, liste_coups, lig, col, ligne, colonne, 0);
@@ -604,6 +620,7 @@ void ajouter_coup_fou(t_liste_coups* liste_coups, t_etat_jeu* etat_jeu, int col,
 	ligne = lig + 1;   //On remet la ligne à la ligne à droite de celle actuelle
 	colonne = col - 1; //On remet la colonne à la colonne à gauche de celle actuelle
 	break_flag = 0;
+
 	while (verifier_position_plateau_jeu_valide(colonne, ligne) && !break_flag)
 	{//S'il y avait une piece sur la case destination, le break_flag s'active et la boucle s'arrête
 		break_flag = ajouter_coup_si_valide(etat_jeu, liste_coups, lig, col, ligne, colonne, 0);
@@ -615,6 +632,7 @@ void ajouter_coup_fou(t_liste_coups* liste_coups, t_etat_jeu* etat_jeu, int col,
 	ligne = lig + 1;   //On remet la ligne à la ligne à droite de celle actuelle
 	colonne = col + 1; //On remet la colonne à la colonne à droite de celle actuelle
 	break_flag = 0;
+
 	while (verifier_position_plateau_jeu_valide(colonne, ligne) && !break_flag)
 	{//S'il y avait une piece sur la case destination, le break_flag s'active et la boucle s'arrête 
 		break_flag = ajouter_coup_si_valide(etat_jeu, liste_coups, lig, col, ligne, colonne, 0);
@@ -759,12 +777,16 @@ t_piece jouer_coup(t_etat_jeu* jeu, const t_coup* coup)
 {
 	//La pièce qui sera retournée, c'est la piece étant à la case_destination
 	t_piece capture = VIDE;  
+
 	//Variable contenant la piece qu'on veut déplacer
-	t_piece piece_a_deplacer = get_piece_case(jeu, coup->col, coup->lig);     
+	t_piece piece_a_deplacer = get_piece_case(jeu, coup->col, coup->lig);  
+
 	//Variable à la case_destination
 	t_piece piece_case_destination = get_piece_case(jeu, coup->col_dest, coup->lig_dest);  
+
 	//Variable représentant la pièce à la case secondaire
 	t_piece piece_case_secondaire = VIDE; 
+
 	int joueur = get_joueur(jeu); //Joueur actuel
 
 	if(coup->col_case2 != POS_VIDE && coup->lig_case2 != POS_VIDE)
@@ -798,8 +820,10 @@ t_piece jouer_coup(t_etat_jeu* jeu, const t_coup* coup)
 			//Si on est les blancs (ou les noirs) on va à la ligne 7 (ou 0), colonne 3 (ou 5)
 			set_piece_case(jeu, (t_piece)(TOUR_N + joueur), POS_TOUR(coup->col_case2),
 						   ROQUE_ROI(joueur));
+
 			//On vide la case où il y avait la tour avant le roque 
 			set_piece_case(jeu, VIDE, coup->col_case2, coup->lig_case2);
+
 			//On désactive la permission de faire le roque pour le joueur
 			jeu->roque_permis[joueur / 8] = 0;
 		}
@@ -900,10 +924,12 @@ int get_score_grille(const t_etat_jeu* jeu)
 void imprimer_grille_fich(const t_etat_jeu* jeu, FILE* fich_log)
 {
 	fprintf(fich_log, "\n");
+
 	/*on parcourt la grille de case en case et on ecrit ce qu'il y a dans le fichier texte*/
 	for (int i = 0; i < TAILLE; i++)
 	{
 		fprintf(fich_log, "\n");
+
 		for (int j = 0; j < TAILLE; j++)
 		{
 			fprintf(fich_log, "%3d ", get_piece_case(jeu, j, i));
@@ -916,6 +942,7 @@ void ecrire_coup_log_file(int joueur, t_coup * coup, FILE * log_file)
 {
 	//On écrit la couleur du joueur et le coup
 	fprintf(log_file, "\n");
+
 	if (joueur)
 		fprintf(log_file, "BLANC");
 	else

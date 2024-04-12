@@ -158,6 +158,7 @@ int ajouter_coup(t_liste_coups* liste_coups, const t_coup* coup)
 
 	/*On transfert le coup dans element*/
 	element->coup = *coup;
+
 	/*on met le suivant de l'élément à NULL car c'est le dernier de la liste*/
 	element->suivant = NULL;
 
@@ -202,6 +203,7 @@ int ajouter_coup_debut(t_liste_coups* liste_coups, const t_coup* coup)
 
 	/*On transfert le coup appelé en paramètre*/
 	element->coup = *coup;
+
 	/*Si la liste est vide*/
 	if (!get_nb_coups(liste_coups))
 	{
@@ -232,6 +234,7 @@ void vider_liste_coups(t_liste_coups* liste_coups)
 {
 	/*On s'assure que la liste est vide*/
 	replacer_pc_debut(liste_coups);
+
 	if (liste_coups->tete != NULL) 
 	{
 		//Tant qu'on est pas arrivé à la fin de la liste
@@ -269,8 +272,10 @@ int  avancer_pc(t_liste_coups* liste_coups)
 		liste_coups->p_courant = liste_coups->p_courant->suivant;
 		return 1;
 	}
+
 	/*Sinon on remet le pc au début pour ne pas prendre de risque*/
 	replacer_pc_debut(liste_coups);
+
 	return 0;
 }
 

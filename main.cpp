@@ -30,12 +30,12 @@
 /*=========================================================*/
 
 /************************************************************************************************
-	OBJECTIF : cette fonction sert a demander au joueur quel coup il veut jouer
+	OBJECTIF    : cette fonction sert a demander au joueur quel coup il veut jouer
 
 	PARAMETRES  : etat_jeu : etat du jeu (grille, joueur courant, etc.)
 				: liste_coup : liste chainee contenant les coups possibles
 				: coup : pointeur dans lequel retourner le coup choisi par le joueur
-	SORTIES :	indique si on a choisi une case sur le jeu ou un bouton
+	SORTIES     : indique si on a choisi une case sur le jeu ou un bouton
 
 	écrit par Pascal Dubé, Victor Poulin et Simon Des-Alliers
 **************************************************************************************************/
@@ -48,10 +48,10 @@ t_saisie saisir_coup(t_etat_jeu* jeu, t_liste_coups* liste_coups, t_coup* coup);
 				: t_coup : un pointeur pour retourner le coup choisi une fois la selection terminee
 				: niveau : le present niveau de recursion
 				: max_niveau : le niveau de recursion maximal (depend de la difficultee choisie)
-				: tab_CP : le pointeur contenant le tableau de la continuation principale
+				: tab_CP     : le pointeur contenant le tableau de la continuation principale
 				: tab_score : utilise pour verifier si on doit arreter l'exploration d'une branche
 					qui serait trop mauvaise
-	SORTIES :	grille de jeu initialisee
+	SORTIES     :	grille de jeu initialisee
 
 	écrit par Pascal Dubé, Victor Poulin et Simon Des-Alliers
 **************************************************************************************************/
@@ -59,23 +59,23 @@ int min_max(t_etat_jeu* jeu0, t_coup* coup, int niveau, int max_niveau, t_table_
 			int tab_score[]);
 
 /************************************************************************************************
-	OBJECTIF : copie un etat de jeu a une autre addresse
+	OBJECTIF    : copie un etat de jeu a une autre addresse
 
 	PARAMETRES  : jeu0 : jeu de source
 				: jeu1 : jeu de destination
-	SORTIES :	copie des donnees seulement
+	SORTIES     :	copie des donnees seulement
 
 	écrit par Pascal Dubé, Victor Poulin et Simon Des-Alliers
 **************************************************************************************************/
 void copier_etat_jeu(t_etat_jeu *jeu0, t_etat_jeu *jeu1);
 
 /************************************************************************************************
-	OBJECTIF : remet le jeu a son etat initial
+	OBJECTIF    : remet le jeu a son etat initial
 
 	PARAMETRES  : jeu : etat actuel du jeu a reinitialiser
 				: liste_coups : la liste de coups a vider
 
-	SORTIES :	aucune sortie directe
+	SORTIES     : Ne retourne rien (void)
 
 	écrit par Pascal Dubé, Victor Poulin et Simon Des-Alliers
 **************************************************************************************************/
@@ -86,8 +86,6 @@ void faire_un_reset(t_liste_coups* liste_coups, t_etat_jeu* jeu);
 
 	PARAMETRES : aucun
 	SORTIES :	aucune
-
-	SPEC :
 
 	Ecrit par Pascal Dube, Victor Poulin et Simon Des-Alliers
 **************************************************************************************************/
@@ -296,7 +294,6 @@ int main()
 }
 #endif
 
-
 /*=========================================================*/
 /*                  PROGRAMME PRINCIPAL                    */
 /*=========================================================*/
@@ -360,6 +357,7 @@ int main()
 
 	max_niveau *= 2;
 
+	//On écrit dans le fichier logfile, le niveau de difficulté
 	fprintf(log_file, "NIVEAU DE DIFFICULTE : %d", max_niveau);
 
 	/*ouverture de la fenetre graphique*/
@@ -439,7 +437,7 @@ int main()
 			imprimer_table_CP(tab_CP, max_niveau, log_file);
 		}
 
-		/*on verifie so on a capture le roi adverse, sinon on joue le coup*/
+		/*on verifie si on a capture le roi adverse, sinon on joue le coup*/
 		if (capture != ROI_N + INVERSER_JOUEUR(get_joueur(&etat_jeu)))
 		{
 			/*on affiche et on joue le coup*/
@@ -448,7 +446,7 @@ int main()
 				get_piece_case(&etat_jeu, coup.col_dest, coup.lig_dest),
 				coup.col_dest, coup.lig_dest);
 
-			/*on joue le coup et on affiche dns le logfile*/
+			/*on joue le coup et on affiche dans le logfile*/
 			capture = jouer_coup(&etat_jeu, &coup);
 			ecrire_coup_log_file(get_joueur(&etat_jeu), &coup, log_file);
 			imprimer_grille_fich(&etat_jeu, log_file);
@@ -501,17 +499,23 @@ void faire_un_reset(t_liste_coups* liste_coups, t_etat_jeu* jeu)
 {
 	/*On doit recommencer du début*/
 	vider_liste_coups(liste_coups);
+
 	/*On détruit la grille*/
 	detruire_grille(jeu->grille_jeu);
+
 	/*initialisation de l'etat du jeu (aux echecs le joueur blanc est toujours le premier a
 	jouer)*/
 	init_jeu(jeu, BLANCS);
+
 	//initialisation de la liste de coup (mise a 0 et allocation du pointeur)
 	init_liste_coups(liste_coups);
+
 	/*On affiche la grille nouvellement créer*/
 	afficher_grille(jeu);
+
 	/*on remet le score a 0*/
 	afficher_score(0);
+
 	/*On affiche un messsage de reset sur le terminal*/
 	printf("\nRESET du jeu");
 }
@@ -523,11 +527,14 @@ t_saisie saisir_coup(t_etat_jeu* jeu, t_liste_coups* liste_coups, t_coup* coup)
 {
 	/*contiendra la string qu'il faudra chercher dans la liste pour valider le coup*/
 	char coup_input_string[6] = { 0 };
+
 	/*contiens le bouton qui sera clique par le joueur*/
 	t_saisie bouton_clique = POS_VALIDE;
+
 	/*variables qui contiendront la selection de cases de jeu faites par l'utilisateur on a besoin
 	d'un tableau car la deuxieme case est la case de destination*/
 	int lig_choisi[2] = { 0 }, col_choisi[2] = { 0 };
+
 	/*indique si le coup est valide (pour sortie de la boucle et retourner dans le main)*/
 	int coup_valide = 1;
 
@@ -535,7 +542,6 @@ t_saisie saisir_coup(t_etat_jeu* jeu, t_liste_coups* liste_coups, t_coup* coup)
 	/*comme on a besoin de demander la case de depart et de destination ainsi que de verifier
 	si on ne clique pas sur quitter ou reset entre temps, on fait une boucle et on ecrit le
 	choix du joueur dans deux tableaux a 2 case (depart et arrivee)*/
-
 	while (coup_valide)
 	{
 		for (int i = 0; i < 2; i++)
@@ -584,6 +590,7 @@ t_saisie saisir_coup(t_etat_jeu* jeu, t_liste_coups* liste_coups, t_coup* coup)
 		}
 	}
 
+	//On retourne 1
 	return POS_VALIDE;
 }
 
@@ -605,7 +612,7 @@ int min_max(t_etat_jeu* jeu0, t_coup* coup, int niveau, int max_niveau, t_table_
 
 	t_piece capture;				   //piece capturee
 
-	/*comme les grilles de jeu sont des double pointeurs, il faut faure une allocation dynamique*/
+	/*comme les grilles de jeu sont des double pointeurs, il faut faire une allocation dynamique*/
 	jeu1.grille_jeu = creer_grille();
 	jeu2.grille_jeu = creer_grille();
 
@@ -682,13 +689,14 @@ int min_max(t_etat_jeu* jeu0, t_coup* coup, int niveau, int max_niveau, t_table_
 				valeur_grille = min_max(&jeu2, coup, niveau + 2, max_niveau, tab_CP, tab_score);
 			}
 
-
-			/*si la valeur est trop basse, on arrete l'exploration de cette branche car les coups
+			/*si la valeur est trop basse, on arrete l'exploration de cette branche, car les coups
 			sont trop mauvais*/
 			if (valeur_grille < tab_score[niveau-1])
 			{
 				tab_score[niveau-1] = valeur_grille;
+
 				mise_a_jour_CP(tab_CP, niveau-1, max_niveau, coupJr.texte_coup);
+
 				if (tab_score[niveau - 1] <= tab_score[niveau - 2])
 					break;
 			}   
@@ -703,12 +711,14 @@ int min_max(t_etat_jeu* jeu0, t_coup* coup, int niveau, int max_niveau, t_table_
 		if (tab_score[niveau-1] > tab_score[niveau-2])
 		{
 			tab_score[niveau-2] = tab_score[niveau-1];
+
 			coup_max = coupOrdi;
+
 			mise_a_jour_CP(tab_CP, niveau - 2, max_niveau, coupOrdi.texte_coup);
+
 			if (niveau > 2 && tab_score[niveau - 2] >= tab_score[niveau - 3])
 				break;
 		}
-
 
 	}
 
