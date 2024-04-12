@@ -307,3 +307,4 @@ void detruire_un_coup(t_liste_coups* liste_coups)
 
 	ptr_debut = NULL;
 }
+
