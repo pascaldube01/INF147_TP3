@@ -22,9 +22,7 @@
 /*                       void replacer_pc_debut(t_liste_coups* liste_coups)               */
 /*                       int  avancer_pc(t_liste_coups* liste_coups)                      */
 /*                       t_coup choix_coup_ordi(t_liste_coups* liste_coups)               */
-/*                       void afficher_liste_coups(t_liste_coups* liste_coups)            */
 /*                       void detruire_liste_coups(t_liste_coups* liste_coups)            */
-/*                       int liste_est_vide(t_liste_coups* liste)                         */
 /*                                                                                        */
 /******************************************************************************************/
 
