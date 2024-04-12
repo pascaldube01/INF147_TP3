@@ -45,7 +45,8 @@ typedef enum { QUITTER = -1, RESET, POS_VALIDE } t_saisie;
 /*                       MACROFONCTION                               */
 /*-------------------------------------------------------------------*/
 
-//Permet de retourner 1 ou 0 dépendamment de la parité de la case
+/*La macrofonction PALE_FONCER permet de déterminer de quelle couleur de fond la case de la grille 
+doit être. Retourne 1 (vert foncer) ou 0 (vert pale) dépendamment de la parité de la case*/
 #define PALE_FONCER(i, j) ((((i)+(j)) % 2) ? 1:0)
 
 /*-------------------------------------------------------------------*/

@@ -60,8 +60,6 @@ static t_image_BMP images[2][16];
 
 t_saisie choix_case(int* col_case, int* lig_case)
 {
-	int colonne;
-	int ligne;
 	int validation = 0;
 
 	//Tant qu'on a pas obtenue un choix de case valide
@@ -112,12 +110,12 @@ t_saisie choix_case(int* col_case, int* lig_case)
 		{
 			//Permet de sortir de la boucle de validation
 			validation = 1;
-
-			//On retourne 1
-			return POS_VALIDE;
 		}
 
 	} while (!validation);
+
+	//On retourne 1
+	return POS_VALIDE;
 
 }
 
@@ -239,17 +237,15 @@ void afficher_coup(t_piece piece_src, int col_src, int ran_src,
 }
 
 void afficher_gagnant(int joueur)
-{
+{/*Avec afficher_info pour afficher le gagnant en haut du message de fin*/
 	/*Si le joueur est blanc*/
 	if (joueur)
-	{
+	{ 
 		afficher_info("Le gagnant est le joueur blanc!", joueur);
-		delai_ecran(500);
 	}
 	else
 	{
 		/*Si le joueur est noir*/
 		afficher_info("Le gagnant est le joueur noir!", joueur);
-		delai_ecran(500);
 	}
 }
