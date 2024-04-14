@@ -34,7 +34,6 @@
 /*=========================================================*/
 
 #include "liste_coup.h"
-#include "mtwister.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
